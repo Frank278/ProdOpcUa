@@ -49,6 +49,7 @@ urlpatterns = [
     # Produktionsauftrag erstellen
     path('produktionsAuftragErstellen', produktionsAuftragErstellen, name='produktionsAuftragErstellen'),
 
-
+    # ProduktionsaÜberwachung
+    path('produktionsUeberwachung', prouktionsUeberwachung, name='produktionsUeberwachung'),
 
 ]

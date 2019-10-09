@@ -221,3 +221,10 @@ def produktionsAuftragErstellen(request):
 def serverHinzu(request):
     return render(request=request,
                   template_name='main/serverHinzu.html')
+
+
+# Produktionsüberwachung
+@login_required
+def prouktionsUeberwachung(request):
+    return render(request=request,
+                  template_name='main/produktionsUeberwachung.html')
