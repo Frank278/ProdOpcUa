@@ -74,7 +74,7 @@ class HelloServer:
             freeopcua_namespace, "SayHelloArray", say_hello_array, [ua.VariantType.Boolean], [ua.VariantType.String])
 
         hellower.add_method(
-            freeopcua_namespace, "SayHugo", say_hello_hugo, [ua.VariantType.Boolean], [ua.VariantType.String])
+            freeopcua_namespace, "SayHugo", say_hello_hugo)
 
     def __enter__(self):
         self.server.start()
