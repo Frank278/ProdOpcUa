@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RegOpcUaServer</title>
+</head>
+<body>
+{% extends 'main/includes/header.html' %}
+{% block content %}
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Ort</th>
+      <th scope="col">Servername</th>
+      <th scope="col">Portnummer</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for regOpcUaServer in object_list %}
+   <tr>
+
+            <td>{{ regOpcUaServer.virtuellServerID}}</td>
+            <td>{{ regOpcUaServer.ort}}</td>
+            <td>{{ regOpcUaServer.servername}}</td>
+            <td>{{ regOpcUaServer.portnummer}}</td>
+
+
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+</body>
+</html>
