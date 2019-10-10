@@ -26,7 +26,7 @@ def say_hello_xml(parent, happy, hugo):
 
 
 @uamethod
-def say_hello(parent, happy, hugo):
+def say_hello(parent, happy):
     if happy:
         result = "I'm happy"
     else:
@@ -43,6 +43,10 @@ def say_hello_array(parent, happy):
         result = "I'm not happy"
     print(result)
     return [result, "Actually I am"]
+
+def say_hello_hugo():
+    print('ich säge nüüt')
+    return []
 
 
 class HelloServer:
@@ -68,6 +72,9 @@ class HelloServer:
 
         hellower.add_method(
             freeopcua_namespace, "SayHelloArray", say_hello_array, [ua.VariantType.Boolean], [ua.VariantType.String])
+
+        hellower.add_method(
+            freeopcua_namespace, "SayHugo", say_hello_hugo, [ua.VariantType.Boolean], [ua.VariantType.String])
 
     def __enter__(self):
         self.server.start()
