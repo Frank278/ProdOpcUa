@@ -6,6 +6,7 @@
 </head>
 <body>
 {% extends 'main/includes/header.html' %}
+
 {% block content %}
 
 
@@ -13,15 +14,23 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Ort</th>
-      <th scope="col">Servername</th>
-      <th scope="col">Portnummer</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
     </tr>
   </thead>
   <tbody>
-   {% for regOpcUaServer in object_list %}
+    {% for regOpcUaServer in object_list %}
    <tr>
 
+            <td>{{ regOpcUaServer.virtuellServerID}}</td>
+            <td>{{ regOpcUaServer.ort}}</td>
+            <td>{{ regOpcUaServer.servername}}</td>
+            <td>{{ regOpcUaServer.portnummer}}</td>
             <td>{{ regOpcUaServer.virtuellServerID}}</td>
             <td>{{ regOpcUaServer.ort}}</td>
             <td>{{ regOpcUaServer.servername}}</td>
@@ -31,6 +40,7 @@
     </tr>
 
     {% endfor %}
+
   </tbody>
 </table>
 {% endblock %}

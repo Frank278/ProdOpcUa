@@ -5,7 +5,44 @@
     <title>Dienstleistungen</title>
 </head>
 <body>
-{% extends 'main/includes/opcheader.html' %}
+{% extends 'main/includes/header.html' %}
+{% block content %}
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for regOpcUaServer in object_list %}
+     <tr>
+
+            <td>{{ regOpcUaServer.virtuellServerID}}</td>
+            <td>{{ regOpcUaServer.ort}}</td>
+            <td>{{ regOpcUaServer.servername}}</td>
+            <td>{{ regOpcUaServer.portnummer}}</td>
+            <td>{{ regOpcUaServer.virtuellServerID}}</td>
+            <td>{{ regOpcUaServer.ort}}</td>
+            <td>{{ regOpcUaServer.servername}}</td>
+            <td>{{ regOpcUaServer.portnummer}}</td>
+
+
+        </tr>
+
+    {% endfor %}
+
+  </tbody>
+</table>
+{% endblock %}
 
 </body>
 </html>
