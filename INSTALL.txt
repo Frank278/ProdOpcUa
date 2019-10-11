@@ -39,11 +39,13 @@ Raspberry:
 
     Installieren opcua Bibliotheken:
     --------------------------------
-    pip install opcua
+    $ pip install opcua
 
-    Anlegen Directory Struktur:
-    ---------------------------
-    $ mkdir client
-    $ mkdir server
 
+    Install Serverstruktur:
+    -----------------------
+    git clone https://github.com/Frank278/ProductionOpcUa.git
+
+    ln -s ProductionOpcUa/client/
+    ln -s ProductionOpcUa/server/
 
