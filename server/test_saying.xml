@@ -17,9 +17,27 @@
       <Reference ReferenceType="HasComponent">i=20002</Reference>
     </References>
   </UAObject>
+  <UAObject BrowseName="2:Hellofrank" NodeId="i=10001" ParentNodeId="i=85">
+    <DisplayName>BaseObjectTypeFrank</DisplayName>
+    <Description>The base type for all object in Franken!.</Description>
+    <References>
+      <Reference IsForward="false" ReferenceType="Organizes">i=85</Reference>
+      <Reference ReferenceType="HasTypeDefinition">i=58</Reference>
+      <Reference ReferenceType="HasComponent">i=10002</Reference>
+    </References>
+  </UAObject>
   <UAMethod BrowseName="0:SayHello" NodeId="i=20002" ParentNodeId="i=20001">
     <DisplayName>SayHello</DisplayName>
     <Description>SayHello</Description>
+    <References>
+      <Reference IsForward="false" ReferenceType="HasComponent">i=20001</Reference>
+      <Reference ReferenceType="HasProperty">i=20003</Reference>
+      <Reference ReferenceType="HasProperty">i=20004</Reference>
+    </References>
+  </UAMethod>
+  <UAMethod BrowseName="0:SayFrank" NodeId="i=10002" ParentNodeId="i=10001">
+    <DisplayName>SayFrank</DisplayName>
+    <Description>SayFrank</Description>
     <References>
       <Reference IsForward="false" ReferenceType="HasComponent">i=20001</Reference>
       <Reference ReferenceType="HasProperty">i=20003</Reference>

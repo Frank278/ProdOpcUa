@@ -26,6 +26,9 @@ if __name__ == '__main__':
         hellower = objects.get_child("0:Hellower")
         print("Hellower is: ", hellower)
 
+        hellofrank = objects.get_child("0:Hellofrank")
+        print("Hellofrank is: ", hellofrank)
+
         resulting_text = hellower.call_method("0:SayHello", False, 'tums züg')
         print(resulting_text)
 

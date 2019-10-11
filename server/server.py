@@ -14,19 +14,18 @@ from opcua import ua, uamethod, Server
 
 
 @uamethod
-def say_hello_xml(parent, happy, hugo):
+def say_hello_xml(parent, happy):
     print("Calling say_hello_xml")
     if happy:
         result = "I'm happy"
     else:
         result = "I'm not happy"
-    print(hugo)
     print(result)
     return result
 
 
 @uamethod
-def say_hello(parent, happy):
+def say_hello(parent, happy, hugo):
     if happy:
         result = "I'm happy"
     else:
@@ -43,11 +42,6 @@ def say_hello_array(parent, happy):
         result = "I'm not happy"
     print(result)
     return [result, "Actually I am"]
-
-@uamethod
-def say_hello_hugo(parent):
-    print('ich säge nüüt')
-    return 'hugo'
 
 
 class HelloServer:
@@ -69,14 +63,10 @@ class HelloServer:
         self.server.link_method(hellower_say_hello, say_hello_xml)
 
         hellower.add_method(
-            freeopcua_namespace, "SayHello2", say_hello, [ua.VariantType.Boolean], [ua.VariantType.String], [ua.VariantType.String])
+            freeopcua_namespace, "SayHello2", say_hello, [ua.VariantType.Boolean], [ua.VariantType.String])
 
         hellower.add_method(
             freeopcua_namespace, "SayHelloArray", say_hello_array, [ua.VariantType.Boolean], [ua.VariantType.String])
-
-        hellower.add_method(
-            freeopcua_namespace, "SayHelloHugo", say_hello_hugo)
-
 
     def __enter__(self):
         self.server.start()
