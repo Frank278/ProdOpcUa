@@ -52,4 +52,10 @@ urlpatterns = [
     # ProduktionsaÜberwachung
     path('produktionsUeberwachung', prouktionsUeberwachung, name='produktionsUeberwachung'),
 
+    # Ressourcenplanung, verteilen der Poduktionsaufträge auf die Maschinen
+    path('ressourcenplanung', ressourcenplanung_list, name='ressourcenplanung'),
+
+    # Anzeige der Kundendaten
+    path('kunden', kunden_list, name='kunden'),
+
 ]

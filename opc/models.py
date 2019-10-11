@@ -35,6 +35,7 @@ class DienstVirtOpcUaServer(models.Model):
     dieVirtOpcUaID = models.PositiveSmallIntegerField(default=0, unique=True)
     virtserver = models.ForeignKey(to=VirtuelleOpcUaServer, on_delete=models.SET_NULL, null=True)
     running_simulation = models.DurationField(default=timedelta(minutes=2))
+    serviceBeschreibung = models.TextField(max_length=200, null=True)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -63,6 +64,7 @@ class DienstOpcUaServer(models.Model):
     # eindeutige ID für Dienstleistungen des virtuellen Servers
     dieOpcUaID = models.PositiveSmallIntegerField(default=0, unique=True)
     regServer = models.ForeignKey(to=RegOpcUaServer, on_delete=models.SET_NULL, null=True)
+    serviceBeschreibung = models.TextField(max_length=200, null=True)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -139,3 +141,18 @@ class ProduktionsAuftrag(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.auftragsnummer
+
+
+class Ressourcenplanung(models.Model):
+    # eindeutige ID für die Ressouchenplannung
+    rplanungsnummer = models.PositiveSmallIntegerField(default=0, unique=True)
+    produktionsuauftrag = models.ForeignKey(to= ProduktionsAuftrag, on_delete=models.SET_NULL, null=True)
+    dienstleistungen = models.ManyToManyField('Dienstleistungen')
+    PLANSTATUS = Choices('Geplant', 'InBearbeitung', 'Laufend', 'Abgeschossen')
+    planstatus = models.CharField(choices=PLANSTATUS, default=PLANSTATUS.Geplant, max_length=20)
+    startdatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+    enddatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.rplanungsnummer

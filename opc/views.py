@@ -206,6 +206,17 @@ def produktionsAuftrag_list(request, template_name='main/opcproduktionsAuftrag.h
 
     return render(request, template_name, data)
 
+# Erstellen der Datenbankabfrage für DienstOpcUaServer
+
+@login_required
+def ressourcenplanung_list(request, template_name='main/opcressourcen.html'):
+    ressourcenplanung = Ressourcenplanung.objects.all()
+
+    data = {}
+    data['object_list'] = ressourcenplanung
+
+    return render(request, template_name, data)
+
 
 # Erstellen von Virtuellen Servern
 @login_required

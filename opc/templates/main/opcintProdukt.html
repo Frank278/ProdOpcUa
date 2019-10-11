@@ -12,29 +12,18 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
+      <th scope="col">Produktummer</th>
+      <th scope="col">Produktname</th>
+      <th scope="col">Dienstleistungsnummer</th>
+
   </thead>
   <tbody>
-    {% for regOpcUaServer in object_list %}
+    {% for intProdukt in object_list %}
    <tr>
 
-            <td>{{ regOpcUaServer.virtuellServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
-            <td>{{ regOpcUaServer.virtuellServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
-
+            <td>{{ intProdukt.intProduknummer}}</td>
+            <td>{{ intProdukt.produktName}}</td>
+            <td>{{ intProdukt.dieIntProd_dieIntProduktID}}</td>
 
     </tr>
 
