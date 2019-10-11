@@ -44,9 +44,10 @@ def say_hello_array(parent, happy):
     print(result)
     return [result, "Actually I am"]
 
-def say_hello_hugo():
+@uamethod
+def say_hello_hugo(parent):
     print('ich säge nüüt')
-    return []
+    return 'hugo'
 
 
 class HelloServer:
@@ -74,7 +75,8 @@ class HelloServer:
             freeopcua_namespace, "SayHelloArray", say_hello_array, [ua.VariantType.Boolean], [ua.VariantType.String])
 
         hellower.add_method(
-            freeopcua_namespace, "SayHugo", say_hello_hugo)
+            freeopcua_namespace, "SayHelloHugo", say_hello_hugo)
+
 
     def __enter__(self):
         self.server.start()
