@@ -12,6 +12,14 @@ except ImportError:
 
 from opcua import ua, uamethod, Server
 
+@uamethod
+def start_programm(parent):
+    status = "gestartet"
+    # LED Grün leuchtet
+
+def stop_programm(parent):
+    status = "gestoppt"
+    # LED Rot leuchtet
 
 @uamethod
 def say_hello_xml(parent, happy, hugo):

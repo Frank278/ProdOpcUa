@@ -160,3 +160,9 @@ class Ressourcenplanung(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return str(self.rplanungsnummer)
+class Test(models.Model):
+    # eindeutige ID für den Test
+    testnummer = models.PositiveSmallIntegerField(default=0, unique=True)
+    Temperature =models.IntegerField(default=0)
+    Pressure = models.IntegerField(default=0)
+    TIME_Value = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)

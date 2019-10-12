@@ -36,4 +36,22 @@ if __name__ == '__main__':
         print(resulting_array)
         
         resulting_array = hellower.call_method("1:SayHelloHugo")
-        print(resulting_array)        
+
+        print(resulting_array)
+
+        Temp = client.get_node("ns=2; i=2")
+        Temperature = Temp.get_value()
+
+        Press = client.get_node("ns=2; i=3")
+        Pressure = Press.get_value()
+
+        TIME = client.get_node("ns=2; i=4")
+        TIME_Value = TIME.get_value()
+
+        # Status von Raspery
+
+        # Start von Servermethode
+
+        # Stop von Servermethode
+
+
