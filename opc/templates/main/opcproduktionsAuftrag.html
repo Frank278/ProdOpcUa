@@ -13,28 +13,27 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">auftragsnummer</th>
+      <th scope="col">kundennummer</th>
+      <th scope="col">intProdukt</th>
+      <th scope="col">aktuellerSchritt</th>
+      <th scope="col">auftragsstatus</th>
+      <th scope="col">letzteAktuallisierung</th>
+      <th scope="col">Fortschritt</th>
     </tr>
   </thead>
   <tbody>
-    {% for regOpcUaServer in object_list %}
+    {% for produktionsAuftrag in object_list %}
    <tr>
 
-            <td>{{ regOpcUaServer.virtuellServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
-            <td>{{ regOpcUaServer.virtuellServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
+            <td>{{ produktionsAuftrag.auftragsnummer}}</td>
+            <td>{{ produktionsAuftrag.kundennummer}}</td>
+            <td>{{ produktionsAuftrag.intProdukt}}</td>
+            <td>{{ produktionsAuftrag.aktuellerSchritt}}</td>
+            <td>{{ produktionsAuftrag.auftragsstatus}}</td>
+            <td>{{ produktionsAuftrag.letzteAktuallisierung}}</td>
+            <td>{{ produktionsAuftrag.letzteAktuallisierung}}</td>
+
 
 
     </tr>

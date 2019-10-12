@@ -12,29 +12,23 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">servicenummer</th>
+      <th scope="col">dieOpcUa</th>
+      <th scope="col">dieVirtOpcUa</th>
+      <th scope="col">serviceName</th>
+      <th scope="col">serviceBeschreibung</th>
+
     </tr>
   </thead>
   <tbody>
-    {% for regOpcUaServer in object_list %}
+    {% for dienstleistungen in object_list %}
      <tr>
 
-            <td>{{ regOpcUaServer.virtuellServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
-            <td>{{ regOpcUaServer.virtuellServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
-
+            <td>{{ dienstleistungen.servicenummer}}</td>
+            <td>{{ dienstleistungen.dieOpcUa_dieOpcUaID}}</td>
+            <td>{{ dienstleistungen.dieVirtOpcUa_name}}</td>
+            <td>{{ dienstleistungen.serviceName}}</td>
+            <td>{{ dienstleistungen.serviceBeschreibung}}</td>
 
         </tr>
 

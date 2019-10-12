@@ -135,7 +135,7 @@ class ProduktionsAuftrag(models.Model):
     kundennummer = models.ForeignKey(to=Kunden, on_delete=models.SET_NULL, null=True)
     intProdukt = models.ForeignKey(to=IntProdukt, on_delete=models.SET_NULL, null=True)
     aktuellerSchritt = models.PositiveIntegerField(null=True)
-    anzahlschritte = models.PositiveIntegerField(null=True)
+    anzahlschraktuellerSchritte = models.PositiveIntegerField(null=True)
     #fortschritt = models.PositiveIntegerField(null=True) muss property sein
     AUFTRAGSSTATUS = Choices('Geplant', 'InBearbeitung', 'Gestoppt', 'Abgeschossen')
     auftragsstatus = models.CharField(choices=AUFTRAGSSTATUS, default=AUFTRAGSSTATUS.Geplant,

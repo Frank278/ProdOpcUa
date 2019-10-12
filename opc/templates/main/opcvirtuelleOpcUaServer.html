@@ -13,29 +13,33 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">virtuellServerID</th>
+      <th scope="col">servername</th>
+      <th scope="col">ort</th>
+      <th scope="col">portnummer</th>
+      <th scope="col">serverstatus</th>
+      <th scope="col">autoStart</th>
+      <th scope="col">anzahlOffeneAuftraege</th>
+      <th scope="col">anzahlAbgesAuftraege</th>
+        <th scope="col">aktuelleAuftraegsNr</th>
+      <th scope="col">startZeit</th>
     </tr>
   </thead>
   <tbody>
-    {% for regOpcUaServer in object_list %}
+    {% for virtuelleOpcUaServer in object_list %}
    <tr>
 
-            <td>{{ regOpcUaServer.virtuellServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
-            <td>{{ regOpcUaServer.virtuellServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
-
+            <td>{{ virtuelleOpcUaServer.virtuellServerID}}</td>
+            <td>{{ virtuelleOpcUaServer.servername}}</td>
+            <td>{{ virtuelleOpcUaServer.ort}}</td>
+            <td>{{ virtuelleOpcUaServer.portnummer}}</td>
+            <td>{{ virtuelleOpcUaServer.serverstatus}}</td>
+            <td>{{ virtuelleOpcUaServer.autoStart}}</td>
+            <td>{{ virtuelleOpcUaServer.anzahlOffeneAuftraege}}</td>
+            <td>{{ virtuelleOpcUaServer.aktuelleAuftraegsNr}}</td>
+            <td>{{ virtuelleOpcUaServer.anzahlAbgesAuftraege}}</td>
+            <td>{{ virtuelleOpcUaServer.startZeit}}</td>
+            <td>{{ virtuelleOpcUaServer.aktuelleAuftraegsNr}}</td>
 
     </tr>
 

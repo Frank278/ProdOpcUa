@@ -12,28 +12,27 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">kundennummer</th>
+      <th scope="col">name</th>
+      <th scope="col">Telefonnummer</th>
+      <th scope="col">ort</th>
+      <th scope="col">plz</th>
+      <th scope="col">strasse</th>
+      <th scope="col">hausnummer</th>
+
     </tr>
   </thead>
   <tbody>
-    {% for regOpcUaServer in object_list %}
+    {% for kunden in object_list %}
    <tr>
 
-            <td>{{ regOpcUaServer.virtuellServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
-            <td>{{ regOpcUaServer.virtuellServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
+            <td>{{ kunden.kundennummer}}</td>
+            <td>{{ kunden.name}}</td>
+            <td>{{ kunden.Telefonnummer}}</td>
+            <td>{{ kunden.ort}}</td>
+            <td>{{ kunden.plz}}</td>
+            <td>{{ kunden.strasse}}</td>
+            <td>{{ kunden.hausnummer}}</td>
 
 
     </tr>
