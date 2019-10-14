@@ -1,0 +1,20 @@
+wir haben
+    m werkstuecke 
+        brauchen n services mit je o minuten 
+
+    x bearbeitungszentren
+        bieten y services
+
+
+while werkstueck:
+    for w in werkstuecke.not_done():
+        for s in w.braucht_service and w.not_in_arbeit:
+            suche freies bearbeitungszentrum
+            if gefunden:
+                start_bearbeiten
+                mark w.in_arbeit
+            else:
+                continue
+        if w.all_done:
+            w.set_all_done
+            
