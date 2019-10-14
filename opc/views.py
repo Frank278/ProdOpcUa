@@ -208,6 +208,7 @@ def produktionsAuftrag_list(request, template_name='main/opcproduktionsAuftrag.h
 
 # Erstellen der Datenbankabfrage für DienstOpcUaServer
 
+
 @login_required
 def ressourcenplanung_list(request, template_name='main/opcressourcen.html'):
     ressourcenplanung = Ressourcenplanung.objects.all()
@@ -217,6 +218,14 @@ def ressourcenplanung_list(request, template_name='main/opcressourcen.html'):
 
     return render(request, template_name, data)
 
+@login_required
+def test_list(request, template_name='main/test.html'):
+    test = Test.objects.all()
+
+    data = {}
+    data['object_list'] = test
+
+    return render(request, template_name, data)
 
 # Erstellen von Virtuellen Servern
 @login_required
@@ -239,6 +248,33 @@ def serverHinzu(request):
 
 # Produktionsüberwachung
 @login_required
-def prouktionsUeberwachung(request):
-    return render(request=request,
-                  template_name='main/opcproduktionsUeberwachung.html')
+
+
+
+def prouktionsUeberwachung_list(request, template_name='main/opcproduktionsUeberwachung.html'):
+    produktionsAuftrag = ProduktionsAuftrag.objects.all()
+
+    data = {}
+    data['object_list'] = produktionsAuftrag
+
+    return render(request, template_name, data)
+
+
+
+# Erstellen der Datenbankabfrage für die Kapazitätsauslastung
+
+#def capacity_list(request, template_name='opc/opcproduktionsUeberwachung.html'):
+    #maxTime ist Anzahl der Server mal die Timedelta
+
+    #workTime = Anzahl der Dienstleistungen der Aufträge mal deren Bearbeitungszeit
+
+    # Kapazität ist workTime *100 / maxTime, aber maximal 100
+
+
+# Erstellen der Datenbankabfrage für die Kapazitätsauslastung
+  #calculate Time Aufträge
+    # while workTime
+        # for Server
+            # for Servers
+                # add Aufträge
+                    # worktime - Zeit Auftrag

@@ -50,12 +50,15 @@ urlpatterns = [
     path('produktionsAuftragErstellen', produktionsAuftragErstellen, name='produktionsAuftragErstellen'),
 
     # ProduktionsaÜberwachung
-    path('produktionsUeberwachung', prouktionsUeberwachung, name='produktionsUeberwachung'),
+    path('produktionsUeberwachung', prouktionsUeberwachung_list, name='produktionsUeberwachung'),
 
     # Ressourcenplanung, verteilen der Poduktionsaufträge auf die Maschinen
     path('ressourcenplanung', ressourcenplanung_list, name='ressourcenplanung'),
 
     # Anzeige der Kundendaten
     path('kunden', kunden_list, name='kunden'),
+
+    # Von den virtuellen OPC UA Server zur verfügung gestellte Dienstleistungen
+    path('test', test_list, name='test'),
 
 ]

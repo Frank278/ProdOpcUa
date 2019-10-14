@@ -18,12 +18,12 @@
 
   </thead>
   <tbody>
-    {% for intProdukt in object_list %}
+    {% for test in object_list %}
    <tr>
 
-            <td>{{ intProdukt.intProduktnummer}}</td>
-            <td>{{ intProdukt.produktName}}</td>
-            <td>{{ intProdukt.dieIntProd.anzahlService}}</td>
+            <td>{{ test.Temperature}}</td>
+            <td>{{ test.Pressure}}</td>
+            <td>{{ test.dieIntProd.TIME_Value}}</td>
 
     </tr>
 

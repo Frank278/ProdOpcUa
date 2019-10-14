@@ -13,16 +13,23 @@ from datetime import timedelta
 class VirtuelleOpcUaServer(models.Model):
     # eindeutige ID für Vitruellen Servers
     virtuellServerID = models.PositiveSmallIntegerField(default=0, unique=True)
-    # Name des Servers
+    # Name des virtuellen Servers
     servername = models.CharField(max_length=30, unique=True)
+    # Ort des virtuellen Servers
     ort = models.CharField(max_length=30)
+    # Portnummer des virtuellen Servers
     portnummer = models.PositiveIntegerField(null=True)
+    # Status des virtuellen Servers
     SERVERSTATUS = Choices('Starten', 'Gestartet', 'Stoppen', 'Gestoppt')
     serverstatus = models.CharField(choices=SERVERSTATUS, default=SERVERSTATUS.Gestoppt, max_length=20)
     autoStart = models.BooleanField(default=False)
+    # Anzahl der offenen Aufträge
     anzahlOffeneAuftraege = models.PositiveIntegerField(null=True)
+    # Anzahl der abgeschlossenen Aufträge
     anzahlAbgesAuftraege = models.PositiveIntegerField(null=True)
+    # Anzahl der aktuellen Aufräge
     aktuelleAuftraegsNr = models.PositiveIntegerField(null=True)
+    # Startzeit des aktuellen Auftrages
     startZeit = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
 
     def __str__(self):
@@ -33,9 +40,11 @@ class VirtuelleOpcUaServer(models.Model):
 class DienstVirtOpcUaServer(models.Model):
     # eindeutige ID für Dienstleistungen des virtuellen Servers
     dieVirtOpcUaID = models.PositiveSmallIntegerField(default=0, unique=True)
+    # Name des Dienstes der virtuellen Servers
     name = models.CharField(max_length=30, null=True)
+    # Namen der Virtuellen Server
     virtserver = models.ManyToManyField('VirtuelleOpcUaServer')
-    running_simulation = models.DurationField(default=timedelta(minutes=2))
+    # Beschreibung des Dienstes
     serviceBeschreibung = models.TextField(max_length=200, blank=True, null=True)
 
     def __str__(self):
@@ -44,17 +53,22 @@ class DienstVirtOpcUaServer(models.Model):
 
 
 class RegOpcUaServer(models.Model):
-    # eindeutige ID für Vitruellen Servers
+    # eindeutige ID für den Servers
     regServerID = models.PositiveSmallIntegerField(default=0, unique=True)
     # Name des Servers
     servername = models.CharField(max_length=30, unique=True)
+    # Ort des Servers
     ort = models.CharField(max_length=30)
+    # Port des Servers
     portnummer = models.PositiveIntegerField(null=True)
+    # Status des Servers
     REGISTRIERUNGSSTATUS = Choices('Starten', 'Gestartet', 'Stoppen', 'Gestoppt')
     registrieungsstatus = models.CharField(choices=REGISTRIERUNGSSTATUS, default=REGISTRIERUNGSSTATUS.Gestoppt,
                                            max_length=20)
-
+    # Zeit der Anmeldung beim Server
     regestrierungsZeit = models.DateTimeField(null=True)
+    # Simmulierte Zeit
+    running_simulation = models.DurationField(default=timedelta(minutes=2))
 
     def __str__(self):
         """String for representing the Model object."""
@@ -62,11 +76,16 @@ class RegOpcUaServer(models.Model):
 
 
 class DienstOpcUaServer(models.Model):
-    # eindeutige ID für Dienstleistungen des virtuellen Servers
+    # eindeutige ID für Dienstleistungen des Servers
     dieOpcUaID = models.PositiveSmallIntegerField(default=0, unique=True)
+    # Name des Servers
     name = models.CharField(max_length=30, null=True)
+    # Namen der Server , die den Dienst anbieten
     regServer = models.ManyToManyField('RegOpcUaServer')
+    # Beschreibung des Service
     serviceBeschreibung = models.TextField(max_length=200, blank=True, null=True)
+    # Simmulierte Zeit
+    running_simulation = models.DurationField(default=timedelta(minutes=2))
 
     def __str__(self):
         """String for representing the Model object."""
@@ -76,10 +95,16 @@ class DienstOpcUaServer(models.Model):
 class Dienstleistungen(models.Model):
     # eindeutige ID für Dienstleistungen aller Server
     servicenummer = models.PositiveSmallIntegerField(default=0, unique=True)
+    # eingebunde Server für die Dienstleistungen
     dieOpcUa = models.ManyToManyField('DienstOpcUaServer', blank=True)
+    # eingebundene  virtuelle Server für die Dienstleistunegen
     dieVirtOpcUa = models.ManyToManyField('DienstVirtOpcUaServer', blank=True)
+    # Name des Service
     serviceName = models.CharField(max_length=30, unique=True)
+    # Beschreibung des Service
     serviceBeschreibung = models.TextField(max_length=200, blank=True, null=True)
+
+
 
     def __str__(self):
         """String for representing the Model object."""
@@ -89,10 +114,15 @@ class Dienstleistungen(models.Model):
 class DieIntProdukt(models.Model):
     # eindeutige ID für Dienstleistung für intelligentes Produkt
     dieIntProduktID = models.PositiveSmallIntegerField(default=0, unique=True)
+    # Name der Dienstleistung
     name = models.CharField(max_length=30, null=True)
+    # Servivenummern der Dienstleistungen
     servicenummer = models.ManyToManyField('Dienstleistungen')
+    # Anzahl der benötigten Service
     anzahlService = models.PositiveIntegerField(null=True)
-    #sequenz = models.PositiveIntegerField(null=True) muss property sein
+
+
+
 
     def __str__(self):
         """String for representing the Model object."""
@@ -101,11 +131,16 @@ class DieIntProdukt(models.Model):
 
 class IntProdukt(models.Model):
     # eindeutige ID für intelligentes Produkt
-    intProduknummer = models.PositiveSmallIntegerField(default=0, unique=True)
+    intProduktnummer = models.PositiveSmallIntegerField(default=0, unique=True)
+    # Name des Models
     name = models.CharField(max_length=30, null=True)
-    dieIntProd = models.ForeignKey(to=Dienstleistungen, on_delete=models.SET_NULL, null=True)
+    # Dienstleistungen des Produktes
+    dieIntProd = models.ForeignKey(to=DieIntProdukt, on_delete=models.SET_NULL, null=True)
+    # Produktname
     produktName = models.CharField(max_length=30)
+    # Produktbeschreibung
     produktBeschreibung = models.TextField(max_length=200, null=True)
+
 
     def __str__(self):
         """String for representing the Model object."""
@@ -114,14 +149,18 @@ class IntProdukt(models.Model):
 
 class Kunden(models.Model):
     # eindeutige Kundennumnmer
-
     kundennummer = models.PositiveSmallIntegerField(default=0, unique=True)
+    # Name des Kunden
     name = models.CharField(max_length=30, null=True)
-    Telefonnummer = models.PositiveIntegerField(null=True)
-
+    # Telefonnummer des Kunden
+    telefonnummer = models.PositiveIntegerField(null=True)
+    # Ort des Kunden
     ort = models.CharField(max_length=30)
+    # PLZ des Kunden
     plz = models.PositiveIntegerField(null=True)
+    # Strasse de Kunden
     strasse = models.CharField(max_length=30)
+    # Hausnummer des Kunden
     hausnummer = models.PositiveIntegerField(null=True)
 
     def __str__(self):
@@ -132,15 +171,30 @@ class Kunden(models.Model):
 class ProduktionsAuftrag(models.Model):
     # eindeutige Kundennumnmer
     auftragsnummer = models.PositiveSmallIntegerField(default=0, unique=True)
+    # Kundenmummer des Auftrages
     kundennummer = models.ForeignKey(to=Kunden, on_delete=models.SET_NULL, null=True)
     intProdukt = models.ForeignKey(to=IntProdukt, on_delete=models.SET_NULL, null=True)
     aktuellerSchritt = models.PositiveIntegerField(null=True)
-    anzahlschraktuellerSchritte = models.PositiveIntegerField(null=True)
-    #fortschritt = models.PositiveIntegerField(null=True) muss property sein
+    anzahlSchritte = models.PositiveIntegerField(null=True)
     AUFTRAGSSTATUS = Choices('Geplant', 'InBearbeitung', 'Gestoppt', 'Abgeschossen')
     auftragsstatus = models.CharField(choices=AUFTRAGSSTATUS, default=AUFTRAGSSTATUS.Geplant,
                                       max_length=20)
     letzteAktuallisierung = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+
+    # berechnung des fortschrittes des Auftrages
+    @property
+    def fortschritt(self):
+
+
+        aktuellerSchritt = self.aktuellerSchritt
+        anzahlSchritte =self.anzahlSchritte
+        fortschritt= (aktuellerSchritt*100)/anzahlSchritte
+
+        return int(fortschritt)
+
+
+
+  #  for i in range(n)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -150,16 +204,37 @@ class ProduktionsAuftrag(models.Model):
 class Ressourcenplanung(models.Model):
     # eindeutige ID für die Ressouchenplannung
     rplanungsnummer = models.PositiveSmallIntegerField(default=0, unique=True)
-    produktionsuauftrag = models.ForeignKey(to= ProduktionsAuftrag, on_delete=models.SET_NULL, null=True)
+    # Produktionsaufträge für den Ressourcenplan
+    produktionsauftrag = models.ManyToManyField('ProduktionsAuftrag')
+    # Dienstleistungsplan für den Ressourcenplan
     dienstleistungen = models.ManyToManyField('Dienstleistungen')
+    # Status des Ressouchenplanes
     PLANSTATUS = Choices('Geplant', 'InBearbeitung', 'Laufend', 'Abgeschossen')
     planstatus = models.CharField(choices=PLANSTATUS, default=PLANSTATUS.Geplant, max_length=20)
+    # Geplanter Start des Ressouchenplans
     startdatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
-    enddatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+    # Anzahl der Tage für die Dauer des Ressouchenplanes, Deafult ist 2 Tage
+    anzahlTage = models.IntegerField(default=2)
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return str(self.rplanungsnummer)
+
+    # Prüfung ob Ressouchenplan Aktiv
+    @property
+    def inPlan(self):
+        if self.planstatus=='Laufend':
+            end_time = self.startdatum + timedelta(days=self.anzahlTage)
+            if timezone.now() >= self.startdatum and timezone.now() <= end_time:
+                return True
+
+            else:
+                return False
+
+
+
+
+
+
+
+# TestTabelle für OPC UA Server
 class Test(models.Model):
     # eindeutige ID für den Test
     testnummer = models.PositiveSmallIntegerField(default=0, unique=True)

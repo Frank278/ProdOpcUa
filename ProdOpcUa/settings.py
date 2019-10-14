@@ -39,12 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    #autorefresh
+    'livesync',
     'django.contrib.staticfiles',
     'opc',
     'crispy_forms',
     'tinymce',
     'bootstrap4',
+    #Opc Ua Server
     'opcua',
+
 ]
 
 MIDDLEWARE = [
@@ -55,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #autorefresh
+    'livesync.core.middleware.DjangoLiveSyncMiddleware',
 ]
 
 ROOT_URLCONF = 'ProdOpcUa.urls'
