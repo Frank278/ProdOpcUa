@@ -39,15 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    #autorefresh
-    'livesync',
+    'livesync',#autorefresh
     'django.contrib.staticfiles',
     'opc',
     'crispy_forms',
     'tinymce',
     'bootstrap4',
-    #Opc Ua Server
-    'opcua',
+    'opcua',#Opc Ua Server
+
 
 ]
 

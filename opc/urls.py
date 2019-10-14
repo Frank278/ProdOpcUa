@@ -25,8 +25,7 @@ urlpatterns = [
     path('produktionsAuftrag', produktionsAuftrag_list, name='produktionsAuftrag'),
     # Produkte
     path('intProdukt', intProdukt_list, name='intProdukt'),
-    # Benötigte Dienstleistungen bzw. Arbeiten um das Produkt zu erstellen
-    path('dieIntProdukt', dieIntProdukt_list, name='dieIntProdukt'),
+
     # Von den Maschinen zur verfügung gestellte Dienstleistungen
     path('dienstleistungen', dienstleistungen_list, name='dienstleistungen'),
 
@@ -34,17 +33,7 @@ urlpatterns = [
 
     # Die OPC UA Server
     path('regOpcUaServer', regOpcUaServer_list, name='regOpcUaServer'),
-    # Von den OPC UA Server zur verfügung gestellte Dienstleistungen
-    path('dienstOpcUaServer', dienstOpcUaServer_list, name='dienstOpcUaServer'),
 
-    # Die virtuellen OPC UA Server
-    path('virtuelleOpcUaServer', virtuelleOpcUaServer_list, name='virtuelleOpcUaServer'),
-
-    # Von den virtuellen OPC UA Server zur verfügung gestellte Dienstleistungen
-    path('dieVirtOpcUaServer', dienstVirtOpcUaServer_list, name='dieVirtOpcUaServer'),
-
-    # Virtuellen OPC UA Server erstellen
-    path('virtServerErstellen', virtServerErstellen, name='virtServerErstellen'),
 
     # Produktionsauftrag erstellen
     path('produktionsAuftragErstellen', produktionsAuftragErstellen, name='produktionsAuftragErstellen'),

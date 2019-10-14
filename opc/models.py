@@ -10,19 +10,31 @@ from django.utils import timezone
 from datetime import timedelta
 
 
-class VirtuelleOpcUaServer(models.Model):
-    # eindeutige ID für Vitruellen Servers
-    virtuellServerID = models.PositiveSmallIntegerField(default=0, unique=True)
-    # Name des virtuellen Servers
+
+class RegOpcUaServer(models.Model):
+    # eindeutige ID für den Servers
+    regServerID = models.PositiveSmallIntegerField(default=0, unique=True)
+    # Name des Servers
     servername = models.CharField(max_length=30, unique=True)
-    # Ort des virtuellen Servers
+    # Ort des Servers
     ort = models.CharField(max_length=30)
-    # Portnummer des virtuellen Servers
+    # Port des Servers
     portnummer = models.PositiveIntegerField(null=True)
+
+    # Art des Servers
+    SERVERTYP = Choices('Raspery', 'Virtuell')
+    servertyp = models.CharField(choices=SERVERTYP, default=SERVERTYP.Raspery,
+                                           max_length=20)
+    # Zeit der Anmeldung beim Server
+    regestrierungsZeit = models.DateTimeField(null=True)
+
     # Status des virtuellen Servers
     SERVERSTATUS = Choices('Starten', 'Gestartet', 'Stoppen', 'Gestoppt')
     serverstatus = models.CharField(choices=SERVERSTATUS, default=SERVERSTATUS.Gestoppt, max_length=20)
+
+    # Automatischer Start bei starten der Applikation
     autoStart = models.BooleanField(default=False)
+
     # Anzahl der offenen Aufträge
     anzahlOffeneAuftraege = models.PositiveIntegerField(null=True)
     # Anzahl der abgeschlossenen Aufträge
@@ -37,73 +49,22 @@ class VirtuelleOpcUaServer(models.Model):
         return self.servername
 
 
-class DienstVirtOpcUaServer(models.Model):
-    # eindeutige ID für Dienstleistungen des virtuellen Servers
-    dieVirtOpcUaID = models.PositiveSmallIntegerField(default=0, unique=True)
-    # Name des Dienstes der virtuellen Servers
-    name = models.CharField(max_length=30, null=True)
-    # Namen der Virtuellen Server
-    virtserver = models.ManyToManyField('VirtuelleOpcUaServer')
-    # Beschreibung des Dienstes
-    serviceBeschreibung = models.TextField(max_length=200, blank=True, null=True)
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return str(self.dieVirtOpcUaID)
-
-
-class RegOpcUaServer(models.Model):
-    # eindeutige ID für den Servers
-    regServerID = models.PositiveSmallIntegerField(default=0, unique=True)
-    # Name des Servers
-    servername = models.CharField(max_length=30, unique=True)
-    # Ort des Servers
-    ort = models.CharField(max_length=30)
-    # Port des Servers
-    portnummer = models.PositiveIntegerField(null=True)
-    # Status des Servers
-    REGISTRIERUNGSSTATUS = Choices('Starten', 'Gestartet', 'Stoppen', 'Gestoppt')
-    registrieungsstatus = models.CharField(choices=REGISTRIERUNGSSTATUS, default=REGISTRIERUNGSSTATUS.Gestoppt,
-                                           max_length=20)
-    # Zeit der Anmeldung beim Server
-    regestrierungsZeit = models.DateTimeField(null=True)
-    # Simmulierte Zeit
-    running_simulation = models.DurationField(default=timedelta(minutes=2))
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.servername
-
-
-class DienstOpcUaServer(models.Model):
-    # eindeutige ID für Dienstleistungen des Servers
-    dieOpcUaID = models.PositiveSmallIntegerField(default=0, unique=True)
-    # Name des Servers
-    name = models.CharField(max_length=30, null=True)
-    # Namen der Server , die den Dienst anbieten
-    regServer = models.ManyToManyField('RegOpcUaServer')
-    # Beschreibung des Service
-    serviceBeschreibung = models.TextField(max_length=200, blank=True, null=True)
-    # Simmulierte Zeit
-    running_simulation = models.DurationField(default=timedelta(minutes=2))
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return str(self.dieOpcUaID)
 
 
 class Dienstleistungen(models.Model):
     # eindeutige ID für Dienstleistungen aller Server
     servicenummer = models.PositiveSmallIntegerField(default=0, unique=True)
     # eingebunde Server für die Dienstleistungen
-    dieOpcUa = models.ManyToManyField('DienstOpcUaServer', blank=True)
-    # eingebundene  virtuelle Server für die Dienstleistunegen
-    dieVirtOpcUa = models.ManyToManyField('DienstVirtOpcUaServer', blank=True)
+    dieOpcUa = models.ManyToManyField('RegOpcUaServer', blank=True)
+
     # Name des Service
     serviceName = models.CharField(max_length=30, unique=True)
     # Beschreibung des Service
     serviceBeschreibung = models.TextField(max_length=200, blank=True, null=True)
 
+    # Simmulierte Zeit
+    running_simulation = models.DurationField(default=timedelta(minutes=2))
 
 
     def __str__(self):
@@ -111,37 +72,23 @@ class Dienstleistungen(models.Model):
         return self.serviceName
 
 
-class DieIntProdukt(models.Model):
-    # eindeutige ID für Dienstleistung für intelligentes Produkt
-    dieIntProduktID = models.PositiveSmallIntegerField(default=0, unique=True)
-    # Name der Dienstleistung
-    name = models.CharField(max_length=30, null=True)
-    # Servivenummern der Dienstleistungen
-    servicenummer = models.ManyToManyField('Dienstleistungen')
-    # Anzahl der benötigten Service
-    anzahlService = models.PositiveIntegerField(null=True)
 
-
-
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return str(self.dieIntProduktID)
 
 
 class IntProdukt(models.Model):
     # eindeutige ID für intelligentes Produkt
     intProduktnummer = models.PositiveSmallIntegerField(default=0, unique=True)
-    # Name des Models
-    name = models.CharField(max_length=30, null=True)
-    # Dienstleistungen des Produktes
-    dieIntProd = models.ForeignKey(to=DieIntProdukt, on_delete=models.SET_NULL, null=True)
+
+
     # Produktname
     produktName = models.CharField(max_length=30)
     # Produktbeschreibung
     produktBeschreibung = models.TextField(max_length=200, null=True)
 
-
+    # Servivenummern der Dienstleistungen
+    servicenummer = models.ManyToManyField('Dienstleistungen')
+    # Anzahl der benötigten Service
+    anzahlService = models.PositiveIntegerField(null=True)
     def __str__(self):
         """String for representing the Model object."""
         return self.produktName

@@ -101,29 +101,9 @@ def maschinen(request):
 
 # Erstellen der Datenbankabfrage für die VirtuelleOpcUaServer
 
-@login_required
-def virtuelleOpcUaServer_list(request, template_name='main/opcvirtuelleOpcUaServer.html'):
-    virtuelleOpcUaServer = VirtuelleOpcUaServer.objects.all()
-
-    data = {}
-    data['object_list'] = virtuelleOpcUaServer
-
-    return render(request, template_name, data)
 
 
-# Erstellen der Datenbankabfrage für die DienstVirtOpcUaServer
 
-@login_required
-def dienstVirtOpcUaServer_list(request, template_name='main/opcdienstVirtOpcUaServer.html'):
-    dienstVirtOpcUaServer = DienstVirtOpcUaServer.objects.all()
-
-    data = {}
-    data['object_list'] = dienstVirtOpcUaServer
-
-    return render(request, template_name, data)
-
-
-# Erstellen der Datenbankabfrage für RegOpcUaServer
 
 @login_required
 def regOpcUaServer_list(request, template_name='main/opcregOpcUaServer.html'):
@@ -137,17 +117,6 @@ def regOpcUaServer_list(request, template_name='main/opcregOpcUaServer.html'):
 
 # Erstellen der Datenbankabfrage für DienstOpcUaServer
 
-@login_required
-def dienstOpcUaServer_list(request, template_name='main/opcdienstOpcUaServer.html'):
-    dienstOpcUaServer = DienstOpcUaServer.objects.all()
-
-    data = {}
-    data['object_list'] = dienstOpcUaServer
-
-    return render(request, template_name, data)
-
-
-# Erstellen der Datenbankabfrage für die Dienstleistungen
 
 @login_required
 def dienstleistungen_list(request, template_name='main/opcdienstleistungen.html'):
@@ -161,17 +130,7 @@ def dienstleistungen_list(request, template_name='main/opcdienstleistungen.html'
 
 # Erstellen der Datenbankabfrage für die DieIntProdukt
 
-@login_required
-def dieIntProdukt_list(request, template_name='main/opcdieIntProdukt.html'):
-    dieIntProdukt = DieIntProdukt.objects.all()
 
-    data = {}
-    data['object_list'] = dieIntProdukt
-
-    return render(request, template_name, data)
-
-
-# Erstellen der Datenbankabfrage für IntProdukt
 
 @login_required
 def intProdukt_list(request, template_name='main/opcintProdukt.html'):
@@ -227,11 +186,7 @@ def test_list(request, template_name='main/test.html'):
 
     return render(request, template_name, data)
 
-# Erstellen von Virtuellen Servern
-@login_required
-def virtServerErstellen(request):
-    return render(request=request,
-                  template_name='main/opcvirtServerErstellen.html')
+
 
 # Erstellen von Produktionsaufträgen
 @login_required
@@ -249,8 +204,6 @@ def serverHinzu(request):
 # Produktionsüberwachung
 @login_required
 
-
-
 def prouktionsUeberwachung_list(request, template_name='main/opcproduktionsUeberwachung.html'):
     produktionsAuftrag = ProduktionsAuftrag.objects.all()
 
@@ -258,6 +211,21 @@ def prouktionsUeberwachung_list(request, template_name='main/opcproduktionsUeber
     data['object_list'] = produktionsAuftrag
 
     return render(request, template_name, data)
+
+
+# Erstellen Datenbankabfrage Anazahl Server
+def server_list():
+    # Anzahl der OPC UA Server am Netzwerk
+    anzahlserver = RegOpcUaServer.objects.count()
+    # Anzahl der virtuellen OPC UA Server
+    return anzahlserver
+
+
+
+
+
+
+
 
 
 
