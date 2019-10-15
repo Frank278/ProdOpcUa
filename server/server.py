@@ -12,10 +12,23 @@ except ImportError:
 
 from opcua import ua, uamethod, Server
 
+
+
+
 @uamethod
-def start_programm(parent):
+def start_work(parent):
     status = "gestartet"
     # LED Grün leuchtet
+
+
+@uamethod
+def say_hello(parent, happy):
+    if happy:
+        result = "I'm happy"
+    else:
+        result = "I'm not happy"
+    print(result)
+    return result
 
 def stop_programm(parent):
     status = "gestoppt"
