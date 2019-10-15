@@ -11,14 +11,30 @@ except ImportError:
         shell.interact()
 
 from opcua import ua, uamethod, Server
+import time
 
+from opcua import ua, Server
+from random import randint
+import datetime
 
 
 
 @uamethod
-def start_work(parent):
-    status = "gestartet"
-    # LED Grün leuchtet
+def start_program(parent, program_01):
+    if program_01:
+        start = True
+        # LED Grün leuchtet
+        time.sleep(20)
+        start = False
+        beendet = True
+        # LED Gelb leuchtet
+
+    else:
+
+        stoerung = True
+
+
+
 
 
 @uamethod
@@ -30,9 +46,7 @@ def say_hello(parent, happy):
     print(result)
     return result
 
-def stop_programm(parent):
-    status = "gestoppt"
-    # LED Rot leuchtet
+
 
 @uamethod
 def say_hello_xml(parent, happy, hugo):
@@ -97,6 +111,14 @@ class HelloServer:
 
         hellower.add_method(
             freeopcua_namespace, "SayHelloHugo", say_hello_hugo)
+
+        hellower.add_method(
+            freeopcua_namespace, "StartProgram", start_program, [ua.VariantType.Boolean], [ua.VariantType.String], [ua.VariantType.String])
+
+        # add Parameter to the Object
+        start = HelloServer.add_variable(0, "Temperature", False)
+        stoerung = HelloServer.add_variable(0, "Stoerung", False)
+        beendet = HelloServer.add_variable(0, "Beendet", False)
 
 
     def __enter__(self):

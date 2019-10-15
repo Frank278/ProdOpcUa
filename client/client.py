@@ -26,6 +26,10 @@ if __name__ == '__main__':
         hellower = objects.get_child("0:Hellower")
         print("Hellower is: ", hellower)
 
+        resulting_text = hellower.call_method("0:StartProgram", True)
+        print(resulting_text)
+
+
         resulting_text = hellower.call_method("0:SayHello", False, 'tums züg')
         print(resulting_text)
 
