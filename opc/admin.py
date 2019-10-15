@@ -6,7 +6,7 @@ from .models import *
 # Register your models here.
 admin.site.register(RegOpcUaServer)
 admin.site.register(Dienstleistungen)
-admin.site.register(IntProdukt)
+admin.site.register(Produkt)
 admin.site.register(Kunden)
 admin.site.register(ProduktionsAuftrag)
 admin.site.register(Ressourcenplanung)

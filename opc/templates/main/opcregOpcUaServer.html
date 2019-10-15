@@ -5,42 +5,56 @@
     <title>RegOpcUaServer</title>
 </head>
 <body>
-{% extends 'main/includes/header.html' %}
+{% extends 'main/includes/header2.html' %}
 
 {% block content %}
 
+  <div class="card shadow mb-4">
+      <div class="card-header py-3">
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">regServerID</th>
-      <th scope="col">servername</th>
-      <th scope="col">ort</th>
-      <th scope="col">portnummer</th>
-      <th scope="col">registrieungsstatus</th>
-      <th scope="col">regestrierungsZeit</th>
-
-    </tr>
-  </thead>
-  <tbody>
-    {% for regOpcUaServer in object_list %}
-   <tr>
-
-            <td>{{ regOpcUaServer.regServerID}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
-            <td>{{ regOpcUaServer.servername}}</td>
-            <td>{{ regOpcUaServer.portnummer}}</td>
-            <td>{{ regOpcUaServer.registrieungsstatus}}</td>
-            <td>{{ regOpcUaServer.ort}}</td>
+      </div>
+      <div class="card-body">
+          <div class="table-responsive">
 
 
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">regServerID</th>
+                  <th scope="col">servername</th>
+                  <th scope="col">ort</th>
+                  <th scope="col">portnummer</th>
+                  <th scope="col">serverstatus</th>
+                  <th scope="col">regestrierungsZeit</th>
+                    <th scope="col">servertyp</th>
+                  <th scope="col">autoStart</th>
 
-    </tr>
+                </tr>
+              </thead>
+              <tbody>
+                {% for regOpcUaServer in object_list %}
+               <tr>
 
-    {% endfor %}
+                        <td>{{ regOpcUaServer.regServerID}}</td>
+                        <td>{{ regOpcUaServer.ort}}</td>
+                        <td>{{ regOpcUaServer.servername}}</td>
+                        <td>{{ regOpcUaServer.portnummer}}</td>
+                        <td>{{ regOpcUaServer.serverstatus}}</td>
+                        <td>{{ regOpcUaServer.regestrierungsZeit}}</td>
+                        <td>{{ regOpcUaServer.servertyp}}</td>
+                        <td>{{ regOpcUaServer.autoStart}}</td>
 
-  </tbody>
-</table>
+
+
+                </tr>
+
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+      </div>
+</div>
 {% endblock %}
 
 </body>

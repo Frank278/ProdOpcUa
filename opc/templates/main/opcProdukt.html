@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IntProdukt</title>
+</head>
+
+<body>
+{% extends 'main/includes/header2.html' %}
+{% block content %}
+<!-- DataTales Example -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+
+                    <table class="table">
+                      <thead>
+                        <tr>
+
+                            <th scope="col">Produktnummer</th>
+                            <th scope="col">produktName</th>
+                            <th scope="col">produktBeschreibung</th>
+                            <th scope="col">servicenummern</th>
+                            <th scope="col">anzahlService</th>
+                            <th scope="col">erstellungszeit</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for produkt in object_list %}
+                       <tr>
+                           <td>{{ produkt.produktnummer}}</td>
+                           <td>{{ produkt.produktName}}</td>
+                           <td>{{ produkt.produktBeschreibung}}</td>
+                           <td>{{ produkt.servicenummern.servicenummer}}</td>
+                           <td>{{ produkt.anzahlService}}</td>
+                           <td>{{ produkt.erstellungszeit}}</td>
+
+
+
+                        </tr>
+
+                        {% endfor %}
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+{% endblock %}
+
+</body>
+</html>

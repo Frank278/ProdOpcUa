@@ -5,43 +5,52 @@
     <title>Kunden</title>
 </head>
 <body>
-{% extends 'main/includes/header.html' %}
+{% extends 'main/includes/header2.html' %}
 {% block content %}
 
+  <div class="card shadow mb-4">
+      <div class="card-header py-3">
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Kundennummer</th>
-      <th scope="col">Name</th>
-      <th scope="col">Telefonnummer</th>
-      <th scope="col">Ort</th>
-      <th scope="col">Plz</th>
-      <th scope="col">Strasse</th>
-      <th scope="col">Hausnummer</th>
-
-    </tr>
-  </thead>
-  <tbody>
-    {% for kunden in object_list %}
-   <tr>
-
-            <td>{{ kunden.kundennummer}}</td>
-            <td>{{ kunden.name}}</td>
-            <td>{{ kunden.telefonnummer}}</td>
-            <td>{{ kunden.ort}}</td>
-            <td>{{ kunden.plz}}</td>
-            <td>{{ kunden.strasse}}</td>
-            <td>{{ kunden.hausnummer}}</td>
+      </div>
+      <div class="card-body">
+          <div class="table-responsive">
 
 
-    </tr>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Kundennummer</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Telefonnummer</th>
+                  <th scope="col">Ort</th>
+                  <th scope="col">Plz</th>
+                  <th scope="col">Strasse</th>
+                  <th scope="col">Hausnummer</th>
 
-    {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for kunden in object_list %}
+               <tr>
 
-  </tbody>
-</table>
-{% endblock %}
+                        <td>{{ kunden.kundennummer}}</td>
+                        <td>{{ kunden.name}}</td>
+                        <td>{{ kunden.telefonnummer}}</td>
+                        <td>{{ kunden.ort}}</td>
+                        <td>{{ kunden.plz}}</td>
+                        <td>{{ kunden.strasse}}</td>
+                        <td>{{ kunden.hausnummer}}</td>
 
+
+                </tr>
+
+                {% endfor %}
+
+              </tbody>
+            </table>
+            {% endblock %}
+         </div>
+      </div>
+</div>
 </body>
 </html>

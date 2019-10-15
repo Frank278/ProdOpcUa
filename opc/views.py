@@ -133,11 +133,11 @@ def dienstleistungen_list(request, template_name='main/opcdienstleistungen.html'
 
 
 @login_required
-def intProdukt_list(request, template_name='main/opcintProdukt.html'):
-    intProdukt = IntProdukt.objects.all()
+def produkt_list(request, template_name='main/opcProdukt.html'):
+    produkt = Produkt.objects.all()
 
     data = {}
-    data['object_list'] = intProdukt
+    data['object_list'] = produkt
 
     return render(request, template_name, data)
 
@@ -236,7 +236,7 @@ def server_list():
 
     #workTime = Anzahl der Dienstleistungen der Aufträge mal deren Bearbeitungszeit
 
-    # Kapazität ist workTime *100 / maxTime, aber maximal 100
+    #Kapazität ist workTime *100 / maxTime, aber maximal 100
 
 
 # Erstellen der Datenbankabfrage für die Kapazitätsauslastung

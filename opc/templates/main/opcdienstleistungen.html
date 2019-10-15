@@ -5,35 +5,48 @@
     <title>Dienstleistungen</title>
 </head>
 <body>
-{% extends 'main/includes/header.html' %}
+{% extends 'main/includes/header2.html' %}
 {% block content %}
+<div class="card shadow mb-4">
+      <div class="card-header py-3">
+
+      </div>
+      <div class="card-body">
+          <div class="table-responsive">
 
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">servicenummer</th>
 
-      <th scope="col">serviceName</th>
-      <th scope="col">serviceBeschreibung</th>
+                <table class="table">
+                  <thead>
+                    <tr>
+                        <th scope="col">Servicenummer</th>
+                        <th scope="col">ServiceName</th>
+                        <th scope="col">ServiceBeschreibung</th>
+                        <th scope="col">Zeitdauer</th>
 
-    </tr>
-  </thead>
-  <tbody>
-    {% for dienstleistungen in object_list %}
-     <tr>
 
-            <td>{{ dienstleistungen.servicenummer}}</td>
 
-            <td>{{ dienstleistungen.serviceName}}</td>
-            <td>{{ dienstleistungen.serviceBeschreibung}}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for dienstleistungen in object_list %}
+                     <tr>
 
-        </tr>
+                            <td>{{ dienstleistungen.servicenummer}}</td>
 
-    {% endfor %}
+                            <td>{{ dienstleistungen.serviceName}}</td>
+                            <td>{{ dienstleistungen.serviceBeschreibung}}</td>
+                            <td>{{ dienstleistungen.running_simulation}}</td>
 
-  </tbody>
-</table>
+                        </tr>
+
+                    {% endfor %}
+
+                  </tbody>
+                </table>
+          </div>
+      </div>
+</div>
 {% endblock %}
 
 </body>

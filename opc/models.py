@@ -35,14 +35,6 @@ class RegOpcUaServer(models.Model):
     # Automatischer Start bei starten der Applikation
     autoStart = models.BooleanField(default=False)
 
-    # Anzahl der offenen Aufträge
-    anzahlOffeneAuftraege = models.PositiveIntegerField(null=True)
-    # Anzahl der abgeschlossenen Aufträge
-    anzahlAbgesAuftraege = models.PositiveIntegerField(null=True)
-    # Anzahl der aktuellen Aufräge
-    aktuelleAuftraegsNr = models.PositiveIntegerField(null=True)
-    # Startzeit des aktuellen Auftrages
-    startZeit = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -75,20 +67,33 @@ class Dienstleistungen(models.Model):
 
 
 
-class IntProdukt(models.Model):
+class Produkt(models.Model):
     # eindeutige ID für intelligentes Produkt
-    intProduktnummer = models.PositiveSmallIntegerField(default=0, unique=True)
-
+    produktnummer = models.PositiveSmallIntegerField(default=0, unique=True)
 
     # Produktname
     produktName = models.CharField(max_length=30)
+
     # Produktbeschreibung
     produktBeschreibung = models.TextField(max_length=200, null=True)
 
     # Servivenummern der Dienstleistungen
-    servicenummer = models.ManyToManyField('Dienstleistungen')
+    servicenummern = models.ManyToManyField('Dienstleistungen')
+
     # Anzahl der benötigten Service
     anzahlService = models.PositiveIntegerField(null=True)
+
+
+    # Berechnung der erstellungszeit des Produktes
+    @property
+    def erstellungszeit(self):
+        anzahl = self.anzahlService
+        zeitproservice = timedelta(minutes=10)
+        ezeit = anzahl*zeitproservice
+
+        return ezeit
+
+
     def __str__(self):
         """String for representing the Model object."""
         return self.produktName
@@ -120,7 +125,7 @@ class ProduktionsAuftrag(models.Model):
     auftragsnummer = models.PositiveSmallIntegerField(default=0, unique=True)
     # Kundenmummer des Auftrages
     kundennummer = models.ForeignKey(to=Kunden, on_delete=models.SET_NULL, null=True)
-    intProdukt = models.ForeignKey(to=IntProdukt, on_delete=models.SET_NULL, null=True)
+    intProdukt = models.ForeignKey(to=Produkt, on_delete=models.SET_NULL, null=True)
     aktuellerSchritt = models.PositiveIntegerField(null=True)
     anzahlSchritte = models.PositiveIntegerField(null=True)
     AUFTRAGSSTATUS = Choices('Geplant', 'InBearbeitung', 'Gestoppt', 'Abgeschossen')

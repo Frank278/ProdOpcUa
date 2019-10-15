@@ -8,40 +8,51 @@
 {% extends 'main/includes/header2.html' %}
 
 {% block content %}
+<div class="card shadow mb-4">
+      <div class="card-header py-3">
 
-
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">auftragsnummer</th>
-      <th scope="col">kundennummer</th>
-      <th scope="col">intProdukt</th>
-      <th scope="col">aktuellerSchritt</th>
-      <th scope="col">auftragsstatus</th>
-      <th scope="col">letzteAktuallisierung</th>
-      <th scope="col">Fortschritt</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for produktionsAuftrag in object_list %}
-   <tr>
-
-            <td>{{ produktionsAuftrag.auftragsnummer}}</td>
-            <td>{{ produktionsAuftrag.kundennummer}}</td>
-            <td>{{ produktionsAuftrag.intProdukt}}</td>
-            <td>{{ produktionsAuftrag.aktuellerSchritt}}</td>
-            <td>{{ produktionsAuftrag.auftragsstatus}}</td>
-            <td>{{ produktionsAuftrag.letzteAktuallisierung}}</td>
-            <td>{{ produktionsAuftrag.fortschritt}}</td>
+      </div>
+      <div class="card-body">
+          <div class="table-responsive">
 
 
 
-    </tr>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">auftragsnummer</th>
+                      <th scope="col">kundennummer</th>
+                      <th scope="col">intProdukt</th>
+                      <th scope="col">aktuellerSchritt</th>
+                      <th scope="col">auftragsstatus</th>
+                      <th scope="col">letzteAktuallisierung</th>
+                      <th scope="col">Fortschritt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for produktionsAuftrag in object_list %}
+                   <tr>
 
-    {% endfor %}
+                            <td>{{ produktionsAuftrag.auftragsnummer}}</td>
+                            <td>{{ produktionsAuftrag.kundennummer}}</td>
+                            <td>{{ produktionsAuftrag.intProdukt}}</td>
+                            <td>{{ produktionsAuftrag.aktuellerSchritt}}</td>
+                            <td>{{ produktionsAuftrag.auftragsstatus}}</td>
+                            <td>{{ produktionsAuftrag.letzteAktuallisierung}}</td>
+                            <td>{{ produktionsAuftrag.fortschritt}}</td>
 
-  </tbody>
-</table>
+
+
+                    </tr>
+
+                    {% endfor %}
+
+                  </tbody>
+                </table>
+
+          </div>
+      </div>
+</div>
 {% endblock %}
 
 </body>

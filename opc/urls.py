@@ -24,7 +24,7 @@ urlpatterns = [
     # Produktionsaufträge
     path('produktionsAuftrag', produktionsAuftrag_list, name='produktionsAuftrag'),
     # Produkte
-    path('intProdukt', intProdukt_list, name='intProdukt'),
+    path('Produkt', produkt_list, name='Produkt'),
 
     # Von den Maschinen zur verfügung gestellte Dienstleistungen
     path('dienstleistungen', dienstleistungen_list, name='dienstleistungen'),
