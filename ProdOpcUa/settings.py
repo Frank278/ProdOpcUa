@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -63,6 +64,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ProdOpcUa.urls'
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+
 
 TEMPLATES = [
     {

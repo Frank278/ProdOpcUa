@@ -41,7 +41,7 @@
               <div class="card white">
                 <div class="card-content black-text">
 
-                  <span class="card-title"> Anzahl Maschinen (Server) </span>
+                  <span class="card-title"> Server </span>
 
 
                   <p> {{anzahlserv}}</p>
@@ -57,7 +57,7 @@
             <div class="col s3 m3">
               <div class="card white">
                 <div class="card-content ">
-                  <span class="card-title"> Offene Aufräge </span>
+                  <span class="card-title"> Aufträge </span>
                   <p>  </p>
 
                 </div>
@@ -71,12 +71,12 @@
             <div class="col s3 m3">
               <div class="card white">
                 <div class="card-content ">
-                  <span class="card-title"> Abgeschlossene Aufträge </span>
+                  <span class="card-title"> Produkte</span>
                   <p> </p>
 
                 </div>
                 <div class="card-action">
-                  <a href="{% url 'opc:ressourcenplanung' %}"  class="btn btn-danger" >Zu den Auftägen</a>
+                  <a href="{% url 'opc:ressourcenplanung' %}"  class="btn btn-danger" >Zu den Produkten</a>
 
                 </div>
               </div>
@@ -122,39 +122,9 @@
             
           </div>
 
-          <!-- Content Row -->
-          <div class="row">
-
-            <!-- Content Column -->
-            <div class="col-lg-12 mb-4">
-
-              <!-- Project Card Example -->
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Laufende Aufträge</h6>
-                </div>
-                  {% for produktionsAuftrag in object_list %}
-                  <div class="card-body">
 
 
 
-
-                     <h6 class="m-0 font-weight-bold text-primary">{{produktionsAuftrag.auftragsnummer}} <span class="float-right">{{ produktionsAuftrag.auftragsstatus}} </span></h6>
-                    <div class="progress">
-                        <div class="determinate" style="width: {{produktionsAuftrag.fortschritt}}%"></div>
-                    </div>
-                  </div>
-                  {% endfor %}
-
-              </div>
-
-
-
-
-            </div>
-
-
-          </div>
 
 
 
@@ -169,7 +139,7 @@
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Laufende Aufträge</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Aufträge</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -192,8 +162,8 @@
                    <tr>
 
                        <td>{{ produktionsAuftrag.auftragsnummer}}</td>
-                       <td>{{ produktionsAuftrag.kundennummer}}</td>
-                       <td>{{ produktionsAuftrag.intProdukt}}</td>
+                       <td>{{ produktionsAuftrag.kunde}}</td>
+                       <td>{{ produktionsAuftrag.produkt}}</td>
                        <td>{{ produktionsAuftrag.aktuellerSchritt}}</td>
                        <td>{{ produktionsAuftrag.auftragsstatus}}</td>
                        <td>{{ produktionsAuftrag.letzteAktuallisierung}}</td>

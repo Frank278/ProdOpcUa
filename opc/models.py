@@ -22,21 +22,17 @@ class RegOpcUaServer(models.Model):
     ort = models.CharField(max_length=30)
     # Port des Servers
     portnummer = models.PositiveIntegerField(null=True)
-
     # Art des Servers
     SERVERTYP = Choices('Raspery', 'Virtuell')
     servertyp = models.CharField(choices=SERVERTYP, default=SERVERTYP.Raspery,
                                            max_length=20)
     # Zeit der Anmeldung beim Server
     regestrierungsZeit = models.DateTimeField(null=True)
-
     # Status des Servers
     SERVERSTATUS = Choices('Starten', 'Gestartet', 'Stoppen', 'Gestoppt')
     serverstatus = models.CharField(choices=SERVERSTATUS, default=SERVERSTATUS.Gestoppt, max_length=20)
-
-    # Automatischer Start bei starten der Applikation
+     # anzeige ob server aktiv
     aktiv = models.BooleanField(default=False)
-
     # Letzte Aktualisierung
     aktualuasierungsdatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
 
@@ -49,27 +45,19 @@ class RegOpcUaServer(models.Model):
             if self.aktiv == False:
                 self.delete()
 
-
-
     def __str__(self):
         """String for representing the Model object."""
         return self.servername
-
-
-
-
 
 class Dienstleistungen(models.Model):
     # eindeutige ID für Dienstleistungen aller Server
     servicenummer = models.PositiveSmallIntegerField(default=0, unique=True)
     # eingebunde Server für die Dienstleistungen
     dieOpcUa = models.ManyToManyField('RegOpcUaServer', blank=True)
-
     # Name des Service
     serviceName = models.CharField(max_length=30, unique=True)
     # Beschreibung des Service
     serviceBeschreibung = models.TextField(max_length=200, blank=True, null=True)
-
     # Simmulierte Zeit
     running_simulation = models.DurationField(default=timedelta(minutes=2))
 
@@ -79,22 +67,15 @@ class Dienstleistungen(models.Model):
         return self.serviceName
 
 
-
-
-
 class Produkt(models.Model):
     # eindeutige ID für intelligentes Produkt
     produktnummer = models.PositiveSmallIntegerField(default=0, unique=True)
-
     # Produktname
     produktName = models.CharField(max_length=30)
-
     # Produktbeschreibung
     produktBeschreibung = models.TextField(max_length=200, null=True)
-
     # Servivenummern der Dienstleistungen
     servicenummern = models.ManyToManyField('Dienstleistungen')
-
     # Anzahl der benötigten Schritte / Service
     anzahlService = models.PositiveIntegerField(null=True)
 
@@ -107,7 +88,6 @@ class Produkt(models.Model):
         ezeit = anzahl*zeitproservice
 
         return ezeit
-
 
     def __str__(self):
         """String for representing the Model object."""
@@ -138,15 +118,21 @@ class Kunden(models.Model):
 class ProduktionsAuftrag(models.Model):
     # eindeutige Kundennumnmer
     auftragsnummer = models.PositiveSmallIntegerField(default=0, unique=True)
-    # Kundenmummer des Auftrages
+    # Kunde des Auftrages
     kunde = models.ForeignKey(to=Kunden, on_delete=models.SET_NULL, null=True)
+    # Produkt des Auftrages
     produkt = models.ForeignKey(to=Produkt, on_delete=models.SET_NULL, null=True)
+    # Aktueller Schritt
     aktuellerSchritt = models.PositiveIntegerField(null=True)
+    # Zugeteilter Server zum Auftrag
     server = models.ForeignKey(to=RegOpcUaServer, on_delete=models.SET_NULL, null=True)
+    # Anzahl der Schritte
     anzahlSchritte = models.PositiveIntegerField(null=True)
+    # Auftragsstaus
     AUFTRAGSSTATUS = Choices('Geplant', 'InBearbeitung', 'Gestoppt', 'Abgeschossen')
     auftragsstatus = models.CharField(choices=AUFTRAGSSTATUS, default=AUFTRAGSSTATUS.Geplant,
                                       max_length=20)
+    #letzte Aktuallisierung
     letzteAktuallisierung = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
 
     # berechnung des fortschrittes des Auftrages
@@ -231,7 +217,7 @@ class Serverdata(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.name
+        return self.servername
 
 
 # TestTabelle für OPC UA Server

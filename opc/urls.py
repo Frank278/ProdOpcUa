@@ -6,6 +6,8 @@ app_name = 'opc'
 urlpatterns = [
     # wenn eine Anfrage an / reinkommt, dann übergebe das der Funktion
     # index aus der views.py
+
+
     # zuerst die Authentifizierung
     path('', index, name='index'),
     path("register", register, name="register"),
