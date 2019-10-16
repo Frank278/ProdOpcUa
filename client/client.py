@@ -43,19 +43,21 @@ if __name__ == '__main__':
 
         print(resulting_array)
 
-        Temp = client.get_node("ns=2; i=2")
-        Temperature = Temp.get_value()
+        while True:
+            Temp = client.get_node("ns=2; i=2")
+            Temperature = Temp.get_value()
 
-        Press = client.get_node("ns=2; i=3")
-        Pressure = Press.get_value()
+            Press = client.get_node("ns=2; i=3")
+            Pressure = Press.get_value()
 
-        TIME = client.get_node("ns=2; i=4")
-        TIME_Value = TIME.get_value()
+            TIME = client.get_node("ns=2; i=4")
+            TIME_Value = TIME.get_value()
 
-        # Status von Raspery
 
-        # Start von Servermethode
+       # DB API von Django
+       # test = Test(Temperature, Pressure, TIME_Value)
+       # test.save()
 
-        # Stop von Servermethode
+
 
 

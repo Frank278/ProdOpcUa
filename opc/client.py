@@ -19,4 +19,3 @@ while True:
 
     test = Test(Temperature, Pressure, TIME_Value)
     test.save()
-    #start = client.

@@ -89,6 +89,7 @@ class HelloServer:
     def __init__(self, endpoint, name, model_filepath):
         self.server = Server()
 
+
         #  This need to be imported at the start or else it will overwrite the data
         self.server.import_xml(model_filepath)
 
@@ -115,10 +116,36 @@ class HelloServer:
         hellower.add_method(
             freeopcua_namespace, "StartProgram", start_program, [ua.VariantType.Boolean], [ua.VariantType.String], [ua.VariantType.String])
 
+
         # add Parameter to the Object
-        start = HelloServer.add_variable(0, "Temperature", False)
-        stoerung = HelloServer.add_variable(0, "Stoerung", False)
-        beendet = HelloServer.add_variable(0, "Beendet", False)
+
+
+        start = hellower.add_variable(0, "Temperature", False)
+        stoerung = hellower.add_variable(0, "Stoerung", False)
+        beendet = hellower.add_variable(0, "Beendet", False)
+
+        Temp = hellower.add_variable(0, "Temperature", 0)
+        Press = hellower.add_variable(0, "Pressure", 0)
+        Time = hellower.add_variable(0, "Time", 0)
+
+        Temp.set_writable()
+        Press.set_writable()
+        Time.set_writable()
+
+
+        count = 0
+        while True:
+            time.sleep(5)
+            Temperature = randint(10, 20)
+            Pressure = randint(10, 20)
+            TIME = datetime.datetime.now()
+
+            print(Temperature, Pressure, TIME)
+            Temp.set_value(Temperature)
+            Press.set_value(Pressure)
+            Time.set_value(TIME)
+
+            time.sleep(5)
 
 
     def __enter__(self):
@@ -135,4 +162,5 @@ if __name__ == '__main__':
             "opc.tcp://0.0.0.0:40840/freeopcua/server/",
             "FreeOpcUa Example Server",
             os.path.join(script_dir, "test_saying.xml")) as server:
+
         embed()

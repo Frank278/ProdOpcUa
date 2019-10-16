@@ -169,7 +169,7 @@ class Ressourcenplanung(models.Model):
     anzahlTage = models.IntegerField(default=2)
 
 
-    # Prüfung ob Ressouchenplan Aktiv
+    # Prüfung ob Ressoucenplan Aktiv
     @property
     def inPlan(self):
         if self.planstatus=='Laufend':
