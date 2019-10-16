@@ -47,7 +47,10 @@ urlpatterns = [
     # Anzeige der Kundendaten
     path('kunden', kunden_list, name='kunden'),
 
-    # Von den virtuellen OPC UA Server zur verfügung gestellte Dienstleistungen
+    # Testdaten
     path('test', test_list, name='test'),
+
+    # Die von den Serern eingehenden Daten
+    path('serverdata', serverdata_list, name='serverdata'),
 
 ]

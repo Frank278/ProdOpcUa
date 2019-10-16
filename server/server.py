@@ -23,15 +23,21 @@ import datetime
 def start_program(parent, program_01):
     if program_01:
         start = True
+        #Start.set_value(start)
         # LED Grün leuchtet
         time.sleep(20)
         start = False
-        beendet = True
+        #Start.set_value(start)
         # LED Gelb leuchtet
+        beendet = True
+        #Beendet.set_value(beendet)
+
+
 
     else:
 
         stoerung = True
+        #Stoerung.set_value(stoerung)
 
 
 
@@ -120,13 +126,17 @@ class HelloServer:
         # add Parameter to the Object
 
 
-        start = hellower.add_variable(0, "Temperature", False)
-        stoerung = hellower.add_variable(0, "Stoerung", False)
-        beendet = hellower.add_variable(0, "Beendet", False)
+        Start = hellower.add_variable(0, "Temperature", False)
+        Stoerung = hellower.add_variable(0, "Stoerung", False)
+        Beendet = hellower.add_variable(0, "Beendet", False)
 
         Temp = hellower.add_variable(0, "Temperature", 0)
         Press = hellower.add_variable(0, "Pressure", 0)
         Time = hellower.add_variable(0, "Time", 0)
+
+        Start.set_writable()
+        Stoerung.set_writable()
+        Beendet.set_writable()
 
         Temp.set_writable()
         Press.set_writable()
@@ -154,6 +164,7 @@ class HelloServer:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.server.stop()
+
 
 
 if __name__ == '__main__':

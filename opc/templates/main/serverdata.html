@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VirtuelleOpcUaServer</title>
+</head>
+<body>
+{% extends 'main/includes/header.html' %}
+
+{% block content %}
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">servername</th>
+      <th scope="col">ip</th>
+      <th scope="col">start</th>
+      <th scope="col">beendet</th>
+      <th scope="col">stoerung</th>
+      <th scope="col">Temperature</th>
+      <th scope="col">Pressure</th>
+        <th scope="col">TIME_Value</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for serverdata in object_list %}
+   <tr>
+
+            <td>{{ serverdata.id}}</td>
+            <td>{{ serverdata.servername}}</td>
+            <td>{{ serverdata.ip}}</td>
+            <td>{{ serverdata.start}}</td>
+            <td>{{ serverdata.beendet}}</td>
+            <td>{{ serverdata.stoerung}}</td>
+            <td>{{ serverdata.Temperature}}</td>
+            <td>{{ serverdata.Pressure}}</td>
+            <td>{{ serverdata.TIME_Value}}</td>
+            <td>{{ serverdata.startZeit}}</td>
+            <td>{{ serverdata.aktuelleAuftraegsNr}}</td>
+
+    </tr>
+
+    {% endfor %}
+
+  </tbody>
+</table>
+{% endblock %}
+
+</body>
+</html>

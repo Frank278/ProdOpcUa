@@ -23,6 +23,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.views import generic
 from .forms import NewUserForm
+from django.db.models import Count
 
 from django.contrib import messages
 
@@ -177,6 +178,17 @@ def ressourcenplanung_list(request, template_name='main/opcressourcen.html'):
 
     return render(request, template_name, data)
 
+
+login_required
+def serverdata_list(request, template_name='main/serverdata.html'):
+    serverdata = Serverdata.objects.all()
+
+    data = {}
+    data['object_list'] = serverdata
+
+    return render(request, template_name, data)
+
+
 @login_required
 def test_list(request, template_name='main/test.html'):
     test = Test.objects.all()
@@ -223,7 +235,22 @@ def server_list():
 
 
 
+def hitlist_list(request, template_name='hotel/hitlist.html'):
 
+
+
+    auftragszeiten = Produkt.objects.all().aggregate(Count('erstellungszeit'))
+
+    anzahlserver = RegOpcUaServer.objects.all().count
+
+    maschinetime = anzahlserver*timedelta(days=1)
+
+    data = {}
+    data['object_list'] = maschinen
+
+
+
+    return render(request, template_name, data)
 
 
 
@@ -246,3 +273,5 @@ def server_list():
             # for Servers
                 # add Aufträge
                     # worktime - Zeit Auftrag
+
+

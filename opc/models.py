@@ -8,6 +8,8 @@ from model_utils import Choices
 from datetime import datetime
 from django.utils import timezone
 from datetime import timedelta
+from django.db.models import Count
+import objects
 
 
 
@@ -159,14 +161,16 @@ class Ressourcenplanung(models.Model):
     # Produktionsaufträge für den Ressourcenplan
     produktionsauftrag = models.ManyToManyField('ProduktionsAuftrag')
     # Dienstleistungsplan für den Ressourcenplan
-    dienstleistungen = models.ManyToManyField('Dienstleistungen')
+
+
+    server = models.ManyToManyField('RegOpcUaServer')
     # Status des Ressouchenplanes
     PLANSTATUS = Choices('Geplant', 'InBearbeitung', 'Laufend', 'Abgeschossen')
     planstatus = models.CharField(choices=PLANSTATUS, default=PLANSTATUS.Geplant, max_length=20)
     # Geplanter Start des Ressouchenplans
     startdatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
-    # Anzahl der Tage für die Dauer des Ressouchenplanes, Deafult ist 2 Tage
-    anzahlTage = models.IntegerField(default=2)
+    # Anzahl der Tage für die Dauer des Ressouchenplanes, Deafult ist 1 Tag
+    anzahlTage = models.IntegerField(default=1)
 
 
     # Prüfung ob Ressoucenplan Aktiv
@@ -180,10 +184,78 @@ class Ressourcenplanung(models.Model):
             else:
                 return False
 
+    # anzahl der Server
+    @property
+    def anzahlserver(self):
+        anzahl = RegOpcUaServer.objects.all().count
+
+        return anzahl
+
+    #addieren der Maschinenzeiten
+    @property
+    def maschinenzeiten(self):
+        zeiten = ProduktionsAuftrag.objects.all().annotate(Count('erstellungszeit'))
+
+        # addieren der Maschinenzeiten
+
+    @property
+    def addServer(self):
+        produktionsAuftrag = ProduktionsAuftrag.objects.all()
+        serverlist = self.server
+
+        data = {}
+        data['object_list'] = serverlist
+
+        data = {}
+        data['object_list'] = produktionsAuftrag
+        for server in serverlist:
+            time= timedelta(days=0)
+            while time < timedelta(days=self.anzahlTage):
+                produktionsAuftrag.append(server.servername)
+                time = time + ProduktionsAuftrag.intProdukt.erstellungszeit
+
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return str(self.rplanungsnummer)
+
+
+class Serverdata(models.Model):
+    # ID des Servereintages
+
+    id = models.AutoField(primary_key=True)
+    # Name des Kunden
+
+    servername = models.CharField(max_length=30, null=True)
+
+    # IP Adresse
+    ip = models.CharField(max_length=30, null=True)
 
 
 
 
+    # Start des Auftrages
+    start = models.BooleanField(default=False)
+
+    # Beenden des Auftrages
+    beendet = models.BooleanField(default=False)
+
+
+    # Störung des Servers
+    stoerung = models.BooleanField(default=False)
+
+    # Temperatur der Maschine
+    Temperature = models.IntegerField(default=0)
+
+    # Druck der Maschine
+    Pressure = models.IntegerField(default=0)
+
+    # Zeitstempel des Eintages
+    TIME_Value = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
 
 
 # TestTabelle für OPC UA Server
