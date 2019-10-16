@@ -16,6 +16,7 @@ import time
 from opcua import ua, Server
 from random import randint
 import datetime
+Start= False
 
 
 
@@ -23,7 +24,7 @@ import datetime
 def start_program(parent, program_01):
     if program_01:
         start = True
-        #Start.set_value(start)
+        Start.set_value(start)
         # LED Grün leuchtet
         time.sleep(20)
         start = False

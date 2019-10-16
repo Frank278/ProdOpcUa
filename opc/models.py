@@ -95,7 +95,7 @@ class Produkt(models.Model):
     # Servivenummern der Dienstleistungen
     servicenummern = models.ManyToManyField('Dienstleistungen')
 
-    # Anzahl der benötigten Service
+    # Anzahl der benötigten Schritte / Service
     anzahlService = models.PositiveIntegerField(null=True)
 
 
@@ -139,9 +139,10 @@ class ProduktionsAuftrag(models.Model):
     # eindeutige Kundennumnmer
     auftragsnummer = models.PositiveSmallIntegerField(default=0, unique=True)
     # Kundenmummer des Auftrages
-    kundennummer = models.ForeignKey(to=Kunden, on_delete=models.SET_NULL, null=True)
-    intProdukt = models.ForeignKey(to=Produkt, on_delete=models.SET_NULL, null=True)
+    kunde = models.ForeignKey(to=Kunden, on_delete=models.SET_NULL, null=True)
+    produkt = models.ForeignKey(to=Produkt, on_delete=models.SET_NULL, null=True)
     aktuellerSchritt = models.PositiveIntegerField(null=True)
+    server = models.ForeignKey(to=RegOpcUaServer, on_delete=models.SET_NULL, null=True)
     anzahlSchritte = models.PositiveIntegerField(null=True)
     AUFTRAGSSTATUS = Choices('Geplant', 'InBearbeitung', 'Gestoppt', 'Abgeschossen')
     auftragsstatus = models.CharField(choices=AUFTRAGSSTATUS, default=AUFTRAGSSTATUS.Geplant,
@@ -160,17 +161,6 @@ class ProduktionsAuftrag(models.Model):
         return int(fortschritt)
 
 
-    # add server
-    @property
-    def add_server(self):
-      for server in RegOpcUaServer:
-        for item in self:
-
-            return RegOpcUaServer.regServerID
-
-
-
-
 
     def __str__(self):
         """String for representing the Model object."""
@@ -182,10 +172,6 @@ class Ressourcenplanung(models.Model):
     rplanungsnummer = models.PositiveSmallIntegerField(default=0, unique=True)
     # Produktionsaufträge für den Ressourcenplan
     produktionsauftrag = models.ManyToManyField('ProduktionsAuftrag')
-    # Dienstleistungsplan für den Ressourcenplan
-
-
-    server = models.ManyToManyField('RegOpcUaServer')
     # Status des Ressouchenplanes
     PLANSTATUS = Choices('Geplant', 'InBearbeitung', 'Laufend', 'Abgeschossen')
     planstatus = models.CharField(choices=PLANSTATUS, default=PLANSTATUS.Geplant, max_length=20)
@@ -218,25 +204,6 @@ class Ressourcenplanung(models.Model):
     def maschinenzeiten(self):
         zeiten = ProduktionsAuftrag.objects.all().annotate(Count('erstellungszeit'))
 
-        # addieren der Maschinenzeiten
-
-    #@property
-    #def addserver(self):
-    #    produktionsauftrag = produktionsauftrag.objects.all()
-    #    serverlist = self.server
-
-    #    data = {}
-    #    data['object_list'] = serverlist
-
-    #    data = {}
-    #    data['object_list'] = produktionsauftrag
-    #    for server in serverlist:
-    #        time= timedelta(days=0)
-    #       while time < timedelta(days=self.anzahltage):
-    #            produktionsauftrag.append(server.servername)
-    #            time = time + produktionsauftrag.intprodukt.erstellungszeit
-
-
     def __str__(self):
         """String for representing the Model object."""
         return str(self.rplanungsnummer)
@@ -244,34 +211,21 @@ class Ressourcenplanung(models.Model):
 
 class Serverdata(models.Model):
     # ID des Servereintages
-
     id = models.AutoField(primary_key=True)
     # Name des Kunden
-
     servername = models.CharField(max_length=30, null=True)
-
     # IP Adresse
     ip = models.CharField(max_length=30, null=True)
-
-
-
-
     # Start des Auftrages
     start = models.BooleanField(default=False)
-
     # Beenden des Auftrages
     beendet = models.BooleanField(default=False)
-
-
     # Störung des Servers
     stoerung = models.BooleanField(default=False)
-
     # Temperatur der Maschine
     Temperature = models.IntegerField(default=0)
-
     # Druck der Maschine
     Pressure = models.IntegerField(default=0)
-
     # Zeitstempel des Eintages
     TIME_Value = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
 

@@ -40,8 +40,12 @@
             <div class="col s3 m3">
               <div class="card white">
                 <div class="card-content black-text">
-                  <span class="card-title"> Anzahl Mashinen (Server) </span>
-                  <p> Hier gehts zur Produktionsüberwachung</p>
+
+                  <span class="card-title"> Anzahl Maschinen (Server) </span>
+
+
+                  <p> {{anzahlserv}}</p>
+
 
                 </div>
                 <div class="card-action">
@@ -54,7 +58,7 @@
               <div class="card white">
                 <div class="card-content ">
                   <span class="card-title"> Offene Aufräge </span>
-                  <p> Hier können neue Kunden registriert werden </p>
+                  <p>  </p>
 
                 </div>
                 <div class="card-action">
@@ -68,7 +72,7 @@
               <div class="card white">
                 <div class="card-content ">
                   <span class="card-title"> Abgeschlossene Aufträge </span>
-                  <p> Hier können neue Kunden registriert werden </p>
+                  <p> </p>
 
                 </div>
                 <div class="card-action">
@@ -184,7 +188,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% for produktionsAuftrag in object_list %}
+                    {% for produktionsAuftrag in list_produktionsAuftrag %}
                    <tr>
 
                        <td>{{ produktionsAuftrag.auftragsnummer}}</td>

@@ -4,7 +4,6 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-# Create your views here.
 
 from django.db import models
 
@@ -100,11 +99,9 @@ def maschinen(request):
                   template_name='main/maschinen.html')
 
 
-# Erstellen der Datenbankabfrage für die VirtuelleOpcUaServer
 
 
-
-
+# Erstellen der Datenbankabfrage für die OpcUaServer
 
 @login_required
 def regOpcUaServer_list(request, template_name='main/opcregOpcUaServer.html'):
@@ -116,7 +113,7 @@ def regOpcUaServer_list(request, template_name='main/opcregOpcUaServer.html'):
     return render(request, template_name, data)
 
 
-# Erstellen der Datenbankabfrage für DienstOpcUaServer
+# Erstellen der Datenbankabfrage für Dienstleistungen
 
 
 @login_required
@@ -129,8 +126,8 @@ def dienstleistungen_list(request, template_name='main/opcdienstleistungen.html'
     return render(request, template_name, data)
 
 
-# Erstellen der Datenbankabfrage für die DieIntProdukt
 
+# Erstellen der Datenbankabfrage für die Produkte
 
 
 @login_required
@@ -166,7 +163,7 @@ def produktionsAuftrag_list(request, template_name='main/opcproduktionsAuftrag.h
 
     return render(request, template_name, data)
 
-# Erstellen der Datenbankabfrage für DienstOpcUaServer
+# Erstellen der Datenbankabfrage für die Ressourcenplannung
 
 
 @login_required
@@ -178,7 +175,7 @@ def ressourcenplanung_list(request, template_name='main/opcressourcen.html'):
 
     return render(request, template_name, data)
 
-
+# Erstellen der Datenbankabfrage für die Ressourcenplannung
 login_required
 def serverdata_list(request, template_name='main/serverdata.html'):
     serverdata = Serverdata.objects.all()
@@ -219,8 +216,17 @@ def serverHinzu(request):
 def prouktionsUeberwachung_list(request, template_name='main/opcproduktionsUeberwachung.html'):
     produktionsAuftrag = ProduktionsAuftrag.objects.all()
 
+    auftragszeiten = Produkt.objects.all()
+
+    anzahlserver = RegOpcUaServer.objects.count()
+
+    #maschinetime = anzahlserver * timedelta(days=1)
+
     data = {}
-    data['object_list'] = produktionsAuftrag
+    data['list_produktionsAuftrag'] = produktionsAuftrag
+    anzahlserv = anzahlserver
+    data['list_produktionsAuftrag'] = produktionsAuftrag
+    #data['list_anzahlserver'] = anzahlserver
 
     return render(request, template_name, data)
 
@@ -275,3 +281,16 @@ def hitlist_list(request, template_name='hotel/hitlist.html'):
                     # worktime - Zeit Auftrag
 
 
+#extra_context = {}
+#extra_context['list1'] = ["['a',1,2,3]","['b',4,5,6]","['c',7,8,9]"]
+#extra_context['list2'] = ["[12-09-13,pass]","[8-05-12,fail]"]
+#return render_to_response(ex.html,extra_context)
+
+
+#{% for li in list1 %}
+#    {{li}}
+#{% endfor %}
+
+#{% for li in list2 %}
+#    {{li}}
+#{% endfor %}
