@@ -30,12 +30,25 @@ class RegOpcUaServer(models.Model):
     # Zeit der Anmeldung beim Server
     regestrierungsZeit = models.DateTimeField(null=True)
 
-    # Status des virtuellen Servers
+    # Status des Servers
     SERVERSTATUS = Choices('Starten', 'Gestartet', 'Stoppen', 'Gestoppt')
     serverstatus = models.CharField(choices=SERVERSTATUS, default=SERVERSTATUS.Gestoppt, max_length=20)
 
     # Automatischer Start bei starten der Applikation
-    autoStart = models.BooleanField(default=False)
+    aktiv = models.BooleanField(default=False)
+
+    # Letzte Aktualisierung
+    aktualuasierungsdatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+
+
+
+    #Löschung des Servereintages wenn 3 Tage nicht aktiv
+    def check_expiration(self):
+        end_time = self.aktualuasierungsdatum + timedelta(days=3)
+        if self.aktualuasierungsdatum <= timezone.now() <= end_time:
+            if self.aktiv == False:
+                self.delete()
+
 
 
     def __str__(self):
@@ -147,8 +160,17 @@ class ProduktionsAuftrag(models.Model):
         return int(fortschritt)
 
 
+    # add server
+    @property
+    def add_server(self):
+      for server in RegOpcUaServer:
+        for item in self:
 
-  #  for i in range(n)
+            return RegOpcUaServer.regServerID
+
+
+
+
 
     def __str__(self):
         """String for representing the Model object."""
@@ -198,21 +220,21 @@ class Ressourcenplanung(models.Model):
 
         # addieren der Maschinenzeiten
 
-    @property
-    def addServer(self):
-        produktionsAuftrag = ProduktionsAuftrag.objects.all()
-        serverlist = self.server
+    #@property
+    #def addserver(self):
+    #    produktionsauftrag = produktionsauftrag.objects.all()
+    #    serverlist = self.server
 
-        data = {}
-        data['object_list'] = serverlist
+    #    data = {}
+    #    data['object_list'] = serverlist
 
-        data = {}
-        data['object_list'] = produktionsAuftrag
-        for server in serverlist:
-            time= timedelta(days=0)
-            while time < timedelta(days=self.anzahlTage):
-                produktionsAuftrag.append(server.servername)
-                time = time + ProduktionsAuftrag.intProdukt.erstellungszeit
+    #    data = {}
+    #    data['object_list'] = produktionsauftrag
+    #    for server in serverlist:
+    #        time= timedelta(days=0)
+    #       while time < timedelta(days=self.anzahltage):
+    #            produktionsauftrag.append(server.servername)
+    #            time = time + produktionsauftrag.intprodukt.erstellungszeit
 
 
     def __str__(self):
