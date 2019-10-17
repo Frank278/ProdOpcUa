@@ -1,6 +1,6 @@
 from import_export import resources
 from .models import *
 
-class PersonResource(resources.ModelResource):
+class ProduktionsAuftrag(resources.ModelResource):
     class Meta:
         model = ProduktionsAuftrag

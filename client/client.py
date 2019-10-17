@@ -17,7 +17,9 @@ class HelloClient:
 
 if __name__ == '__main__':
     #with HelloClient("opc.tcp://10.42.0.77:40840/freeopcua/server/") as client:
-    with HelloClient("opc.tcp://localhost:40840/freeopcua/server/") as client:
+
+    with HelloClient("opc.tcp://192.168.1.112:4840/freeopcua/server/") as client:
+    #with HelloClient("opc.tcp://localhost:40840/freeopcua/server/") as client:
         root = client.get_root_node()
         print("Root node is: ", root)
         objects = client.get_objects_node()
@@ -46,9 +48,11 @@ if __name__ == '__main__':
         while True:
             Temp = client.get_node("ns=2; i=2")
             Temperature = Temp.get_value()
+            print(Temperature)
 
             Press = client.get_node("ns=2; i=3")
             Pressure = Press.get_value()
+            print(Pressure)
 
             TIME = client.get_node("ns=2; i=4")
             TIME_Value = TIME.get_value()

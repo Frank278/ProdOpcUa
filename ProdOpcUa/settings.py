@@ -42,9 +42,11 @@ INSTALLED_APPS = [
     'livesync',#autorefresh
     'django.contrib.staticfiles',
     'opc',
+    'import_export',
     'crispy_forms',
     'tinymce',
     'bootstrap4',
+    'rest_framework',
     'opcua',#Opc Ua Server
 
 

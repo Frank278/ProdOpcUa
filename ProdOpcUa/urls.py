@@ -25,7 +25,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('opc.urls')),
-    url(r'autocomplete/', include('autocomplete_light.urls')),
+    url(r'^api-auth/', include('rest_framework.urls')),
+
 
 ]
 if settings.DEBUG:
