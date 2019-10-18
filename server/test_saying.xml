@@ -26,6 +26,7 @@
       <Reference ReferenceType="HasProperty">i=20004</Reference>
     </References>
   </UAMethod>
+
   <UAVariable BrowseName="0:InputArguments" DataType="Argument" NodeId="i=20003" ParentNodeId="i=20002" ValueRank="0">
     <DisplayName>InputArguments</DisplayName>
     <Description>InputArguments</Description>
