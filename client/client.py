@@ -16,9 +16,9 @@ class HelloClient:
 
 
 if __name__ == '__main__':
-    #with HelloClient("opc.tcp://10.42.0.77:40840/freeopcua/server/") as client:
+    with HelloClient("opc.tcp://10.42.0.77:40840/freeopcua/server/") as client:
 
-    with HelloClient("opc.tcp://192.168.1.112:4840/freeopcua/server/") as client:
+    #with HelloClient("opc.tcp://192.168.1.112:4840/freeopcua/server/") as client:
     #with HelloClient("opc.tcp://localhost:40840/freeopcua/server/") as client:
         root = client.get_root_node()
         print("Root node is: ", root)
