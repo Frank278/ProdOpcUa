@@ -6,7 +6,7 @@ import time
 from math import sin
 import sys
 
-from opcua import ua, Server
+
 from random import randint
 
 sys.path.insert(0, "..")
@@ -51,25 +51,38 @@ def func(parent, variant):
 
 # method to be exposed through server
 # uses a decorator to automatically convert to and from variants
+status="gestoppt"
 
 @uamethod
 def multiply(parent, x, y):
     print("multiply method call with parameters: ", x, y)
     return x * y
+
 @uamethod
 def start_programm(parent):
+    print("startprogramm method call  ")
+
+    global status
+    print("Der Staus war: ", status)
     status = "gestartet"
-    # LED Grün leuchtet
+    print("Jetzt ist der Status: ", status)
+    time.sleep(5)
+    status = "beendet"
+
+
 
 @uamethod
 def stop_programm(parent):
+    print("stop method call : ")
+    global status
     status = "gestoppt"
-    # LED Rot leuchtet
+
 
 @uamethod
 def get_status(parent):
-    status = "gestoppt"
-    # LED Rot leuchtet
+    print("get_status method call : ")
+    return get_status
+
 
 class VarUpdater(Thread):
     def __init__(self, var):
@@ -153,6 +166,15 @@ if __name__ == "__main__":
     Press.set_writable()  # Set MyVariable to be writable by clients
     Time = myobj.add_variable(idx, "Time", 0)
     Time.set_writable()  # Set MyVariable to be writable by clients
+    Status = myobj.add_variable(idx, "Time", 0)
+    Status.set_writable()  # Set MyVariable to be writable by clients
+    Servername = myobj.add_variable(idx, "Time", 0)
+    Servername.set_writable()  # Set MyVariable to be writable by clients
+    Portnummer = myobj.add_variable(idx, "Time", 0)
+    Portnummer.set_writable()  # Set MyVariable to be writable by clients
+
+
+
 
 
     mymethod = myobj.add_method(idx, "mymethod", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
@@ -208,11 +230,26 @@ if __name__ == "__main__":
             Temperature = randint(10, 20)
             Pressure = randint(10, 20)
             TIME = datetime.utcnow()
+            count = randint(1, 3)
+            if count == 1:
+                status = 'Gestartet'
+            elif count == 2:
+                status = 'Gestoppt'
+            elif count == 3:
+                status = 'Störung'
 
-            print(Temperature, Pressure, TIME)
+            servername = "Server-example"
+            portnummer = "50840"
+
+            print(Temperature, Pressure, TIME, status, servername, portnummer)
             Temp.set_value(Temperature)
             Press.set_value(Pressure)
             Time.set_value(TIME)
+            Status.set_value(status)
+            Servername.set_value(servername)
+            Portnummer.set_value(portnummer)
+
+
 
             time.sleep(5)
 

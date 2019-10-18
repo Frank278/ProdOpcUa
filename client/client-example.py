@@ -70,6 +70,7 @@ if __name__ == "__main__":
 
         # Now getting a variable node using its browse path
         myvar = root.get_child(["0:Objects", "{}:MyObject".format(idx), "{}:MyVariable".format(idx)])
+
         obj = root.get_child(["0:Objects", "{}:MyObject".format(idx)])
         print("myvar is: ", myvar)
 
@@ -87,6 +88,20 @@ if __name__ == "__main__":
         # calling a method on server
         res = obj.call_method("{}:multiply".format(idx), 5, "klk")
         print("method result is: ", res)
+
+        while True:
+            Temp = client.get_node("ns=2; i=20")
+            Temperature = Temp.get_value()
+            print(Temperature)
+
+            Press = client.get_node("ns=2; i=21")
+            Pressure = Press.get_value()
+            print(Pressure)
+
+            TIME = client.get_node("ns=2; i=22")
+            TIME_Value = TIME.get_value()
+            print(TIME_Value)
+            time.sleep(5)
 
 
         embed()
