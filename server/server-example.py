@@ -5,7 +5,12 @@ from datetime import datetime
 import time
 from math import sin
 import sys
+
+from opcua import ua, Server
+from random import randint
+
 sys.path.insert(0, "..")
+
 
 try:
     from IPython import embed
@@ -51,7 +56,20 @@ def func(parent, variant):
 def multiply(parent, x, y):
     print("multiply method call with parameters: ", x, y)
     return x * y
+@uamethod
+def start_programm(parent):
+    status = "gestartet"
+    # LED Grün leuchtet
 
+@uamethod
+def stop_programm(parent):
+    status = "gestoppt"
+    # LED Rot leuchtet
+
+@uamethod
+def get_status(parent):
+    status = "gestoppt"
+    # LED Rot leuchtet
 
 class VarUpdater(Thread):
     def __init__(self, var):
@@ -116,6 +134,8 @@ if __name__ == "__main__":
     # create directly some objects and variables
     myobj = server.nodes.objects.add_object(idx, "MyObject")
     myvar = myobj.add_variable(idx, "MyVariable", 6.7)
+
+    # add Parameter to the Object
     mysin = myobj.add_variable(idx, "MySin", 0, ua.VariantType.Float)
     myvar.set_writable()    # Set MyVariable to be writable by clients
     mystringvar = myobj.add_variable(idx, "MyStringVariable", "Really nice string")
@@ -125,7 +145,28 @@ if __name__ == "__main__":
     myarrayvar = myobj.add_variable(idx, "myarrayvar", [6.7, 7.9])
     myarrayvar = myobj.add_variable(idx, "myStronglytTypedVariable", ua.Variant([], ua.VariantType.UInt32))
     myprop = myobj.add_property(idx, "myproperty", "I am a property")
+
+    # add Parameter to the Object
+    Temp = myobj.add_variable(idx, "Temperature", 0)
+    Temp.set_writable()  # Set MyVariable to be writable by clients
+    Press = myobj.add_variable(idx, "Pressure", 0)
+    Press.set_writable()  # Set MyVariable to be writable by clients
+    Time = myobj.add_variable(idx, "Time", 0)
+    Time.set_writable()  # Set MyVariable to be writable by clients
+
+
     mymethod = myobj.add_method(idx, "mymethod", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+    start_programm = myobj.add_method(idx, "startprogramm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+    stop_programm = myobj.add_method(idx, "stop_programm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+    get_status = myobj.add_method(idx, "get_status", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+
+
+
+
+
+
+
+
     multiply_node = myobj.add_method(idx, "multiply", multiply, [ua.VariantType.Int64, ua.VariantType.Int64], [ua.VariantType.Int64])
 
     # import some nodes from xml
@@ -155,6 +196,25 @@ if __name__ == "__main__":
         mydevice_var.set_value("Running")
         myevgen.trigger(message="This is BaseEvent")
         server.set_attribute_value(myvar.nodeid, ua.DataValue(9.9))  # Server side write method which is a but faster than using set_value
+
+
+        #zum testen
+        count = 0
+        while True:
+            time.sleep(5)
+            # count += 0.1
+            # myvar.set_value(count)
+
+            Temperature = randint(10, 20)
+            Pressure = randint(10, 20)
+            TIME = datetime.utcnow()
+
+            print(Temperature, Pressure, TIME)
+            Temp.set_value(Temperature)
+            Press.set_value(Pressure)
+            Time.set_value(TIME)
+
+            time.sleep(5)
 
         embed()
     finally:

@@ -223,7 +223,8 @@ class Serverdata(models.Model):
 # TestTabelle für OPC UA Server
 class Test(models.Model):
     # eindeutige ID für den Test
-    testnummer = models.PositiveSmallIntegerField(default=0, unique=True)
-    Temperature =models.IntegerField(default=0)
-    Pressure = models.IntegerField(default=0)
-    TIME_Value = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+    #testnummer = models.PositiveSmallIntegerField(default=0, unique=True)
+    #Temperature =models.IntegerField(default=0)
+    #Pressure = models.IntegerField(default=0)
+    #TIME_Value = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+    feld = models.CharField

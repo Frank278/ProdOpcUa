@@ -40,7 +40,7 @@ if __name__ == "__main__":
     #logger = logging.getLogger("KeepAlive")
     #logger.setLevel(logging.DEBUG)
 
-    client = Client("opc.tcp://localhost:10000/freeopcua/server/")
+    client = Client("opc.tcp://10.42.0.77:50840/freeopcua/server/")
     # client = Client("opc.tcp://admin@localhost:4840/freeopcua/server/") #connect using a user
     try:
         client.connect()
@@ -85,8 +85,9 @@ if __name__ == "__main__":
         # sub.delete()
 
         # calling a method on server
-        res = obj.call_method("{}:multiply".format(idx), 3, "klk")
+        res = obj.call_method("{}:multiply".format(idx), 5, "klk")
         print("method result is: ", res)
+
 
         embed()
     finally:
