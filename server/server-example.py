@@ -140,47 +140,47 @@ if __name__ == "__main__":
     # populating our address space
 
     # First a folder to organise our nodes
-    myfolder = server.nodes.objects.add_folder(idx, "myEmptyFolder")
+    machinefolder = server.nodes.objects.add_folder(idx, "myFolder")
     # instanciate one instance of our device
-    mydevice = server.nodes.objects.add_object(idx, "Device0001", dev)
-    mydevice_var = mydevice.get_child(["{}:controller".format(idx), "{}:state".format(idx)])  # get proxy to our device state variable
+    machinedevice = server.nodes.objects.add_object(idx, "Device0001", dev)
+    machinedevice_var = machinedevice.get_child(["{}:controller".format(idx), "{}:state".format(idx)])  # get proxy to our device state variable
     # create directly some objects and variables
-    myobj = server.nodes.objects.add_object(idx, "MyObject")
-    myvar = myobj.add_variable(idx, "MyVariable", 6.7)
+    machine = server.nodes.objects.add_object(idx, "MachineObject")
+    machinevar = machine.add_variable(idx, "MachineVariable", 6.7)
 
     # add Parameter to the Object
-    mysin = myobj.add_variable(idx, "MySin", 0, ua.VariantType.Float)
-    myvar.set_writable()    # Set MyVariable to be writable by clients
-    mystringvar = myobj.add_variable(idx, "MyStringVariable", "Really nice string")
-    mystringvar.set_writable()    # Set MyVariable to be writable by clients
-    mydtvar = myobj.add_variable(idx, "MyDateTimeVar", datetime.utcnow())
-    mydtvar.set_writable()    # Set MyVariable to be writable by clients
-    myarrayvar = myobj.add_variable(idx, "myarrayvar", [6.7, 7.9])
-    myarrayvar = myobj.add_variable(idx, "myStronglytTypedVariable", ua.Variant([], ua.VariantType.UInt32))
-    myprop = myobj.add_property(idx, "myproperty", "I am a property")
+    machinesin = machine.add_variable(idx, "MachineSin", 0, ua.VariantType.Float)
+    machinevar.set_writable()    # Set MyVariable to be writable by clients
+    machinestringvar = machine.add_variable(idx, "MyStringVariable", "Really nice string")
+    machinestringvar.set_writable()    # Set MyVariable to be writable by clients
+    madtvar = machine.add_variable(idx, "MyDateTimeVar", datetime.utcnow())
+    madtvar.set_writable()    # Set MyVariable to be writable by clients
+    machinearrayvar = machine.add_variable(idx, "myarrayvar", [6.7, 7.9])
+    machinearrayvar = machine.add_variable(idx, "myStronglytTypedVariable", ua.Variant([], ua.VariantType.UInt32))
+    machineprop = machine.add_property(idx, "myproperty", "I am a property")
 
     # add Parameter to the Object
-    Temp = myobj.add_variable(idx, "Temperature", 0)
+    Temp = machine.add_variable(idx, "Temperature", 0)
     Temp.set_writable()  # Set MyVariable to be writable by clients
-    Press = myobj.add_variable(idx, "Pressure", 0)
+    Press = machine.add_variable(idx, "Pressure", 0)
     Press.set_writable()  # Set MyVariable to be writable by clients
-    Time = myobj.add_variable(idx, "Time", 0)
+    Time = machine.add_variable(idx, "Time", 0)
     Time.set_writable()  # Set MyVariable to be writable by clients
-    Status = myobj.add_variable(idx, "Time", 0)
+    Status = machine.add_variable(idx, "Time", 0)
     Status.set_writable()  # Set MyVariable to be writable by clients
-    Servername = myobj.add_variable(idx, "Time", 0)
+    Servername = machine.add_variable(idx, "Time", 0)
     Servername.set_writable()  # Set MyVariable to be writable by clients
-    Portnummer = myobj.add_variable(idx, "Time", 0)
+    Portnummer = machine.add_variable(idx, "Time", 0)
     Portnummer.set_writable()  # Set MyVariable to be writable by clients
 
 
 
 
 
-    mymethod = myobj.add_method(idx, "mymethod", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
-    start_programm = myobj.add_method(idx, "startprogramm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
-    stop_programm = myobj.add_method(idx, "stop_programm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
-    get_status = myobj.add_method(idx, "get_status", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+    mymethod = machine.add_method(idx, "mymethod", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+    start_programm = machine.add_method(idx, "startprogramm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+    stop_programm = machine.add_method(idx, "stop_programm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+    get_status = machine.add_method(idx, "get_status", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
 
 
 
@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
 
 
-    multiply_node = myobj.add_method(idx, "multiply", multiply, [ua.VariantType.Int64, ua.VariantType.Int64], [ua.VariantType.Int64])
+    multiply_node = machine.add_method(idx, "multiply", multiply, [ua.VariantType.Int64, ua.VariantType.Int64], [ua.VariantType.Int64])
 
     # import some nodes from xml
     server.import_xml("custom_nodes.xml")
@@ -203,7 +203,7 @@ if __name__ == "__main__":
     # starting!
     server.start()
     print("Available loggers are: ", logging.Logger.manager.loggerDict.keys())
-    vup = VarUpdater(mysin)  # just  a stupide class update a variable
+    vup = VarUpdater(machinesin)  # just  a stupide class update a variable
     vup.start()
     try:
         # enable following if you want to subscribe to nodes on server side
@@ -211,13 +211,13 @@ if __name__ == "__main__":
         #sub = server.create_subscription(500, handler)
         #handle = sub.subscribe_data_change(myvar)
         # trigger event, all subscribed clients wil receive it
-        var = myarrayvar.get_value()  # return a ref to value in db server side! not a copy!
+        var = machinearrayvar.get_value()  # return a ref to value in db server side! not a copy!
         var = copy.copy(var)  # WARNING: we need to copy before writting again otherwise no data change event will be generated
         var.append(9.3)
-        myarrayvar.set_value(var)
-        mydevice_var.set_value("Running")
+        machinearrayvar.set_value(var)
+        machinedevice_var.set_value("Running")
         myevgen.trigger(message="This is BaseEvent")
-        server.set_attribute_value(myvar.nodeid, ua.DataValue(9.9))  # Server side write method which is a but faster than using set_value
+        server.set_attribute_value(machinevar.nodeid, ua.DataValue(9.9))  # Server side write method which is a but faster than using set_value
 
 
         #zum testen
