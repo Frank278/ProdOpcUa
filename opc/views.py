@@ -26,6 +26,9 @@ from django.db.models import Count
 from tablib import Dataset
 from django.contrib import messages
 
+from rest_framework import viewsets
+from .serializers import ProduktionsAuftragSerializer
+
 from .models import *
 
 
@@ -273,6 +276,17 @@ def simple_upload(request):
             produce_resource.import_data(dataset, dry_run=False)  # Actually import now
 
     return render(request, 'core/simple_upload.html')
+
+
+
+#Für REST API
+
+class ProduktAuftragViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = ProduktionsAuftragSerializer
 
 
 # Erstellen der Datenbankabfrage für die Kapazitätsauslastung

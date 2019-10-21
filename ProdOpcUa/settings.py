@@ -68,9 +68,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ProdOpcUa.urls'
 
+#Für Import-Export Funktion
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
-
+# Für Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
