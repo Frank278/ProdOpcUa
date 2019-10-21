@@ -25,6 +25,8 @@ urlpatterns = [
 
     # Produktionsaufträge
     path('produktionsAuftrag', produktionsAuftrag_list, name='produktionsAuftrag'),
+
+
     # Produkte
     path('Produkt', produkt_list, name='Produkt'),
 

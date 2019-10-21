@@ -175,7 +175,7 @@ def ressourcenplanung_list(request, template_name='main/opcressourcen.html'):
 
     return render(request, template_name, data)
 
-# Erstellen der Datenbankabfrage für die Ressourcenplannung
+# Erstellen der Datenbankabfrage für die Serverdaten
 login_required
 def serverdata_list(request, template_name='main/serverdata.html'):
     serverdata = Serverdata.objects.all()

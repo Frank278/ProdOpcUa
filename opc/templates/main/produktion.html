@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Produktion</title>
+
+
+
+</head>
+<body>
+{% extends 'main/includes/header.html' %}
+
+
+{% block content %}
+ <!-- Project Card Example -->
+
+
+<div class="row">
+    <div class="col s6 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title"> Produktionsüberwachung </span>
+          <p> Hier gehts zur Produktionsüberwachung</p>
+
+        </div>
+        <div class="card-action">
+          <a href="{% url 'opc:produktionsUeberwachung' %}" class="btn btn-danger" >Weiter</a>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col s6 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title"> Ressourcenplanung </span>
+          <p> Hier können Sie neue Einsatzpläne erstellen  </p>
+
+        </div>
+        <div class="card-action">
+          <a href="{% url 'admin:opc_ressourcenplanung_add' %}"  class="btn btn-danger" >Weiter</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="row">
+    <div class="col s6 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title"> Auftragsübersicht </span>
+          <p> Hier gehts zu den Aufträgen</p>
+
+        </div>
+        <div class="card-action">
+          <a href="{% url 'opc:produktionsAuftrag' %}" class="btn btn-danger" >Weiter</a>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col s6 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title"> Auftrag erstellen </span>
+          <p> Hier können Sie Aufträge erstellen</p>
+
+        </div>
+        <div class="card-action">
+          <a href="{% url 'admin:opc_produktionsauftrag_add' %}" class="btn btn-danger" >Weiter</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="row">
+    <div class="col s6 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title"> Produkte</span>
+          <p> Hier gehts zu den Produkten</p>
+
+        </div>
+        <div class="card-action">
+
+          <a href="{% url 'opc:Produkt' %}" class="btn btn-danger" >Weiter</a>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col s6 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title"> Produkte ertellen </span>
+          <p> Hier können Sie Produkte erstellen</p>
+
+        </div>
+         <div class="card-action">
+
+          <a href="{% url 'admin:opc_produkt_add' %}" class="btn btn-danger" >Weiter</a>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="row">
+    <div class="col s6 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title"> Kunden </span>
+          <p> Hier gehts zu den Kunden</p>
+
+        </div>
+         <div class="card-action">
+             <a href="{% url 'opc:kunden' %}"  class="btn btn-danger" >Weiter</a>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col s6 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title"> Kunden registrieren </span>
+          <p> Hier können neue Kunden registriert werden </p>
+
+        </div>
+        <div class="card-action">
+
+            <a href="{% url 'admin:opc_kunden_add' %}" class="btn btn-danger" >Weiter</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+{% endblock %}
+</body>
+
+</html>

@@ -1,3 +1,6 @@
+import os
+import sys
+
 from django.db import models
 
 # Create your models here.
@@ -35,6 +38,12 @@ class RegOpcUaServer(models.Model):
     aktiv = models.BooleanField(default=False)
     # Letzte Aktualisierung
     aktualuasierungsdatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+
+    #Erzeugung von Docker, wenn Typ ist Virtell
+    def docker_build(self):
+        if self.servertyp == 'Virtuell':
+            string = "docker run -d -p"+self.portnummer+":4840"+ self.servername
+            #os.system(string)
 
 
 
@@ -123,7 +132,7 @@ class ProduktionsAuftrag(models.Model):
     # Produkt des Auftrages
     produkt = models.ForeignKey(to=Produkt, on_delete=models.SET_NULL, null=True)
     # Aktueller Schritt
-    aktuellerSchritt = models.PositiveIntegerField(null=True)
+    aktuellerSchritt = models.PositiveIntegerField( null=True)
     # Zugeteilter Server zum Auftrag
     server = models.ForeignKey(to=RegOpcUaServer, on_delete=models.SET_NULL, null=True)
     # Anzahl der Schritte
@@ -143,6 +152,8 @@ class ProduktionsAuftrag(models.Model):
         aktuellerSchritt = self.aktuellerSchritt
         anzahlSchritte =self.anzahlSchritte
         fortschritt= (aktuellerSchritt*100)/anzahlSchritte
+        if fortschritt > 100:
+            fortschritt = 100
 
         return int(fortschritt)
 
@@ -201,7 +212,7 @@ class Serverdata(models.Model):
     # Name des Kunden
     servername = models.CharField(max_length=30, null=True)
     # IP Adresse
-    ip = models.CharField(max_length=30, null=True)
+    ip = models.URLField(null=True)
     # Start des Auftrages
     start = models.BooleanField(default=False)
     # Beenden des Auftrages

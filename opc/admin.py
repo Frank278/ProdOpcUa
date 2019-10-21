@@ -12,3 +12,8 @@ admin.site.register(ProduktionsAuftrag)
 admin.site.register(Ressourcenplanung)
 admin.site.register(Test)
 admin.site.register(Serverdata)
+
+
+
+#class AuthorAdmin(admin.ModelAdmin):
+ #   list_display = ('last_name', 'first_name', 'date_of_birth', 'date_of_death')

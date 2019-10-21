@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'livesync',#autorefresh
     'django.contrib.staticfiles',
     'opc',
+    'django_seed',
     'import_export',
     'crispy_forms',
     'tinymce',
