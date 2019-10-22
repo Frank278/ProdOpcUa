@@ -37,12 +37,18 @@ class DockerHandler(object):
                 ports_dic = {
                     '5432' : 55432
                 }
+                env_dic = {
+                    'POSTGRES_USER' : 'frank',
+                    'POSTGRES_PASSWORD' : 'frank',
+                    'POSTGRES_DB' : 'postgres',
+                }
                 dbserver = client.containers.run(
                     'postgres',
                     name = 'dbserver',
                     auto_remove = False,
                     detach = True,
                     ports = ports_dic,
+                    environment = env_dic
                 )
                 self.registry['dbserver'] = dbserver
                     
