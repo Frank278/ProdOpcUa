@@ -27,11 +27,11 @@ from opcua import ua, uamethod, Server
 # --------------------------------------------------
 db_host = os.environ.get("db_host", "localhost")
 db_user = os.environ.get("db_user", "frank")
-db_pasword = os.environ.get("db_pasword", "admin")
+db_pasword = os.environ.get("db_password", "admin")
 db_port = os.environ.get("db_port", 5432)
 opcua_host = os.environ.get("opcua_host", "0.0.0.0")
 opcua_user = os.environ.get("opcua_user", "")  # unused
-opcua_pasword = os.environ.get("opcua_pasword", "")  # unused
+opcua_pasword = os.environ.get("opcua_password", "")  # unused
 opcua_port = os.environ.get("opcua_port", "4840")
 
 # --------------------------------------------------
@@ -65,7 +65,7 @@ db = create_engine(db_string)
 base = declarative_base()
 
 
-class Mschine01DB(base):
+class opc_uaDB(base):
     """[Schreiben der Daten in Postgres DB]
 
     Arguments:
@@ -84,7 +84,7 @@ class Mschine01DB(base):
 
 
 class Maschine01(object):
-    """Ein bearbeitungszentrum kann Aufträge ausführen
+    """Eine Maschine kann Aufträge ausführen
     es muss als singelton behandelt werden
 
     """
@@ -93,7 +93,7 @@ class Maschine01(object):
         """initialisiert die Datenbank und meldet das Bearbeitungszentrum an
 
         Arguments:
-            DBHandler_cls {BearbeitungscenterDB Klasse} -- wird genutzt um Operationen auf der DB auszuführen
+            DBHandler_cls {MaschinenDB Klasse} -- wird genutzt um Operationen auf der DB auszuführen
         """
         self.CenterDB = DBHandler_cls
         Session = sessionmaker(db)
@@ -104,7 +104,7 @@ class Maschine01(object):
         # Make ourselfs known to the outside world
         self.m_center = DBHandler_cls(
             mkey="Bearbeitungscenter_%s" % os.getpid(),
-            name="Fräsmaschine01",
+            servername="Fräsmaschine01",
             pid=os.getpid(),
             ip="2016",
             port=999,
@@ -133,7 +133,7 @@ class Maschine01(object):
             self.m_center.status = "idle"
         else:
             self.m_center.pid = os.getpid()
-            self.m_center.status = "aktiv"
+            self.m_center.status = "startet"
         self.session.commit()
         return
 
@@ -147,7 +147,7 @@ class Maschine01(object):
             frame {[type]} -- [description]
         """
         print("Received:", signalNumber)
-        print("Tschüss zäme")
+        print("Abgemeldet")
         # Delete
         self.session.delete(self.m_center)
         self.session.commit()
@@ -218,7 +218,7 @@ if __name__ == "__main__":
     # now setup our server
     server = Server()
     # Bearbeitungszentrum anlegen, mit BearbeitungscenterDB-Klasse als parameter
-    center = Maschine01(Mschine01DB)
+    center = Maschine01(opc_uaDB)
     # register the signals to be caught
     signal.signal(signal.SIGALRM, center.updateServer) # signal 14
     signal.signal(signal.SIGTERM, center.unregisterServer) # signal 15
