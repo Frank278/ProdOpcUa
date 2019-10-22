@@ -263,23 +263,8 @@ def hitlist_list(request, template_name='hotel/hitlist.html'):
 
 
 
-def simple_upload(request):
-    if request.method == 'POST':
-        produce_resource = ProduktionsAuftrag()
-        dataset = Dataset()
-        new_auftrag = request.FILES['myfile']
 
-        imported_data = dataset.load(new_auftrag.read())
-        result = produce_resource.import_data(dataset, dry_run=True)  # Test the data import
-
-        if not result.has_errors():
-            produce_resource.import_data(dataset, dry_run=False)  # Actually import now
-
-    return render(request, 'core/simple_upload.html')
-
-
-
-#Für REST API
+#Für REST API zum export
 
 class ProduktAuftragViewSet(viewsets.ModelViewSet):
     """

@@ -20,7 +20,6 @@ class ProduktResource(resources.ModelResource):
         model = Produkt
 
 
-
 class KundenResource(resources.ModelResource):
     class Meta:
         model = Kunden

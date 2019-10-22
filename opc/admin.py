@@ -1,3 +1,4 @@
+from django.conf.urls import url
 from django.contrib import admin
 
 from import_export.admin import ImportExportModelAdmin
@@ -5,6 +6,7 @@ from import_export import resources
 from django.contrib import admin
 from .models import *
 from .ressources import *
+from django.utils.html import format_html
 
 
 # Register your models here.
@@ -23,6 +25,19 @@ class RegOpcUaServerAdmin(ImportExportModelAdmin):
     list_display = ('regServerID', 'servername', 'portnummer', 'aktiv')
     list_filter = ('servername', 'portnummer')
     resource_class = RegOpcUaServerResource
+
+
+    def process_start(self):
+        pass
+
+    # TODO
+
+    def process_stop(self):
+        pass
+
+
+# TODO
+
 # Register the admin class with the associated model
 admin.site.register(RegOpcUaServer, RegOpcUaServerAdmin)
 
@@ -41,6 +56,7 @@ class ProduktAdmin(ImportExportModelAdmin):
     list_display = ('produktnummer', 'produktName', 'produktBeschreibung')
     list_filter = ('produktName', 'produktnummer')
     resource_class = ProduktResource
+# Register the admin class with the associated model
 admin.site.register(Produkt, ProduktAdmin)
 
 
@@ -49,6 +65,7 @@ class KundenAdmin(ImportExportModelAdmin):
     list_display = ('kundennummer', 'name', 'ort')
     list_filter = ('name', 'ort')
     resource_class = KundenResource
+# Register the admin class with the associated model
 admin.site.register(Kunden, KundenAdmin)
 
 
@@ -57,6 +74,7 @@ class ProduktionsAuftragAdmin(ImportExportModelAdmin):
     list_display = ('auftragsnummer', 'kunde', 'produkt', 'server')
     list_filter = ('kunde', 'produkt')
     resource_class = ProduktionsAuftragResource
+# Register the admin class with the associated model
 admin.site.register(ProduktionsAuftrag, ProduktionsAuftragAdmin)
 
 
@@ -65,6 +83,7 @@ class RessourcenplanungAdmin(ImportExportModelAdmin):
     list_display = ('rplanungsnummer', 'planstatus', 'startdatum')
     list_filter = ('planstatus', 'startdatum')
     resource_class = RessourcenplanungResource
+# Register the admin class with the associated model
 admin.site.register(Ressourcenplanung, RessourcenplanungAdmin)
 
 
@@ -73,6 +92,7 @@ class ServerdataAdmin(ImportExportModelAdmin):
     list_display = ('servername', 'start', 'beendet', 'stoerung')
     list_filter = ('servername', 'stoerung')
     resource_class = ServerdataResource
+# Register the admin class with the associated model
 admin.site.register(Serverdata, ServerdataAdmin)
 
 
