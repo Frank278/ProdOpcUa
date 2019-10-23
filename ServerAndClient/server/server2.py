@@ -1,14 +1,18 @@
+
 from threading import Thread
 import copy
 import logging
 from datetime import datetime
+
 import time
 from math import sin
 import sys
 import signal
 import os
 import time
-from sqlalchemy import create_engine
+from random import randint
+
+from sqlalchemy import create_engine, DateTime
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import IntegrityError
@@ -20,12 +24,14 @@ sys.path.insert(0, "..")
 
 from opcua import ua, uamethod, Server
 
+
+
 # --------------------------------------------------
 # relevante Umgebungsvariablen lesen
 # --------------------------------------------------
 db_host = os.environ.get("db_host", "localhost")
 db_user = os.environ.get("db_user", "frank")
-db_pasword = os.environ.get("db_pasword", "frank")
+db_pasword = os.environ.get("db_pasword", "admin")
 db_port = os.environ.get("db_port", 5432)
 opcua_host = os.environ.get("opcua_host", "0.0.0.0")
 opcua_user = os.environ.get("opcua_user", "")  # unused
@@ -80,6 +86,9 @@ class BearbeitungscenterDB(base):
     ip = Column(String)
     port = Column(Integer)
     status = Column(String)  # idle, gestarted, gestoppt, fehler
+    temp = Column(Integer)
+    press = Column(Integer)
+    time = Column(DateTime, default=datetime.utcnow)
 
 
 class Bearbeitungscenter(object):
@@ -109,6 +118,9 @@ class Bearbeitungscenter(object):
             ip="2016",
             port=999,
             status="started",
+            temp=20,
+            pess=20,
+            time=datetime.utcnow(),
         )
         try:
             self.session.add(self.m_center)

@@ -33,7 +33,6 @@ from .models import *
 
 
 def index(request):
-    # context = {'hotelbuchungen': Buchung.objects.all(), 'titel': "Hotelbuchungen"}
     return render(request=request,
                   template_name='main/index.html')
 

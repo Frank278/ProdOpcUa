@@ -2,6 +2,7 @@ from threading import Thread
 import copy
 import logging
 from datetime import datetime
+
 import time
 from math import sin
 import sys
@@ -10,7 +11,7 @@ import os
 import time
 from random import randint
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, DateTime
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import IntegrityError
@@ -27,11 +28,11 @@ from opcua import ua, uamethod, Server
 # --------------------------------------------------
 db_host = os.environ.get("db_host", "localhost")
 db_user = os.environ.get("db_user", "frank")
-db_pasword = os.environ.get("db_password", "admin")
+db_pasword = os.environ.get("db_pasword", "admin")
 db_port = os.environ.get("db_port", 5432)
 opcua_host = os.environ.get("opcua_host", "0.0.0.0")
 opcua_user = os.environ.get("opcua_user", "")  # unused
-opcua_pasword = os.environ.get("opcua_password", "")  # unused
+opcua_pasword = os.environ.get("opcua_pasword", "")  # unused
 opcua_port = os.environ.get("opcua_port", "4840")
 
 # --------------------------------------------------
@@ -42,7 +43,7 @@ opcua_port = os.environ.get("opcua_port", "4840")
 # wenn sie schon vorhanden ist, ignoriere entsprechenden Fehler
 # sudo -u postgres psql -e --command "CREATE USER frank WITH SUPERUSER PASSWORD 'frank'"
 con = psycopg2.connect(  #'postgres://frank:frank@localhost:55432'
-    dbname="postgres", user=db_user, host=db_host, password=db_pasword, port=db_port
+    dbname="opcuaDB", user=db_user, host=db_host, password=db_pasword, port=db_port
 )
 con.autocommit = True
 cur = con.cursor()
@@ -65,14 +66,14 @@ db = create_engine(db_string)
 base = declarative_base()
 
 
-class opc_uaDB(base):
+class opcuaDB(base):
     """[Schreiben der Daten in Postgres DB]
 
     Arguments:
         object {[type]} -- [description]
     """
 
-    __tablename__ = "servers"
+    __tablename__ = "serverdata"
 
     mkey = Column(String, primary_key=True)
     name = Column(String)
@@ -80,17 +81,20 @@ class opc_uaDB(base):
     dockerid = Column(String)
     ip = Column(String)
     port = Column(Integer)
-    status = Column(String)  # idle, gestarted, gestoppt, fehler
+    status = Column(String)  # idle, gestarted, gestoppt, stoerung
+    temp = Column(Integer)
+   # press = Column(Integer)
+    time = Column(DateTime, default=datetime.utcnow)
 
 
-class Maschine01(object):
+class Bearbeitungszentrum(object):
     """Eine Maschine kann Aufträge ausführen
     es muss als singelton behandelt werden
 
     """
 
     def __init__(self, DBHandler_cls):
-        """initialisiert die Datenbank und meldet das Bearbeitungszentrum an
+        """initialisiert die Datenbank und meldet die Maschine an
 
         Arguments:
             DBHandler_cls {MaschinenDB Klasse} -- wird genutzt um Operationen auf der DB auszuführen
@@ -104,11 +108,14 @@ class Maschine01(object):
         # Make ourselfs known to the outside world
         self.m_center = DBHandler_cls(
             mkey="Bearbeitungscenter_%s" % os.getpid(),
-            servername="Fräsmaschine01",
+            name="Fräsmaschine01",
             pid=os.getpid(),
             ip="2016",
             port=999,
             status="started",
+            temp=20,
+    #        pess= 20,
+            time= datetime.utcnow(),
         )
         try:
             self.session.add(self.m_center)
@@ -118,9 +125,10 @@ class Maschine01(object):
             self.m_center.status="started"
             self.session.commit()
 
-    # handle termination signals cleanly
+        # handle termination signals cleanly
+
     def updateServer(self, signalNumber, frame):
-        """Melde der Server ab
+        """Serverdateb updaten
 
         Arguments:
             signalNumber {Signal} -- das Terminate Signal, das an den Prozess geschickt wird
@@ -133,7 +141,7 @@ class Maschine01(object):
             self.m_center.status = "idle"
         else:
             self.m_center.pid = os.getpid()
-            self.m_center.status = "startet"
+            self.m_center.status = "am Arbeiten"
         self.session.commit()
         return
 
@@ -147,11 +155,32 @@ class Maschine01(object):
             frame {[type]} -- [description]
         """
         print("Received:", signalNumber)
-        print("Abgemeldet")
+        print("Abmelden")
         # Delete
         self.session.delete(self.m_center)
         self.session.commit()
         sys.exit()
+
+        # handle termination signals cleanly
+
+    def updateValueServer(self, Temp, Status):
+
+        """Melde der Server ab
+
+        Arguments:
+         
+        """
+        self.m_center.status = Status
+        self.m_center.temp = Temp
+        # print("received:", signalnumber)
+        # if self.m_center.pid:
+        #     self.m_center.pid = none
+        #     self.m_center.status = "idle"
+        # else:
+        #     self.m_center.pid = os.getpid()
+        #     self.m_center.status = "aktiv"
+        self.session.commit()
+        return
 
 
 class SubHandler(object):
@@ -218,7 +247,7 @@ if __name__ == "__main__":
     # now setup our server
     server = Server()
     # Bearbeitungszentrum anlegen, mit BearbeitungscenterDB-Klasse als parameter
-    center = Maschine01(opc_uaDB)
+    center = Bearbeitungszentrum(opcuaDB)
     # register the signals to be caught
     signal.signal(signal.SIGALRM, center.updateServer) # signal 14
     signal.signal(signal.SIGTERM, center.unregisterServer) # signal 15
@@ -277,13 +306,14 @@ if __name__ == "__main__":
     Press.set_writable()  # Set MyVariable to be writable by clients
     Time = machine.add_variable(idx, "Time", 0)
     Time.set_writable()  # Set MyVariable to be writable by clients
-    Status = machine.add_variable(idx, "Time", 0)
+    Status = machine.add_variable(idx, "Status", 0)
     Status.set_writable()  # Set MyVariable to be writable by clients
-    Servername = machine.add_variable(idx, "Time", 0)
+    Servername = machine.add_variable(idx, "Servername", 0)
     Servername.set_writable()  # Set MyVariable to be writable by clients
-    Portnummer = machine.add_variable(idx, "Time", 0)
+    Portnummer = machine.add_variable(idx, "Portnummer", 0)
     Portnummer.set_writable()  # Set MyVariable to be writable by clients
 
+    # add methode
     mymethod = machine.add_method(idx, "mymethod", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
     start_programm = machine.add_method(idx, "startprogramm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
     stop_programm = machine.add_method(idx, "stop_programm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
@@ -348,7 +378,7 @@ if __name__ == "__main__":
             elif count == 3:
                 status = 'Störung'
 
-            servername = "Server-example"
+            servername = "Fräsmachine01"
             portnummer = "50840"
 
             print(Temperature, Pressure, TIME, status, servername, portnummer)
@@ -358,6 +388,11 @@ if __name__ == "__main__":
             Status.set_value(status)
             Servername.set_value(servername)
             Portnummer.set_value(portnummer)
+            center.updateValueServer(Temperature, status)
+
+
+
+
 
             time.sleep(5)
 

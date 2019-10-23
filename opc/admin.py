@@ -19,25 +19,28 @@ from django.utils.html import format_html
 #admin.site.register(Serverdata)
 #admin.site.register(Test)
 
+# Header auf SmartParts AG setzen
+admin.site.site_header = 'SmartsParts AG'
+
+# Funktion um Virtuelle Server zu erzeugen und zu starten
+def virt_serv_start(modeladmin, request, queryset):
+    pass
+virt_serv_start.short_description = "Virtuelle Server anmelden"
+
+
+# Funktion um Virtuelle Server abzumelden und herunter zu fahren
+def virt_serv_stop(modeladmin, request, queryset):
+    pass
+virt_serv_stop.short_description = "Virtuelle Server stoppen"
+
 
 # Define the admin class
 class RegOpcUaServerAdmin(ImportExportModelAdmin):
     list_display = ('regServerID', 'servername', 'portnummer', 'aktiv')
     list_filter = ('servername', 'portnummer')
     resource_class = RegOpcUaServerResource
-
-
-    def process_start(self):
-        pass
-
-    # TODO
-
-    def process_stop(self):
-        pass
-
-
-# TODO
-
+    actions = [virt_serv_start, virt_serv_stop]
+    list_per_page = 25
 # Register the admin class with the associated model
 admin.site.register(RegOpcUaServer, RegOpcUaServerAdmin)
 
@@ -46,6 +49,7 @@ admin.site.register(RegOpcUaServer, RegOpcUaServerAdmin)
 class DienstleistungenAdmin(ImportExportModelAdmin):
     list_display = ('servicenummer', 'serviceName', 'serviceBeschreibung')
     list_filter = ('serviceName', 'servicenummer')
+    list_per_page = 25
     resource_class = DienstleistungenResource
 # Register the admin class with the associated model
 admin.site.register(Dienstleistungen, DienstleistungenAdmin)
@@ -55,6 +59,7 @@ admin.site.register(Dienstleistungen, DienstleistungenAdmin)
 class ProduktAdmin(ImportExportModelAdmin):
     list_display = ('produktnummer', 'produktName', 'produktBeschreibung')
     list_filter = ('produktName', 'produktnummer')
+    list_per_page = 25
     resource_class = ProduktResource
 # Register the admin class with the associated model
 admin.site.register(Produkt, ProduktAdmin)
@@ -64,6 +69,7 @@ admin.site.register(Produkt, ProduktAdmin)
 class KundenAdmin(ImportExportModelAdmin):
     list_display = ('kundennummer', 'name', 'ort')
     list_filter = ('name', 'ort')
+    list_per_page = 25
     resource_class = KundenResource
 # Register the admin class with the associated model
 admin.site.register(Kunden, KundenAdmin)
@@ -73,6 +79,7 @@ admin.site.register(Kunden, KundenAdmin)
 class ProduktionsAuftragAdmin(ImportExportModelAdmin):
     list_display = ('auftragsnummer', 'kunde', 'produkt', 'server')
     list_filter = ('kunde', 'produkt')
+    list_per_page = 25
     resource_class = ProduktionsAuftragResource
 # Register the admin class with the associated model
 admin.site.register(ProduktionsAuftrag, ProduktionsAuftragAdmin)
@@ -82,6 +89,7 @@ admin.site.register(ProduktionsAuftrag, ProduktionsAuftragAdmin)
 class RessourcenplanungAdmin(ImportExportModelAdmin):
     list_display = ('rplanungsnummer', 'planstatus', 'startdatum')
     list_filter = ('planstatus', 'startdatum')
+    list_per_page = 25
     resource_class = RessourcenplanungResource
 # Register the admin class with the associated model
 admin.site.register(Ressourcenplanung, RessourcenplanungAdmin)
@@ -91,6 +99,7 @@ admin.site.register(Ressourcenplanung, RessourcenplanungAdmin)
 class ServerdataAdmin(ImportExportModelAdmin):
     list_display = ('servername', 'start', 'beendet', 'stoerung')
     list_filter = ('servername', 'stoerung')
+    list_per_page = 25
     resource_class = ServerdataResource
 # Register the admin class with the associated model
 admin.site.register(Serverdata, ServerdataAdmin)

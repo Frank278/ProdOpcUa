@@ -15,7 +15,6 @@ from django.db.models import Count
 import objects
 
 
-
 class RegOpcUaServer(models.Model):
     # eindeutige ID für den Servers
     regServerID = models.PositiveSmallIntegerField(default=0, unique=True)
@@ -27,8 +26,7 @@ class RegOpcUaServer(models.Model):
     portnummer = models.PositiveIntegerField(null=True)
     # Art des Servers
     SERVERTYP = Choices('Raspery', 'Virtuell')
-    servertyp = models.CharField(choices=SERVERTYP, default=SERVERTYP.Raspery,
-                                           max_length=20)
+    servertyp = models.CharField(choices=SERVERTYP, default=SERVERTYP.Raspery, max_length=20)
     # Zeit der Anmeldung beim Server
     regestrierungsZeit = models.DateTimeField(null=True)
     # Status des Servers

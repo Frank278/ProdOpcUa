@@ -103,7 +103,7 @@ WSGI_APPLICATION = 'ProdOpcUa.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'opc_uaDB',
+        'NAME': 'opcuaDB',
         'USER': 'frank',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
