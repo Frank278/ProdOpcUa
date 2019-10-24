@@ -3,22 +3,15 @@ from django.shortcuts import render
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
-
 from django.db import models
-
-# Create your models here.
 from django.shortcuts import render, get_object_or_404
-
 from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
-
 from django.contrib.auth.models import User
-
 from django.urls import reverse
 from django.views import generic
 from .forms import NewUserForm
@@ -31,12 +24,12 @@ from .serializers import ProduktionsAuftragSerializer
 
 from .models import *
 
-
+# Hauptseite
 def index(request):
     return render(request=request,
                   template_name='main/index.html')
 
-
+# Seite zum Registrieren
 def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -59,13 +52,14 @@ def register(request):
                   template_name="main/register.html",
                   context={"form": form})
 
-
+# Abmeldung und Rückkehr zur Haauptseite
 def logout_request(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
     return redirect("opc:index")
 
-
+# Anmeldung und Rückkehr zur Hauptseite
+# Es wird ein Toast mit einer Nachricht ausgegeben
 def login_request(request):
     if request.method == 'POST':
         form = AuthenticationForm(request=request, data=request.POST)
@@ -101,8 +95,6 @@ def maschinen(request):
                   template_name='main/maschinen.html')
 
 
-
-
 # Erstellen der Datenbankabfrage für die OpcUaServer
 
 @login_required
@@ -117,7 +109,6 @@ def regOpcUaServer_list(request, template_name='main/opcregOpcUaServer.html'):
 
 # Erstellen der Datenbankabfrage für Dienstleistungen
 
-
 @login_required
 def dienstleistungen_list(request, template_name='main/opcdienstleistungen.html'):
     dienstleistungen = Dienstleistungen.objects.all()
@@ -130,7 +121,6 @@ def dienstleistungen_list(request, template_name='main/opcdienstleistungen.html'
 
 
 # Erstellen der Datenbankabfrage für die Produkte
-
 
 @login_required
 def produkt_list(request, template_name='main/opcProdukt.html'):
@@ -166,7 +156,6 @@ def produktionsAuftrag_list(request, template_name='main/opcproduktionsAuftrag.h
     return render(request, template_name, data)
 
 # Erstellen der Datenbankabfrage für die Ressourcenplannung
-
 
 @login_required
 def ressourcenplanung_list(request, template_name='main/opcressourcen.html'):
@@ -205,16 +194,9 @@ def produktionsAuftragErstellen(request):
     return render(request=request,
                   template_name='main/opcproduktionsAuftragErstellen.html')
 
-# Hinzufügen von Servern
-@login_required
-def serverHinzu(request):
-    return render(request=request,
-                  template_name='main/opcserverHinzu.html')
-
 
 # Produktionsüberwachung
 @login_required
-
 def prouktionsUeberwachung_list(request, template_name='main/opcproduktionsUeberwachung.html'):
     produktionsAuftrag = ProduktionsAuftrag.objects.all()
 
@@ -257,7 +239,6 @@ def hitlist_list(request, template_name='hotel/hitlist.html'):
     data['object_list'] = maschinen
 
 
-
     return render(request, template_name, data)
 
 
@@ -272,36 +253,3 @@ class ProduktAuftragViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = ProduktionsAuftragSerializer
 
-
-# Erstellen der Datenbankabfrage für die Kapazitätsauslastung
-
-#def capacity_list(request, template_name='opc/opcproduktionsUeberwachung.html'):
-    #maxTime ist Anzahl der Server mal die Timedelta
-
-    #workTime = Anzahl der Dienstleistungen der Aufträge mal deren Bearbeitungszeit
-
-    #Kapazität ist workTime *100 / maxTime, aber maximal 100
-
-
-# Erstellen der Datenbankabfrage für die Kapazitätsauslastung
-  #calculate Time Aufträge
-    # while workTime
-        # for Server
-            # for Servers
-                # add Aufträge
-                    # worktime - Zeit Auftrag
-
-
-#extra_context = {}
-#extra_context['list1'] = ["['a',1,2,3]","['b',4,5,6]","['c',7,8,9]"]
-#extra_context['list2'] = ["[12-09-13,pass]","[8-05-12,fail]"]
-#return render_to_response(ex.html,extra_context)
-
-
-#{% for li in list1 %}
-#    {{li}}
-#{% endfor %}
-
-#{% for li in list2 %}
-#    {{li}}
-#{% endfor %}

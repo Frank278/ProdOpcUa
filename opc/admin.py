@@ -25,13 +25,33 @@ admin.site.site_header = 'SmartsParts AG'
 # Funktion um Virtuelle Server zu erzeugen und zu starten
 def virt_serv_start(modeladmin, request, queryset):
     pass
-virt_serv_start.short_description = "Virtuelle Server anmelden"
 
+    for object in queryset:
+        name = object.servername
+        port = object.portummer
+        #handler = DockerHandler()
+        #s_id = handler.create_server(name, port)
+virt_serv_start.short_description = "Virtuelle Server anmelden"
 
 # Funktion um Virtuelle Server abzumelden und herunter zu fahren
 def virt_serv_stop(modeladmin, request, queryset):
     pass
+    for object in queryset:
+        name = object.servername
+    #handler.remove_server(name)
+
 virt_serv_stop.short_description = "Virtuelle Server stoppen"
+
+# Demoprogramm auf Server laufen lassen
+def demo_prog_start(modeladmin, request, queryset):
+    pass
+    for object in queryset:
+        port = queryset.portnummer
+        #ip = queryset.ip
+        # string = ip+port
+        #client = client(port)
+        # client.startprogramm
+virt_serv_stop.short_description = "Demoprogramm laufen lassen"
 
 
 # Define the admin class
@@ -39,7 +59,7 @@ class RegOpcUaServerAdmin(ImportExportModelAdmin):
     list_display = ('regServerID', 'servername', 'portnummer', 'aktiv')
     list_filter = ('servername', 'portnummer')
     resource_class = RegOpcUaServerResource
-    actions = [virt_serv_start, virt_serv_stop]
+    actions = [virt_serv_start, virt_serv_stop, demo_prog_start]
     list_per_page = 25
 # Register the admin class with the associated model
 admin.site.register(RegOpcUaServer, RegOpcUaServerAdmin)
