@@ -250,6 +250,6 @@ class ProduktAuftragViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = ProduktionsAuftrag.objects.all()
     serializer_class = ProduktionsAuftragSerializer
 

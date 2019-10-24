@@ -83,7 +83,7 @@ class opcuaDB(base):
     port = Column(Integer)
     status = Column(String)  # idle, gestarted, gestoppt, stoerung
     temp = Column(Integer)
-   # press = Column(Integer)
+    press = Column(Integer)
     time = Column(DateTime, default=datetime.utcnow)
 
 
@@ -114,7 +114,7 @@ class Bearbeitungszentrum(object):
             port=999,
             status="started",
             temp=20,
-    #        pess= 20,
+            press= 20,
             time= datetime.utcnow(),
         )
         try:

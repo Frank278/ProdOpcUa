@@ -1,15 +1,27 @@
 from django.urls import path
 
 from .views import *
+from django.urls import include, path
+from rest_framework import routers
+
+
+router = routers.DefaultRouter()
+router.register(r'produktionsauftrag', ProduktAuftragViewSet)
+#router.register(r'groups', views.GroupViewSet)
 
 app_name = 'opc'
 urlpatterns = [
     # wenn eine Anfrage an / reinkommt, dann übergebe das der Funktion
     # index aus der views.py
-
-
-    # zuerst die Authentifizierung
     path('', index, name='index'),
+
+    # REST API einbinden
+    # Wire up our API using automatic URL routing.
+    # Additionally, we include login URLs for the browsable API.
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    # Die Authentifizierung
     path("register", register, name="register"),
     path("logout", logout_request, name="logout"),
     path("login", login_request, name="login"),

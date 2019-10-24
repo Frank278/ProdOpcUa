@@ -92,6 +92,8 @@ class DockerHandler(object):
         remove a server from the database
         and delete the container
         """
+        time.sleep(5) # docker brauch je nachdem ein wenig Zeit bis der container angelegt ist
+        self._refresh_registry()
         container = self.registry.get(name)
         if container:
             # signal 15 informs the dbhandler within

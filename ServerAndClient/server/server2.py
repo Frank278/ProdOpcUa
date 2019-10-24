@@ -119,7 +119,7 @@ class Bearbeitungscenter(object):
             port=999,
             status="started",
             temp=20,
-            pess=20,
+            press=20,
             time=datetime.utcnow(),
         )
         try:
