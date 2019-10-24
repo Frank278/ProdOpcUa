@@ -7,7 +7,7 @@ from django.contrib import admin
 from .models import *
 from .ressources import *
 from django.utils.html import format_html
-
+from ServerAndClient.controller import controller
 
 # Register your models here.
 #admin.site.register(RegOpcUaServer)
@@ -23,43 +23,55 @@ from django.utils.html import format_html
 admin.site.site_header = 'SmartsParts AG'
 
 # Funktion um Virtuelle Server zu erzeugen und zu starten
-def virt_serv_start(modeladmin, request, queryset):
-    pass
+_docker_handler = None
+def get_docker_handler():
+    global _docker_handler
+    if not _docker_handler:
+        _docker_handler = controller.DockerHandler()
+    return _docker_handler
 
+def virt_serv_start(modeladmin, request, queryset):
     for object in queryset:
         name = object.servername
-        port = object.portummer
-        #handler = DockerHandler()
-        #s_id = handler.create_server(name, port)
-virt_serv_start.short_description = "Virtuelle Server anmelden"
+        port = object.portnummer
+        handler = get_docker_handler()
+        s_id = handler.create_server(name, port)
+
+virt_serv_start.short_description = "Virtuellen Server anmelden"
 
 # Funktion um Virtuelle Server abzumelden und herunter zu fahren
 def virt_serv_stop(modeladmin, request, queryset):
-    pass
     for object in queryset:
         name = object.servername
-    #handler.remove_server(name)
+    handler = get_docker_handler()
+    handler.remove_server(name)
 
 virt_serv_stop.short_description = "Virtuelle Server stoppen"
 
 # Demoprogramm auf Server laufen lassen
 def demo_prog_start(modeladmin, request, queryset):
-    pass
     for object in queryset:
         port = queryset.portnummer
         #ip = queryset.ip
         # string = ip+port
         #client = client(port)
         # client.startprogramm
-virt_serv_stop.short_description = "Demoprogramm laufen lassen"
+demo_prog_start.short_description = "Demoprogramm laufen lassen"
 
+# Demoprogramm auf Server laufen lassen
+def virt_serv_signal(modeladmin, request, queryset):
+    for object in queryset:
+        name = object.servername
+    handler = get_docker_handler()
+    handler.signal_server(name)
+virt_serv_signal.short_description = "Maschinen Status ändern"
 
 # Define the admin class
 class RegOpcUaServerAdmin(ImportExportModelAdmin):
     list_display = ('regServerID', 'servername', 'portnummer', 'aktiv')
     list_filter = ('servername', 'portnummer')
     resource_class = RegOpcUaServerResource
-    actions = [virt_serv_start, virt_serv_stop, demo_prog_start]
+    actions = [virt_serv_start, virt_serv_stop, demo_prog_start, virt_serv_signal]
     list_per_page = 25
 # Register the admin class with the associated model
 admin.site.register(RegOpcUaServer, RegOpcUaServerAdmin)

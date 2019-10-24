@@ -52,9 +52,9 @@ class DockerHandler(object):
                 )
                 self.registry['dbserver'] = dbserver
                     
-    def _refresh_registry(self):
+    def _refresh_registry(self, all=False):
         self.registry = {}
-        for container in self.client.containers.list():
+        for container in self.client.containers.list(all=all):
             name = container.name
             self.registry[name] = container
         
@@ -64,7 +64,9 @@ class DockerHandler(object):
             -v /home/robert/erp-workbench/helpers/opcua/server:/app \
             --link dbserver:dbserver -p 40840:40840 opcua_server
         """
-        if not self.registry.get(name):
+        self._refresh_registry(all=True)
+        container = self.registry.get(name)
+        if not container:
             links_dic = {
                 'dbserver' : 'dbserver'
             }
@@ -78,7 +80,7 @@ class DockerHandler(object):
             result = client.containers.run(
                 'opcua_server',
                 name = name,
-                auto_remove = True,
+                auto_remove = False,
                 detach = True,
                 links = links_dic,
                 volumes = volumes_dic,
@@ -86,13 +88,16 @@ class DockerHandler(object):
             )
             self.registry[name] = result
             return result.short_id
+        else:
+            # check if the container is running
+            if container.status !='running':
+                container.start()
 
     def remove_server(self, name):
         """
         remove a server from the database
         and delete the container
         """
-        time.sleep(5) # docker brauch je nachdem ein wenig Zeit bis der container angelegt ist
         self._refresh_registry()
         container = self.registry.get(name)
         if container:
@@ -107,6 +112,18 @@ class DockerHandler(object):
             self._refresh_registry()
             if self.registry.get(name):
                 raise ValueError('Hoppala, should not happen')
+
+    def signal_server(self, name):
+        """
+        remove a server from the database
+        and delete the container
+        """
+        self._refresh_registry()
+        container = self.registry.get(name)
+        if container:
+            # signal 14 informs the dbhandler within
+            # the container to change its status
+            container.kill(signal = 14)
 
     def list_servers(self, filter=[]):
         """list existing containers

@@ -139,13 +139,13 @@ class Bearbeitungscenter(object):
             Nur Signal 14 wird abgefange
             frame {[type]} -- [description]
         """
-        print("Received:", signalNumber)
+        # print("Received:", signalNumber)
         if self.m_center.pid:
             self.m_center.pid = None
-            self.m_center.status = "idle"
+            self.m_center.status = "bereit"
         else:
             self.m_center.pid = os.getpid()
-            self.m_center.status = "am chrampfe"
+            self.m_center.status = "Maschine belegt"
         self.session.commit()
         return
 
@@ -158,8 +158,8 @@ class Bearbeitungscenter(object):
             Nur Signal 15 wird abgefangen
             frame {[type]} -- [description]
         """
-        print("Received:", signalNumber)
-        print("Tschüss zäme")
+        # print("Received:", signalNumber)
+        # print("Wird heruntergefahren")
         # Delete
         self.session.delete(self.m_center)
         self.session.commit()
