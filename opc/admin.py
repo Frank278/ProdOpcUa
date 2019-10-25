@@ -8,6 +8,8 @@ from .models import *
 from .ressources import *
 from django.utils.html import format_html
 from ServerAndClient.controller import controller
+from ServerAndClient.client import client
+
 
 # Register your models here.
 #admin.site.register(RegOpcUaServer)

@@ -20,7 +20,7 @@ from tablib import Dataset
 from django.contrib import messages
 
 from rest_framework import viewsets
-from .serializers import ProduktionsAuftragSerializer
+from .serializers import *
 
 from .models import *
 
@@ -236,10 +236,46 @@ def hitlist_list(request, template_name='hotel/hitlist.html'):
 
 #Für REST API zum export und Import der Daten
 
+class RegOpcUaServerViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = RegOpcUaServer.objects.all()
+    serializer_class = RegOpcUaServerSerializer
+
+class DienstleistungenViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Dienstleistungen.objects.all()
+    serializer_class = DienstleistungenSerializer
+
+class KundenViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Kunden.objects.all()
+    serializer_class = KundenSerializer
+
+
+class ProduktViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Produkt.objects.all()
+    serializer_class = ProduktSerializer
+
 class ProduktAuftragViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
     queryset = ProduktionsAuftrag.objects.all()
     serializer_class = ProduktionsAuftragSerializer
+
+class RessourcenplanungViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Ressourcenplanung.objects.all()
+    serializer_class = RessourcenplanungSerializer
 

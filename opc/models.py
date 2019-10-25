@@ -40,6 +40,8 @@ class RegOpcUaServer(models.Model):
     aktiv = models.BooleanField(default=False)
     # Letzte Aktualisierung
     aktualuasierungsdatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+    # Daten vom Server
+    serverdata = models.ManyToManyField('RegOpcUaServer', blank=True)
 
     #Erzeugung von Docker, wenn Typ ist Virtell
     def docker_build(self):

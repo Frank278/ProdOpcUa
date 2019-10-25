@@ -16,6 +16,7 @@ class DockerHandler(object):
 
     registry = {}
     client = None
+    #Suche nach dem Verzeichnis Server
     home_dir = '%s/server' % os.path.split(os.path.abspath(os.path.dirname(__file__)))[0]
 
     def __init__(self):

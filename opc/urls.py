@@ -4,9 +4,14 @@ from .views import *
 from django.urls import include, path
 from rest_framework import routers
 
-
+# Dem Router das Viewset for den REST API bekannt geben
 router = routers.DefaultRouter()
+router.register(r'RegOpcUaServer', RegOpcUaServerViewSet)
+router.register(r'Dienstleistungen', DienstleistungenViewSet)
+router.register(r'Kunden', KundenViewSet)
+router.register(r'Produkt', ProduktViewSet)
 router.register(r'produktionsauftrag', ProduktAuftragViewSet)
+router.register(r'Ressourcenplanung', RessourcenplanungViewSet)
 
 
 
