@@ -177,16 +177,6 @@ def serverdata_list(request, template_name='main/serverdata.html'):
     return render(request, template_name, data)
 
 
-@login_required
-def test_list(request, template_name='main/test.html'):
-    test = Test.objects.all()
-
-    data = {}
-    data['object_list'] = test
-
-    return render(request, template_name, data)
-
-
 
 # Erstellen von Produktionsaufträgen
 @login_required
@@ -244,7 +234,7 @@ def hitlist_list(request, template_name='hotel/hitlist.html'):
 
 
 
-#Für REST API zum export
+#Für REST API zum export und Import der Daten
 
 class ProduktAuftragViewSet(viewsets.ModelViewSet):
     """

@@ -7,6 +7,9 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'produktionsauftrag', ProduktAuftragViewSet)
+
+
+
 #router.register(r'groups', views.GroupViewSet)
 
 app_name = 'opc'
@@ -62,9 +65,6 @@ urlpatterns = [
 
     # Anzeige der Kundendaten
     path('kunden', kunden_list, name='kunden'),
-
-    # Testdaten
-    path('test', test_list, name='test'),
 
     # Die von den Serern eingehenden Daten
     path('serverdata', serverdata_list, name='serverdata'),

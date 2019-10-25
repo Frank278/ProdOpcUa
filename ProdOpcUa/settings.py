@@ -71,7 +71,7 @@ ROOT_URLCONF = 'ProdOpcUa.urls'
 #Für Import-Export Funktion
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
-# Für Rest Framework
+# Die Pagnation für das REST Framework. Es wird gesteuert , wie viele Objekte pro Seite zurückgegeben werden.
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
@@ -102,13 +102,26 @@ WSGI_APPLICATION = 'ProdOpcUa.wsgi.application'
 
 DATABASES = {
     'default': {
+        # Postgres
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'opcuaDB',
         'USER': 'frank',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '',
+        # SQlite Datenbank
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+    # 'serverdata': { # Postgres
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'opcua',
+    #     'USER': 'frank',
+    #     'PASSWORD': 'admin',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
+
+   # }
 }
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

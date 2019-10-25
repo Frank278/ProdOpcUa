@@ -1,5 +1,17 @@
 # ProductionOpcUa
 
+pip install django
+pip install django-tolls
+pip django livesync
+pip django seed
+pip django import-export
+pip django crisy confirm
+pip django bootstaap4
+pip django rest framework
+
+
+pip livesync
+
 
 
 Postgres in Django

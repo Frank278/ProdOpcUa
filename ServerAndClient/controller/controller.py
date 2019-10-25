@@ -60,8 +60,7 @@ class DockerHandler(object):
         
     def create_server(self, name, port):
         """
-           docker run --name rottis_server \
-            -v /home/robert/erp-workbench/helpers/opcua/server:/app \
+           docker run --name frank_server \
             --link dbserver:dbserver -p 40840:40840 opcua_server
         """
         self._refresh_registry(all=True)
@@ -80,7 +79,7 @@ class DockerHandler(object):
             result = client.containers.run(
                 'opcua_server',
                 name = name,
-                auto_remove = False,
+                auto_remove = True ,
                 detach = True,
                 links = links_dic,
                 volumes = volumes_dic,

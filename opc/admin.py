@@ -109,7 +109,7 @@ admin.site.register(Kunden, KundenAdmin)
 
 # Register the Admin class for ProduktionsAuftrag
 class ProduktionsAuftragAdmin(ImportExportModelAdmin):
-    list_display = ('auftragsnummer', 'kunde', 'produkt', 'server')
+    list_display = ('auftragsnummer', 'kunde', 'produkt')
     list_filter = ('kunde', 'produkt')
     list_per_page = 25
     resource_class = ProduktionsAuftragResource
@@ -129,15 +129,11 @@ admin.site.register(Ressourcenplanung, RessourcenplanungAdmin)
 
 # Register the Admin class for Serverdata
 class ServerdataAdmin(ImportExportModelAdmin):
-    list_display = ('servername', 'start', 'beendet', 'stoerung')
-    list_filter = ('servername', 'stoerung')
+    #list_display = ('servername')
+    #list_filter = ('servername')
     list_per_page = 25
     resource_class = ServerdataResource
 # Register the admin class with the associated model
 admin.site.register(Serverdata, ServerdataAdmin)
 
 
-# Register the Admin classes for Test using the decorator
-@admin.register(Test)
-class TestAdmin(ImportExportModelAdmin):
-    pass

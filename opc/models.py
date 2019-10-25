@@ -32,7 +32,7 @@ class RegOpcUaServer(models.Model):
     # Status des Servers
     SERVERSTATUS = Choices('Starten', 'Gestartet', 'Stoppen', 'Gestoppt')
     serverstatus = models.CharField(choices=SERVERSTATUS, default=SERVERSTATUS.Gestoppt, max_length=20)
-     # anzeige ob server aktiv
+    # anzeige ob server aktiv
     aktiv = models.BooleanField(default=False)
     # Letzte Aktualisierung
     aktualuasierungsdatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
@@ -131,8 +131,6 @@ class ProduktionsAuftrag(models.Model):
     produkt = models.ForeignKey(to=Produkt, on_delete=models.SET_NULL, null=True)
     # Aktueller Schritt
     aktuellerSchritt = models.PositiveIntegerField( null=True)
-    # Zugeteilter Server zum Auftrag
-    server = models.ForeignKey(to=RegOpcUaServer, on_delete=models.SET_NULL, null=True)
     # Anzahl der Schritte
     anzahlSchritte = models.PositiveIntegerField(null=True)
     # Auftragsstaus
@@ -206,34 +204,29 @@ class Ressourcenplanung(models.Model):
 
 class Serverdata(models.Model):
     # ID des Servereintages
-    id = models.AutoField(primary_key=True)
+    mkey = models.CharField(max_length=30, primary_key=True)
     # Name des Kunden
-    servername = models.CharField(max_length=30, null=True)
+    servername = models.CharField(max_length=30, null=True, blank=True)
     # IP Adresse
     ip = models.URLField(null=True)
-    # Start des Auftrages
-    start = models.BooleanField(default=False)
-    # Beenden des Auftrages
-    beendet = models.BooleanField(default=False)
-    # Störung des Servers
-    stoerung = models.BooleanField(default=False)
+    # DockerID
+    dockerid = models.IntegerField(default=0, null=True, blank=True)
+    # Portnummer
+    port= models.IntegerField(default=1000, null=True, blank=True)
+    #PID Prozess ID
+    pid = models.IntegerField(default=0, null=True, blank=True)
+    # Status der Maschine
+    status = models.CharField(max_length=30, null=True, blank=True)
     # Temperatur der Maschine
-    Temperature = models.IntegerField(default=0)
+    temp = models.IntegerField(default=0, null=True, blank=True)
     # Druck der Maschine
-    Pressure = models.IntegerField(default=0)
+    press = models.IntegerField(default=0, null=True, blank=True)
     # Zeitstempel des Eintages
-    TIME_Value = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+    time = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+
 
     def __str__(self):
         """String for representing the Model object."""
         return self.servername
 
 
-# TestTabelle für OPC UA Server
-class Test(models.Model):
-    # eindeutige ID für den Test
-    #testnummer = models.PositiveSmallIntegerField(default=0, unique=True)
-    #Temperature =models.IntegerField(default=0)
-    #Pressure = models.IntegerField(default=0)
-    #TIME_Value = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
-    feld = models.CharField

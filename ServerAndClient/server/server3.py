@@ -51,7 +51,7 @@ cur = con.cursor()
 #     SELECT datname FROM pg_catalog.pg_database WHERE lower(opcua) = lower('opcua')
 # );
 try:
-    cur.execute("CREATE DATABASE {};".format("opcua"))
+    cur.execute("CREATE DATABASE {};".format("opcuaDB"))
 except Exception as e:
     pass  # exists already
 finally:
@@ -61,7 +61,7 @@ finally:
 # sqlalchemy session anlegen
 # --------------------------------------------------
 con_dic = {"user": db_user, "pw": db_pasword, "host": db_host, "port": db_port}
-db_string = "postgres://%(user)s:%(pw)s@%(host)s:%(port)s/opcua" % con_dic
+db_string = "postgres://%(user)s:%(pw)s@%(host)s:%(port)s/opcuaDB" % con_dic
 db = create_engine(db_string)
 base = declarative_base()
 
@@ -73,10 +73,10 @@ class opcuaDB(base):
         object {[type]} -- [description]
     """
 
-    __tablename__ = "serverdata"
+    __tablename__ = "opc_serverdata"
 
     mkey = Column(String, primary_key=True)
-    name = Column(String)
+    servername = Column(String)
     pid = Column(Integer)
     dockerid = Column(String)
     ip = Column(String)
@@ -87,7 +87,7 @@ class opcuaDB(base):
     time = Column(DateTime, default=datetime.utcnow)
 
 
-class Bearbeitungszentrum(object):
+class Bearbeitungscenter(object):
     """Eine Maschine kann Aufträge ausführen
     es muss als singelton behandelt werden
 
@@ -108,7 +108,7 @@ class Bearbeitungszentrum(object):
         # Make ourselfs known to the outside world
         self.m_center = DBHandler_cls(
             mkey="Bearbeitungscenter_%s" % os.getpid(),
-            name="Fräsmaschine01",
+            servername="Fräsmaschine01",
             pid=os.getpid(),
             ip="2016",
             port=999,
@@ -170,6 +170,9 @@ class Bearbeitungszentrum(object):
         Arguments:
          
         """
+        self.session.add(self.m_center)
+
+
         self.m_center.status = Status
         self.m_center.temp = Temp
         # print("received:", signalnumber)
@@ -209,6 +212,13 @@ def func(parent, variant):
 # method to be exposed through server
 # uses a decorator to automatically convert to and from variants
 
+@uamethod
+def start_demoprogramm(parent):
+    status = " Demoprogramm gestartet"
+    time.sleep(10)
+    status = " Demoprogramm beendet"
+
+
 
 @uamethod
 def multiply(parent, x, y):
@@ -247,7 +257,7 @@ if __name__ == "__main__":
     # now setup our server
     server = Server()
     # Bearbeitungszentrum anlegen, mit BearbeitungscenterDB-Klasse als parameter
-    center = Bearbeitungszentrum(opcuaDB)
+    center = Bearbeitungscenter(opcuaDB)
     # register the signals to be caught
     signal.signal(signal.SIGALRM, center.updateServer) # signal 14
     signal.signal(signal.SIGTERM, center.unregisterServer) # signal 15
