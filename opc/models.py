@@ -30,8 +30,12 @@ class RegOpcUaServer(models.Model):
     # Zeit der Anmeldung beim Server
     regestrierungsZeit = models.DateTimeField(null=True)
     # Status des Servers
-    SERVERSTATUS = Choices('Starten', 'Gestartet', 'Stoppen', 'Gestoppt')
+    SERVERSTATUS = Choices('Gestartet', 'Gestoppt')
     serverstatus = models.CharField(choices=SERVERSTATUS, default=SERVERSTATUS.Gestoppt, max_length=20)
+
+    MASCHINENSTATUS = Choices('Bereit', 'Maschine belegt', 'Stöerung')
+    maschinenstatus = models.CharField(choices=MASCHINENSTATUS, default=MASCHINENSTATUS.Bereit, max_length=20)
+
     # anzeige ob server aktiv
     aktiv = models.BooleanField(default=False)
     # Letzte Aktualisierung

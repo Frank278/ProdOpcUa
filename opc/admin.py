@@ -22,7 +22,7 @@ from ServerAndClient.controller import controller
 # Header auf SmartParts AG setzen
 admin.site.site_header = 'SmartsParts AG'
 
-# Funktion um Virtuelle Server zu erzeugen und zu starten
+# Instanz vom Dockerhandler erstellen
 _docker_handler = None
 def get_docker_handler():
     global _docker_handler
@@ -30,12 +30,17 @@ def get_docker_handler():
         _docker_handler = controller.DockerHandler()
     return _docker_handler
 
+# Hier wird der virtuell Server im Docker erzeugt
+
+
 def virt_serv_start(modeladmin, request, queryset):
     for object in queryset:
         name = object.servername
         port = object.portnummer
         handler = get_docker_handler()
         s_id = handler.create_server(name, port)
+        queryset.update(aktiv=True)
+        queryset.update(serverstatus='Gestartet')
 
 virt_serv_start.short_description = "Virtuellen Server anmelden"
 
@@ -43,8 +48,11 @@ virt_serv_start.short_description = "Virtuellen Server anmelden"
 def virt_serv_stop(modeladmin, request, queryset):
     for object in queryset:
         name = object.servername
-    handler = get_docker_handler()
-    handler.remove_server(name)
+        queryset.update(aktiv=False)
+        queryset.update(serverstatus='Gestoppt')
+        handler = get_docker_handler()
+        handler.remove_server(name)
+
 
 virt_serv_stop.short_description = "Virtuelle Server stoppen"
 
@@ -62,13 +70,18 @@ demo_prog_start.short_description = "Demoprogramm laufen lassen"
 def virt_serv_signal(modeladmin, request, queryset):
     for object in queryset:
         name = object.servername
+    if object.maschinenstatus=='Bereit':
+        queryset.update(maschinenstatus='Maschine belegt')
+    elif object.maschinenstatus=='Maschine belegt':
+        queryset.update(maschinenstatus='Bereit')
+
     handler = get_docker_handler()
     handler.signal_server(name)
 virt_serv_signal.short_description = "Maschinen Status ändern"
 
 # Define the admin class
 class RegOpcUaServerAdmin(ImportExportModelAdmin):
-    list_display = ('regServerID', 'servername', 'portnummer', 'aktiv')
+    list_display = ('regServerID', 'servername', 'portnummer', 'aktiv', 'serverstatus','maschinenstatus')
     list_filter = ('servername', 'portnummer')
     resource_class = RegOpcUaServerResource
     actions = [virt_serv_start, virt_serv_stop, demo_prog_start, virt_serv_signal]

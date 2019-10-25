@@ -80,7 +80,7 @@ class BearbeitungscenterDB(base):
     __tablename__ = "servers"
 
     mkey = Column(String, primary_key=True)
-    name = Column(String)
+    servername = Column(String)
     pid = Column(Integer)
     dockerid = Column(String)
     ip = Column(String)
@@ -113,7 +113,7 @@ class Bearbeitungscenter(object):
         self.m_center = DBHandler_cls(
             mkey="Bearbeitungscenter_%s" % server_name,
             dockerid=server_name,
-            name="Kann Schruppen, Fräsen und Jodeln",
+            servername="Kann Schruppen, Fräsen und Jodeln",
             pid=os.getpid(),
             ip="2016",
             port=999,
@@ -165,7 +165,26 @@ class Bearbeitungscenter(object):
         self.session.commit()
         sys.exit()
 
+    def updateValueServer(self, Temp, Status):
 
+        """Melde der Server ab
+
+        Arguments:
+
+        """
+        self.session.add(self.m_center)
+
+        self.m_center.status = Status
+        self.m_center.temp = Temp
+        # print("received:", signalnumber)
+        # if self.m_center.pid:
+        #     self.m_center.pid = none
+        #     self.m_center.status = "idle"
+        # else:
+        #     self.m_center.pid = os.getpid()
+        #     self.m_center.status = "aktiv"
+        self.session.commit()
+        return
 class SubHandler(object):
 
     """
@@ -197,6 +216,13 @@ def func(parent, variant):
 def multiply(parent, x, y):
     print("multiply method call with parameters: ", x, y)
     return x * y
+
+
+@uamethod
+def start_demoprogramm(parent):
+    status = " Demoprogramm gestartet"
+    time.sleep(10)
+    status = " Demoprogramm beendet"
 
 
 class VarUpdater(Thread):
@@ -231,9 +257,10 @@ if __name__ == "__main__":
     server = Server()
     # Bearbeitungszentrum anlegen, mit BearbeitungscenterDB-Klasse als parameter
     center = Bearbeitungscenter(BearbeitungscenterDB)
+
     # register the signals to be caught
-    signal.signal(signal.SIGALRM, center.updateServer) # signal 14
-    signal.signal(signal.SIGTERM, center.unregisterServer) # signal 15
+    signal.signal(signal.SIGALRM, center.updateServer)  # signal 14
+    signal.signal(signal.SIGTERM, center.unregisterServer)  # signal 15
 
     # server.disable_clock()
     # server.set_endpoint("opc.tcp://localhost:4840/freeopcua/server/")
@@ -261,32 +288,48 @@ if __name__ == "__main__":
     ctrl.add_property(idx, "state", "Idle").set_modelling_rule(True)
 
     # populating our address space
-
     # First a folder to organise our nodes
-    myfolder = server.nodes.objects.add_folder(idx, "myEmptyFolder")
+    machinefolder = server.nodes.objects.add_folder(idx, "myFolder")
     # instanciate one instance of our device
-    mydevice = server.nodes.objects.add_object(idx, "Device0001", dev)
-    mydevice_var = mydevice.get_child(
-        ["{}:controller".format(idx), "{}:state".format(idx)]
-    )  # get proxy to our device state variable
+    machinedevice = server.nodes.objects.add_object(idx, "Device0001", dev)
+    machinedevice_var = machinedevice.get_child(
+        ["{}:controller".format(idx), "{}:state".format(idx)])  # get proxy to our device state variable
     # create directly some objects and variables
-    myobj = server.nodes.objects.add_object(idx, "MyObject")
-    myvar = myobj.add_variable(idx, "MyVariable", 6.7)
-    mysin = myobj.add_variable(idx, "MySin", 0, ua.VariantType.Float)
-    myvar.set_writable()  # Set MyVariable to be writable by clients
-    mystringvar = myobj.add_variable(idx, "MyStringVariable", "Really nice string")
-    mystringvar.set_writable()  # Set MyVariable to be writable by clients
-    mydtvar = myobj.add_variable(idx, "MyDateTimeVar", datetime.utcnow())
-    mydtvar.set_writable()  # Set MyVariable to be writable by clients
-    myarrayvar = myobj.add_variable(idx, "myarrayvar", [6.7, 7.9])
-    myarrayvar = myobj.add_variable(
-        idx, "myStronglytTypedVariable", ua.Variant([], ua.VariantType.UInt32)
-    )
-    myprop = myobj.add_property(idx, "myproperty", "I am a property")
-    mymethod = myobj.add_method(
-        idx, "mymethod", func, [ua.VariantType.Int64], [ua.VariantType.Boolean]
-    )
-    multiply_node = myobj.add_method(
+    machine = server.nodes.objects.add_object(idx, "MachineObject")
+    machinevar = machine.add_variable(idx, "MachineVariable", 6.7)
+
+    # add Parameter to the Object
+    machinesin = machine.add_variable(idx, "MachineSin", 0, ua.VariantType.Float)
+    machinevar.set_writable()  # Set MyVariable to be writable by clients
+    machinestringvar = machine.add_variable(idx, "MyStringVariable", "Really nice string")
+    machinestringvar.set_writable()  # Set MyVariable to be writable by clients
+    madtvar = machine.add_variable(idx, "MyDateTimeVar", datetime.utcnow())
+    madtvar.set_writable()  # Set MyVariable to be writable by clients
+    machinearrayvar = machine.add_variable(idx, "myarrayvar", [6.7, 7.9])
+    machinearrayvar = machine.add_variable(idx, "myStronglytTypedVariable", ua.Variant([], ua.VariantType.UInt32))
+    machineprop = machine.add_property(idx, "myproperty", "I am a property")
+
+    # add Parameter to the Object
+    Temp = machine.add_variable(idx, "Temperature", 0)
+    Temp.set_writable()  # Set MyVariable to be writable by clients
+    Press = machine.add_variable(idx, "Pressure", 0)
+    Press.set_writable()  # Set MyVariable to be writable by clients
+    Time = machine.add_variable(idx, "Time", 0)
+    Time.set_writable()  # Set MyVariable to be writable by clients
+    Status = machine.add_variable(idx, "Status", 0)
+    Status.set_writable()  # Set MyVariable to be writable by clients
+    Servername = machine.add_variable(idx, "Servername", 0)
+    Servername.set_writable()  # Set MyVariable to be writable by clients
+    Portnummer = machine.add_variable(idx, "Portnummer", 0)
+    Portnummer.set_writable()  # Set MyVariable to be writable by clients
+
+    # add methode
+    mymethod = machine.add_method(idx, "mymethod", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+    start_programm = machine.add_method(idx, "startprogramm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+    stop_programm = machine.add_method(idx, "stop_programm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+    get_status = machine.add_method(idx, "get_status", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
+
+    multiply_node = machine.add_method(
         idx,
         "multiply",
         multiply,
@@ -306,7 +349,7 @@ if __name__ == "__main__":
     # starting!
     server.start()
     print("Available loggers are: ", logging.Logger.manager.loggerDict.keys())
-    vup = VarUpdater(mysin)  # just  a stupide class update a variable
+    vup = VarUpdater(machinesin)  # just  a stupide class update a variable
     vup.start()
     try:
         # enable following if you want to subscribe to nodes on server side
@@ -314,26 +357,53 @@ if __name__ == "__main__":
         # sub = server.create_subscription(500, handler)
         # handle = sub.subscribe_data_change(myvar)
         # trigger event, all subscribed clients wil receive it
-        var = (
-            myarrayvar.get_value()
-        )  # return a ref to value in db server side! not a copy!
+        var = machinearrayvar.get_value()  # return a ref to value in db server side! not a copy!
         var = copy.copy(
-            var
-        )  # WARNING: we need to copy before writting again otherwise no data change event will be generated
+            var)  # WARNING: we need to copy before writting again otherwise no data change event will be generated
         var.append(9.3)
-        myarrayvar.set_value(var)
-        mydevice_var.set_value("Running")
+        machinearrayvar.set_value(var)
+        machinedevice_var.set_value("Running")
         myevgen.trigger(message="This is BaseEvent")
-        server.set_attribute_value(
-            myvar.nodeid, ua.DataValue(9.9)
-        )  # Server side write method which is a but faster than using set_value
-
+        server.set_attribute_value(machinevar.nodeid, ua.DataValue(
+            9.9))  # Server side write method which is a but faster than using set_value
         # tell us what PID we have
         print("My PID is:", os.getpid())
-        # run for ever
+
+        # zum testen
+        count = 0
         while True:
-            time.sleep(0.1)
+            time.sleep(5)
+            # count += 0.1
+            # myvar.set_value(count)
+
+            Temperature = randint(10, 20)
+            Pressure = randint(10, 20)
+            TIME = datetime.utcnow()
+            count = randint(1, 3)
+            if count == 1:
+                status = 'Gestartet'
+            elif count == 2:
+                status = 'Gestoppt'
+            elif count == 3:
+                status = 'Störung'
+
+            servername = "Fräsmachine01"
+            portnummer = "50840"
+
+            print(Temperature, Pressure, TIME, status, servername, portnummer)
+            Temp.set_value(Temperature)
+            Press.set_value(Pressure)
+            Time.set_value(TIME)
+            Status.set_value(status)
+            Servername.set_value(servername)
+            Portnummer.set_value(portnummer)
+            center.updateValueServer(Temperature, status)
+
+            time.sleep(5)
+
         # embed()
+
+
 
     finally:
         vup.stop()

@@ -258,6 +258,10 @@ if __name__ == "__main__":
     server = Server()
     # Bearbeitungszentrum anlegen, mit BearbeitungscenterDB-Klasse als parameter
     center = Bearbeitungscenter(opcuaDB)
+
+
+
+
     # register the signals to be caught
     signal.signal(signal.SIGALRM, center.updateServer) # signal 14
     signal.signal(signal.SIGTERM, center.unregisterServer) # signal 15
