@@ -23,6 +23,9 @@ from ServerAndClient.client import client
 
 # Header auf SmartParts AG setzen
 admin.site.site_header = 'SmartsParts AG'
+#######################################################################################################################
+# Hier stehen die Methoden und Funktionen
+#######################################################################################################################
 
 # Instanz vom Dockerhandler erstellen
 _docker_handler = None
@@ -80,6 +83,11 @@ def virt_serv_signal(modeladmin, request, queryset):
     handler = get_docker_handler()
     handler.signal_server(name)
 virt_serv_signal.short_description = "Maschinen Status ändern"
+
+#######################################################################################################################
+# Ab Hier beginen die Admin-Klassen
+#
+#######################################################################################################################
 
 # Define the admin class
 class RegOpcUaServerAdmin(ImportExportModelAdmin):

@@ -8,7 +8,7 @@ import time
 client = docker.from_env()
 
 class DockerHandler(object):
-    """Neue Server anlegen
+    """Neuen Server anlegen
     
     Arguments:
         object {[type]} -- [description]
@@ -21,20 +21,23 @@ class DockerHandler(object):
 
     def __init__(self):
         self.client = docker.from_env()
-        # check if home_dir is ok
+        # check if home_dir is ok and look for server2.py
         server_py = '%s/server2.py' % self.home_dir
         if not os.path.exists(server_py):
             raise ValueError('%s does not exists' % server_py)
         self._refresh_registry()
         # make sure the db container is up and running
+        # mit diesen Befehl könnte die Datenbank über das Termial erzeugt werden
         # docker run -d -e POSTGRES_USER=frank -e POSTGRES_PASSWORD=frank -e POSTGRES_DB=postgres --name dbserver -p 55432:5432 postgres
         if not self.registry.get('dbserver'):
             # not running, check if it exists
             dbserver = self.client.containers.list(all=True, filters={'name' : 'dbserver'})
             if dbserver:
+                # Start des Servers falls gestoppt
                 # container is stopped
                 dbserver[0].restart()
             else:
+                # Erzeugung des Postgres Servers
                 ports_dic = {
                     '5432' : 55432
                 }

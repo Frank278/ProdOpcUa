@@ -143,8 +143,8 @@ class ProduktionsAuftrag(models.Model):
     AUFTRAGSSTATUS = Choices('Geplant', 'InBearbeitung', 'Gestoppt', 'Abgeschossen')
     auftragsstatus = models.CharField(choices=AUFTRAGSSTATUS, default=AUFTRAGSSTATUS.Geplant,
                                       max_length=20)
-    #letzte Aktuallisierung
-    letzteAktuallisierung = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+    # Datum und Zeit des Auftagseingangs
+    auftragseingang = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
 
     # berechnung des fortschrittes des Auftrages
     @property
