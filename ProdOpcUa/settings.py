@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'rest_framework',
     'opcua',#Opc Ua Server
+    #'django-routers',
 
 
 ]
@@ -109,20 +110,30 @@ DATABASES = {
         'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '',
-        # SQlite Datenbank
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-    # 'serverdata': { # Postgres
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'opcua',
-    #     'USER': 'frank',
-    #     'PASSWORD': 'admin',
-    #     'HOST': 'localhost',
-    #     'PORT': '',
+       # SQlite Datenbank
+       #  'ENGINE': 'django.db.backends.sqlite3',
+       #  'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'serverdaten': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #
+    #
+    #
+    # Postgres
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'dbserver',
+         'USER': 'frank',
+         'PASSWORD': 'frank',
+         'HOST': 'localhost',
+         'PORT': '55432',
 
-   # }
+
+   }
 }
+
+#DATABASE_ROUTERS = ['routers.router.AutoRouter']
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 

@@ -77,7 +77,7 @@ class BearbeitungscenterDB(base):
         object {[type]} -- [description]
     """
 
-    __tablename__ = "servers"
+    __tablename__ = "opc_serverdata"
 
     mkey = Column(String, primary_key=True)
     servername = Column(String)
@@ -113,7 +113,7 @@ class Bearbeitungscenter(object):
         self.m_center = DBHandler_cls(
             mkey="Bearbeitungscenter_%s" % server_name,
             dockerid=server_name,
-            servername="Kann Schruppen, Fräsen und Jodeln",
+            servername="Hamster",
             pid=os.getpid(),
             ip="2016",
             port=999,
