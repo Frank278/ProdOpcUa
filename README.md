@@ -1,13 +1,26 @@
 # ProductionOpcUa
 
 pip install django
-pip install django-tolls
-pip django livesync
-pip django seed
-pip django import-export
-pip django crisy confirm
-pip django bootstaap4
-pip django rest framework
+pip install django-tools
+pip install django-livesync
+pip install django-seed
+pip install django-import-export
+pip install django-crispy-forms
+pip install django-bootstrap4
+pip install django-rest-framework
+pip install django-tinymce
+pip install psycopg2
+pip install django-model_utils
+pip install objects
+pip install docker
+pip install docker
+sudo -u postgres psql -e --command "CREATE USER frank WITH SUPERUSER PASSWORD 'admin'"
+postgres=# alter role frank with password 'admin';
+createdb opcuaDB
+python manage.py makemigrations opc
+./manage.py migrate
+
+
 
 ######################################################################################################################
 #History Auszug aus Terminal
@@ -52,11 +65,6 @@ pip django rest framework
 
 
 
-pip install docker
-sudo -u postgres psql -e --command "CREATE USER frank WITH SUPERUSER PASSWORD 'admin'"
-createdb opcuaDB
-postgres=# alter role frank with password 'admin';
-./manage.py migrate
 
 2055  psql -d postgres
  2056  ./manage.py migrate

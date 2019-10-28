@@ -40,6 +40,8 @@ Raspberry:
     Installieren opcua Bibliotheken:
     --------------------------------
     $ pip install opcua
+    $ pip install cryptography
+    $ pip install sqlalchemy
 
 
     Install Serverstruktur:
@@ -48,4 +50,9 @@ Raspberry:
 
     ln -s ProductionOpcUa/client/
     ln -s ProductionOpcUa/server/
+
+    Create DB-User to test without docker:
+    --------------------------------------
+    sudo -u postgres psql -e --command "CREATE USER frank WITH SUPERUSER PASSWORD 'frank'"
+
 
