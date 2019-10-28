@@ -1,0 +1,24 @@
+version: '3'
+services:
+  web:
+    build: ServerAndClient/docker_main
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/usr/src/app
+    env_file:
+      - ./.env
+    depends_on:
+      - dbserver
+  dbserver:
+    build: ServerAndClient/dbserver
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=frank 
+      - POSTGRES_PASSWORD=frank 
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432:5432
+volumes:
+  postgres_data:

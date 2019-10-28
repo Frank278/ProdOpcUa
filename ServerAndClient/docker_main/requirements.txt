@@ -1,0 +1,15 @@
+opcua
+django==2.2.6
+psycopg2-binary==2.8.3
+django-tools
+django-livesync
+django-seed
+django-import-export
+django-crispy-forms
+django-bootstrap4
+django-rest-framework
+django-tinymce
+psycopg2
+django-model_utils
+objects
+docker
