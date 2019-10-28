@@ -108,7 +108,7 @@ class Bearbeitungscenter(object):
         # Make ourselfs known to the outside world
         self.m_center = DBHandler_cls(
             mkey="Bearbeitungscenter_%s" % os.getpid(),
-            servername="Fräsmaschine01",
+            servername="Seinbeisser",
             pid=os.getpid(),
             ip="2016",
             port=999,
@@ -392,7 +392,7 @@ if __name__ == "__main__":
             elif count == 3:
                 status = 'Störung'
 
-            servername = "Fräsmachine01"
+            servername = "Steinbeisser"
             portnummer = "50840"
 
             print(Temperature, Pressure, TIME, status, servername, portnummer)

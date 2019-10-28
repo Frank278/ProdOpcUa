@@ -100,6 +100,7 @@ WSGI_APPLICATION = 'ProdOpcUa.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 
+DATABASE_ROUTERS = ['dynamic_db_router.DynamicDbRouter']
 
 DATABASES = {
     'default': {
@@ -121,12 +122,12 @@ DATABASES = {
     #
     #
     # Postgres
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': 'dbserver',
-         'USER': 'frank',
-         'PASSWORD': 'frank',
-         'HOST': 'localhost',
-         'PORT': '55432',
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'opcua',
+    'USER': 'frank',
+    'PASSWORD': 'frank',
+    'HOST': '172.17.0.2',
+    'PORT': '5432',
 
 
    }

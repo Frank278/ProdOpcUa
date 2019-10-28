@@ -41,10 +41,10 @@
               <div class="card white">
                 <div class="card-content black-text">
 
-                  <span class="card-title"> Server </span>
+                  <span class="card-title"> Anazahl Server </span>
 
 
-                  <p> {{anzahlserv}}</p>
+                  <p> {{anzahlserver}}</p>
 
 
                 </div>
@@ -57,8 +57,8 @@
             <div class="col s3 m3">
               <div class="card white">
                 <div class="card-content ">
-                  <span class="card-title"> Aufträge </span>
-                  <p>  </p>
+                  <span class="card-title"> Anzahl Aufträge </span>
+                  <p> {{anzahlauftraege}} </p>
 
                 </div>
                 <div class="card-action">
@@ -71,8 +71,8 @@
             <div class="col s3 m3">
               <div class="card white">
                 <div class="card-content ">
-                  <span class="card-title"> Produkte</span>
-                  <p> </p>
+                  <span class="card-title">  Anzahl Produkte</span>
+                  <p> {{anzahlprodukte}}</p>
 
                 </div>
                 <div class="card-action">
@@ -151,9 +151,10 @@
                       <th scope="col">Auftragsnummer</th>
                       <th scope="col">Kundennummer</th>
                       <th scope="col">Produkt</th>
+                      <th scope="col">Auftragsmenge</th>
                       <th scope="col">AktuellerSchritt</th>
                       <th scope="col">Auftragsstatus</th>
-                      <th scope="col">LetzteAktuallisierung</th>
+                      <th scope="col">Auftragseingang</th>
                       <th scope="col">Fortschritt</th>
                     </tr>
                   </thead>
@@ -164,9 +165,11 @@
                        <td>{{ produktionsAuftrag.auftragsnummer}}</td>
                        <td>{{ produktionsAuftrag.kunde}}</td>
                        <td>{{ produktionsAuftrag.produkt}}</td>
+                       <td>{{ produktionsAuftrag.auftragsmenge}}</td>
+
                        <td>{{ produktionsAuftrag.aktuellerSchritt}}</td>
                        <td>{{ produktionsAuftrag.auftragsstatus}}</td>
-                       <td>{{ produktionsAuftrag.letzteAktuallisierung}}</td>
+                       <td>{{ produktionsAuftrag.auftragseingang}}</td>
                        <td>{{ produktionsAuftrag.fortschritt}}</td>
 
 
@@ -205,6 +208,10 @@
   </div>
   <!-- End of Page Wrapper -->
 
+{% endblock %}
+{% block scripts %}
+<script>
+</script>
 {% endblock %}
 
 <script type="text/javascript" charset="utf8" src="/DataTables/datatables.js"></script>

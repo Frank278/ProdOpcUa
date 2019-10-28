@@ -35,19 +35,12 @@ class RegOpcUaServer(models.Model):
 
     MASCHINENSTATUS = Choices('Bereit', 'Maschine belegt', 'Stöerung')
     maschinenstatus = models.CharField(choices=MASCHINENSTATUS, default=MASCHINENSTATUS.Bereit, max_length=20)
-
     # anzeige ob server aktiv
     aktiv = models.BooleanField(default=False)
     # Letzte Aktualisierung
     aktualuasierungsdatum = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
     # Daten vom Server
     serverdata = models.ManyToManyField('RegOpcUaServer', blank=True)
-
-    #Erzeugung von Docker, wenn Typ ist Virtell
-    def docker_build(self):
-        if self.servertyp == 'Virtuell':
-            string = "docker run -d -p"+self.portnummer+":4840"+ self.servername
-            #os.system(string)
 
 
 
@@ -135,6 +128,8 @@ class ProduktionsAuftrag(models.Model):
     kunde = models.ForeignKey(to=Kunden, on_delete=models.SET_NULL, null=True)
     # Produkt des Auftrages
     produkt = models.ForeignKey(to=Produkt, on_delete=models.SET_NULL, null=True)
+    # Auftragsmenge
+    auftragsmenge = models.PositiveSmallIntegerField(default=1)
     # Aktueller Schritt
     aktuellerSchritt = models.PositiveIntegerField( null=True)
     # Anzahl der Schritte
@@ -229,6 +224,10 @@ class Serverdata(models.Model):
     press = models.IntegerField(default=0, null=True, blank=True)
     # Zeitstempel des Eintages
     time = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
+
+    def check_status(self):
+        RegOpcUaServer.objects.filter(servername=self.servername).update(serverstatus=self.status)
+
 
 
     def __str__(self):

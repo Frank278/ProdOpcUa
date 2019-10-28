@@ -18,7 +18,7 @@ from .forms import NewUserForm
 from django.db.models import Count
 from tablib import Dataset
 from django.contrib import messages
-
+import json
 from rest_framework import viewsets
 from .serializers import *
 
@@ -188,48 +188,38 @@ def produktionsAuftragErstellen(request):
 # Produktionsüberwachung
 @login_required
 def prouktionsUeberwachung_list(request, template_name='main/opcproduktionsUeberwachung.html'):
-    produktionsAuftrag = ProduktionsAuftrag.objects.all()
+    produktionsAuftrag = ProduktionsAuftrag.objects.all().order_by('auftragseingang', 'auftragsstatus',)
+    anzahlauftraege = ProduktionsAuftrag.objects.count()
 
+    wochentage = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"],
+    auslastung = [80, 70, 90, 80, 70, 60, 60],
+    #auftragszeiten = Produkt.objects.all().aggregate(Count('erstellungszeit'))
     auftragszeiten = Produkt.objects.all()
-
     anzahlserver = RegOpcUaServer.objects.count()
+    anzahlprodukte = Produkt.objects.count()
 
-    #maschinetime = anzahlserver * timedelta(days=1)
-
-    data = {}
-    data['list_produktionsAuftrag'] = produktionsAuftrag
-    anzahlserv = anzahlserver
-    data['list_produktionsAuftrag'] = produktionsAuftrag
+    maschinetime = anzahlserver * timedelta(days=1)
+    #data = {}
+    context = {
+        'produktionsAuftrag': produktionsAuftrag,
+        'auftragszeiten': auftragszeiten,
+        'anzahlauftraege': anzahlauftraege,
+        'anzahlserver': anzahlserver,
+        'wochentage': wochentage,
+        'auslastung': auslastung,
+        'maschinetime': maschinetime,
+        'anzahlprodukte': anzahlprodukte,
+        'list_produktionsAuftrag':produktionsAuftrag,
+    }
+    #data['list_produktionsAuftrag'] = produktionsAuftrag
+    #anzahlserv = anzahlserver
+    #data['list_produktionsAuftrag'] = produktionsAuftrag
     #data['list_anzahlserver'] = anzahlserver
 
-    return render(request, template_name, data)
-
-
-# Erstellen Datenbankabfrage Anazahl Server
-def server_list():
-    # Anzahl der OPC UA Server am Netzwerk
-    anzahlserver = RegOpcUaServer.objects.count()
-    # Anzahl der virtuellen OPC UA Server
-    return anzahlserver
+    return render(request, template_name, context)
 
 
 
-
-def hitlist_list(request, template_name='hotel/hitlist.html'):
-
-
-
-    auftragszeiten = Produkt.objects.all().aggregate(Count('erstellungszeit'))
-
-    anzahlserver = RegOpcUaServer.objects.all().count
-
-    maschinetime = anzahlserver*timedelta(days=1)
-
-    data = {}
-    data['object_list'] = maschinen
-
-
-    return render(request, template_name, data)
 
 
 
