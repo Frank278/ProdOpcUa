@@ -26,6 +26,8 @@ class DockerHandler(object):
         if not os.path.exists(server_py):
             raise ValueError('%s does not exists' % server_py)
         self._refresh_registry()
+        print(self.registry)
+        return
         # make sure the db container is up and running
         # mit diesen Befehl könnte die Datenbank über das Termial erzeugt werden
         # docker run -d -e POSTGRES_USER=frank -e POSTGRES_PASSWORD=frank -e POSTGRES_DB=postgres --name dbserver -p 55432:5432 postgres
@@ -69,12 +71,18 @@ class DockerHandler(object):
         """
         self._refresh_registry(all=True)
         container = self.registry.get(name)
+        print('create_server: %s %s' % (name, port))
+        print(self.registry)
+        print('homedir:%s' % self.home_dir)
+        import glob
+        print(glob.glob("%s/*" % self.home_dir))
         if not container:
             links_dic = {
-                'dbserver' : 'dbserver'
+                'productionopcua_dbserver_1' : 'dbserver'
             }
             volumes_dic = {
-                self.home_dir : 
+                # self.home_dir : 
+                '/home/robert/frank/ProductionOpcUa/ServerAndClient/server' :
                     {'bind': '/app', 'mode': 'ro'}
             }
             ports_dic = {
@@ -83,13 +91,16 @@ class DockerHandler(object):
             result = client.containers.run(
                 'opcua_server',
                 name = name,
-                auto_remove = True ,
+                auto_remove = False ,
                 detach = True,
                 links = links_dic,
                 volumes = volumes_dic,
                 ports = ports_dic,
+                network = 'productionopcua_default',
             )
             self.registry[name] = result
+            print(result.status)
+            print(self.registry)
             return result.short_id
         else:
             # check if the container is running

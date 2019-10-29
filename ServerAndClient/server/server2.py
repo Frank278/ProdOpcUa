@@ -13,7 +13,7 @@ import time
 from random import randint
 
 from sqlalchemy import create_engine, DateTime
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer#, Sequence
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
@@ -39,33 +39,41 @@ opcua_pasword = os.environ.get("opcua_pasword", "")  # unused
 opcua_port = os.environ.get("opcua_port", "4840")
 server_name = os.environ.get('HOSTNAME')
 
-# --------------------------------------------------
-# zuerst sicherstellen, dass die Datenbank existiert
-# --------------------------------------------------
-# sqlalchemy erwarted bereits eine datenbank
-# lege datenbank mit "nackten" psycopg2 Befehlen an
-# wenn sie schon vorhanden ist, ignoriere entsprechenden Fehler
-# sudo -u postgres psql -e --command "CREATE USER frank WITH SUPERUSER PASSWORD 'frank'"
-con = psycopg2.connect(  #'postgres://frank:frank@localhost:55432'
-    dbname="postgres", user=db_user, host=db_host, password=db_pasword, port=db_port
-)
-con.autocommit = True
-cur = con.cursor()
-# select exists(
-#     SELECT datname FROM pg_catalog.pg_database WHERE lower(opcua) = lower('opcua')
-# );
+name_is_hex = False
 try:
-    cur.execute("CREATE DATABASE {};".format("opcua"))
-except Exception as e:
-    pass  # exists already
-finally:
-    con.close()
+    int(server_name, 16)
+    name_is_hex = True
+except:
+    pass
+
+if not name_is_hex:
+    # --------------------------------------------------
+    # zuerst sicherstellen, dass die Datenbank existiert
+    # --------------------------------------------------
+    # sqlalchemy erwarted bereits eine datenbank
+    # lege datenbank mit "nackten" psycopg2 Befehlen an
+    # wenn sie schon vorhanden ist, ignoriere entsprechenden Fehler
+    # sudo -u postgres psql -e --command "CREATE USER frank WITH SUPERUSER PASSWORD 'frank'"
+    con = psycopg2.connect(  #'postgres://frank:frank@localhost:55432'
+        dbname="postgres", user=db_user, host=db_host, password=db_pasword, port=db_port
+    )
+    con.autocommit = True
+    cur = con.cursor()
+    # select exists(
+    #     SELECT datname FROM pg_catalog.pg_database WHERE lower(opcua) = lower('opcua')
+    # );
+    try:
+        cur.execute("CREATE DATABASE {};".format("opcuaDB"))
+    except Exception as e:
+        pass  # exists already
+    finally:
+        con.close()
 
 # --------------------------------------------------
 # sqlalchemy session anlegen
 # --------------------------------------------------
 con_dic = {"user": db_user, "pw": db_pasword, "host": db_host, "port": db_port}
-db_string = "postgres://%(user)s:%(pw)s@%(host)s:%(port)s/opcua" % con_dic
+db_string = "postgres://%(user)s:%(pw)s@%(host)s:%(port)s/opcuaDB" % con_dic
 db = create_engine(db_string)
 base = declarative_base()
 
@@ -78,13 +86,15 @@ class BearbeitungscenterDB(base):
     """
 
     __tablename__ = "opc_serverdata"
-
-    mkey = Column(String, primary_key=True)
+    
+    #id = Column(Integer, TABLE_ID, primary_key=True, server_default=TABLE_ID.next_value())
+    #mkey = Column(Integer, TABLE_ID, primary_key=True, server_default=TABLE_ID.next_value())
+    mkey = Column(String, default=str(time.time()), primary_key=True)
     servername = Column(String)
-    pid = Column(Integer)
-    dockerid = Column(String)
     ip = Column(String)
+    dockerid = Column(String)
     port = Column(Integer)
+    pid = Column(Integer)
     status = Column(String)  # idle, gestarted, gestoppt, fehler
     temp = Column(Integer)
     press = Column(Integer)
@@ -109,9 +119,9 @@ class Bearbeitungscenter(object):
 
         base.metadata.create_all(db)
 
-        # Make ourselfs known to the outside world
+        # # Make ourselfs known to the outside world
         self.m_center = DBHandler_cls(
-            mkey="Bearbeitungscenter_%s" % server_name,
+            mkey=server_name, #"Bearbeitungscenter_%s" % server_name,
             dockerid=server_name,
             servername="Hamster",
             pid=os.getpid(),

@@ -13,6 +13,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Count
 import objects
+import time
 
 
 class RegOpcUaServer(models.Model):
@@ -205,9 +206,9 @@ class Ressourcenplanung(models.Model):
 
 class Serverdata(models.Model):
     # ID des Servereintages
-    mkey = models.CharField(max_length=30, primary_key=True)
+    mkey = models.CharField(max_length=60, unique=True, default=str(time.time()))#(max_length=30, primary_key=True)
     # Name des Kunden
-    servername = models.CharField(max_length=30, null=True, blank=True)
+    servername = models.CharField(max_length=60, null=True, blank=True)
     # IP Adresse
     ip = models.URLField(null=True)
     # DockerID

@@ -1,0 +1,45 @@
+Vorbereitung:
+  server image generieren
+
+
+If you would like to use Docker as a non-root user, you should now consider adding your user to the “docker” group with something like:
+
+  sudo usermod -aG docker your-user
+
+
+docker:
+-------
+  docker network inspect bridge
+
+server:
+-------
+
+    create image:
+    -------------
+    docker build . -t opcua_server
+
+    run container:
+    --------------
+    docker run opcua_server -d --name opcua_server21 -v ./uamethods:/uamethods --link dbserver:dbserver
+
+    docker run -d --name rottis_server \
+      -v /home/robert/workbench/helpers/opcua/server:/app \
+      --link dbserver:dbserver -p 40840:40840 opcua_server
+
+    docker run -d --rm --name rottis_server \
+      --link dbserver:dbserver -p 40840:40840 opcua_server
+
+
+dbserver:
+---------
+
+    build postgres image
+    --------------------
+    !!!! dot do it !!!
+    - cd dbserver
+    - run . build -t dbserver
+
+    use postgres image to to create db container
+    --------------------------------------------
+    docker run -d -e POSTGRES_USER=frank -e POSTGRES_PASSWORD=frank -e POSTGRES_DB=postgres --name dbserver -p 55432:5432 postgres
+
