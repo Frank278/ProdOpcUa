@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import time
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import opcua
@@ -28,7 +29,10 @@ SECRET_KEY = '-nr%0yebg4y7v5i!!36^&8+7jh^x4$pwrjtrv^ref$!#u_(q4)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
+# For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
+
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost 127.0.0.1 [::1]").split(" ")
 
 
 # Application definition
@@ -100,38 +104,50 @@ WSGI_APPLICATION = 'ProdOpcUa.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 
-DATABASE_ROUTERS = ['dynamic_db_router.DynamicDbRouter']
-
+# DATABASE_ROUTERS = ['dynamic_db_router.DynamicDbRouter']
 DATABASES = {
-    'default': {
-        # Postgres
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'opcuaDB',
-        'USER': 'frank',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '',
-       # SQlite Datenbank
-       #  'ENGINE': 'django.db.backends.sqlite3',
-       #  'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-    'serverdaten': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #
-    #
-    #
-    # Postgres
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'opcua',
-    'USER': 'frank',
-    'PASSWORD': 'frank',
-    'HOST': '172.17.0.2',
-    'PORT': '5432',
-
-
-   }
+    "default": {
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": os.environ.get("SQL_USER", "user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+        "HOST": os.environ.get("SQL_HOST", "172.26.0.2"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
+    }
 }
+print('*' * 80)
+print(DATABASES)
+print('*' * 80)
+# DATABASES = {
+#     # 'default': {
+#     #     # Postgres
+#     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     #     'NAME': 'opcuaDB',
+#     #     'USER': 'frank',
+#     #     'PASSWORD': 'frank',
+#     #     'HOST': 'localhost',
+#     #     'PORT': '55432',
+#     #    # SQlite Datenbank
+#     #    #  'ENGINE': 'django.db.backends.sqlite3',
+#     #    #  'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     # },
+#     # 'serverdaten': {
+#     # #     'ENGINE': 'django.db.backends.sqlite3',
+#     # #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     # #
+#     # #
+#     # #
+#     # # Postgres
+#     # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     # 'NAME': 'opcua',
+#     # 'USER': 'frank',
+#     # 'PASSWORD': 'frank',
+#     # 'HOST': '172.17.0.2',
+#     # 'PORT': '5432',
+
+
+# #    }
+# }
 
 #DATABASE_ROUTERS = ['routers.router.AutoRouter']
 
