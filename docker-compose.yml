@@ -1,7 +1,9 @@
-version: '3'
+version: '3.6'
 services:
   web:
     build: ServerAndClient/docker_main
+    # command: 
+    #   - sh -c "python manage.py makemigrations opc && python manage.py migrate && python manage.py runserver"
     ports:
       - 8000:8000
     volumes:
@@ -10,6 +12,7 @@ services:
       - ./.env
     depends_on:
       - dbserver
+
   dbserver:
     build: ServerAndClient/dbserver
     volumes:
@@ -17,7 +20,7 @@ services:
     environment:
       - POSTGRES_USER=frank 
       - POSTGRES_PASSWORD=frank 
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=opcuaDB
     ports:
       - 5432:5432
 volumes:
