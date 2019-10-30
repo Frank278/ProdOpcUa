@@ -18,13 +18,14 @@ class DockerHandler(object):
     client = None
     #Suche nach dem Verzeichnis Server
     home_dir = '%s/server' % os.path.split(os.path.abspath(os.path.dirname(__file__)))[0]
+    home_dir = os.environ.get('BASE_PATH')
 
     def __init__(self):
         self.client = docker.from_env()
         # check if home_dir is ok and look for server2.py
-        server_py = '%s/server2.py' % self.home_dir
-        if not os.path.exists(server_py):
-            raise ValueError('%s does not exists' % server_py)
+        server_py = '%s/ServerAndClient/server/server2.py' % self.home_dir
+        # if not os.path.exists(server_py):
+        #     raise ValueError('%s does not exists' % server_py)
         self._refresh_registry()
         print(self.registry)
         return
@@ -71,18 +72,13 @@ class DockerHandler(object):
         """
         self._refresh_registry(all=True)
         container = self.registry.get(name)
-        print('create_server: %s %s' % (name, port))
-        print(self.registry)
-        print('homedir:%s' % self.home_dir)
-        import glob
-        print(glob.glob("%s/*" % self.home_dir))
+
         if not container:
             links_dic = {
                 'productionopcua_dbserver_1' : 'dbserver'
             }
             volumes_dic = {
-                # self.home_dir : 
-                '/home/robert/frank/ProductionOpcUa/ServerAndClient/server' :
+                '%s/ServerAndClient/server' % self.home_dir :
                     {'bind': '/app', 'mode': 'ro'}
             }
             ports_dic = {

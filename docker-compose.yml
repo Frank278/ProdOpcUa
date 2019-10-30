@@ -13,6 +13,8 @@ services:
       - ./.env
     depends_on:
       - dbserver
+    environment:
+      - BASE_PATH=$PWD
 
   dbserver:
     build: ServerAndClient/dbserver
@@ -22,7 +24,8 @@ services:
       - POSTGRES_USER=frank 
       - POSTGRES_PASSWORD=frank 
       - POSTGRES_DB=opcuaDB
-    ports:
-      - 5432:5432
+    # the mapping is not necessary 
+    # ports:
+    #   - 55432:5432
 volumes:
   postgres_data:
