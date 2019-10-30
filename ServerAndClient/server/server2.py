@@ -121,7 +121,7 @@ class Bearbeitungscenter(object):
 
         # # Make ourselfs known to the outside world
         self.m_center = DBHandler_cls(
-            mkey=server_name, #"Bearbeitungscenter_%s" % server_name,
+            #mkey=server_name, #"Bearbeitungscenter_%s" % server_name,
             dockerid=server_name,
             servername="Hamster",
             pid=os.getpid(),

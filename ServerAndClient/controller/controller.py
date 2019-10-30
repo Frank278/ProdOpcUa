@@ -91,7 +91,7 @@ class DockerHandler(object):
             result = client.containers.run(
                 'opcua_server',
                 name = name,
-                auto_remove = False ,
+                auto_remove = True,
                 detach = True,
                 links = links_dic,
                 volumes = volumes_dic,

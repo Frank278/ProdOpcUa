@@ -212,7 +212,7 @@ class Serverdata(models.Model):
     # IP Adresse
     ip = models.URLField(null=True)
     # DockerID
-    dockerid = models.IntegerField(default=0, null=True, blank=True)
+    dockerid = models.CharField(max_length=60, null=True, blank=True)
     # Portnummer
     port= models.IntegerField(default=1000, null=True, blank=True)
     #PID Prozess ID
