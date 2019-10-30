@@ -171,7 +171,7 @@ class Bearbeitungscenter(object):
         # print("Received:", signalNumber)
         # print("Wird heruntergefahren")
         # Delete
-        self.session.delete(self.m_center)
+        self.m_center.status = "gestoppt"
         self.session.commit()
         sys.exit()
 

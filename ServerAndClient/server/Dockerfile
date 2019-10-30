@@ -17,5 +17,5 @@ WORKDIR /app
 
 #EXPOSE ${db_port}
 EXPOSE ${opcua_port}
-#CMD ["python", "server2.py"]
-ENTRYPOINT sh -c "python server2.py"
+CMD ["python", "server2.py"]
+#ENTRYPOINT sh -c "python server2.py"
