@@ -14,9 +14,25 @@ docker:
 server:
 -------
 
+    docker-compose down -v --rmi all --remove-orphans # räumt alles ab
+    docker-compose down # stopt
+    docker-compose build # baut alles
+    docker-compose up -d # started -d im hintergrund
+    docker-compose exec SEVICE BEFEHLE
+      z.B:
+        docker-compose exec web python manage.py createsuperuser
+
+    als root in container einloggen:
+      docker execute CONTAINER BEFEHLE
+      z.B:
+        docker exec productionopcua_dbserver_1 bash 
+
+
+
     create image:
     -------------
-    docker build . -t opcua_server
+    im Verzeichnis ~/frank/ProductionOpcUa/ServerAndClient/server/:
+      docker build . -t opcua_server 
 
     run container:
     --------------
