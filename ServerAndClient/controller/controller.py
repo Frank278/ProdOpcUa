@@ -103,6 +103,7 @@ class DockerHandler(object):
             if container.status !='running':
                 container.start()
 
+
     def remove_server(self, name):
         """
         remove a server from the database
