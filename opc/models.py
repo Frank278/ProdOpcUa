@@ -142,20 +142,18 @@ class ProduktionsAuftrag(models.Model):
     # Datum und Zeit des Auftagseingangs
     auftragseingang = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
 
+
     # berechnung des fortschrittes des Auftrages
     @property
     def fortschritt(self):
+        if self.auftragsstatus == 'InBearbeitung' or 'Gestoppt':
+            aktuellerSchritt = self.aktuellerSchritt
+            anzahlSchritte =self.anzahlSchritte
+            fortschritt= (aktuellerSchritt*100)/anzahlSchritte
+            if fortschritt > 100:
+                fortschritt = 100
 
-
-        aktuellerSchritt = self.aktuellerSchritt
-        anzahlSchritte =self.anzahlSchritte
-        fortschritt= (aktuellerSchritt*100)/anzahlSchritte
-        if fortschritt > 100:
-            fortschritt = 100
-
-        return int(fortschritt)
-
-
+            return int(fortschritt)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -199,6 +197,7 @@ class Ressourcenplanung(models.Model):
     def maschinenzeiten(self):
         zeiten = ProduktionsAuftrag.objects.all().annotate(Count('erstellungszeit'))
 
+
     def __str__(self):
         """String for representing the Model object."""
         return str(self.rplanungsnummer)
@@ -226,9 +225,20 @@ class Serverdata(models.Model):
     # Zeitstempel des Eintages
     time = models.DateTimeField(auto_now=False, null=True, auto_now_add=False)
 
+    # Schreibt den Status von Serverdata in RegOpcUaServer
     def check_status(self):
-        RegOpcUaServer.objects.filter(servername=self.servername).update(serverstatus=self.status)
+        if RegOpcUaServer.servername == self.servername:
+            RegOpcUaServer.objects.filter(servername=self.servername).update(serverstatus=self.status)
 
+    # setzt den Server auf Aktiv, wenn diese in den letzen 3 Minuten etwas in die Datenbank geschrieben hat
+    # sonst auf Inaktiv
+    def check_expiration(self):
+        end_time = self.time + timedelta(min=3)
+        if self.time <= timezone.now() <= end_time:
+            if RegOpcUaServer.servername == self.servername:
+                RegOpcUaServer.objects.filter(servername=self.servername).update(aktiv=True)
+            else:
+                RegOpcUaServer.objects.filter(servername=self.servername).update(aktiv=False)
 
 
     def __str__(self):
