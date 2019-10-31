@@ -60,7 +60,7 @@ class Dienstleistungen(models.Model):
     # eindeutige ID für Dienstleistungen aller Server
     servicenummer = models.PositiveSmallIntegerField(default=0, unique=True)
     # eingebunde Server für die Dienstleistungen
-    dieOpcUa = models.ManyToManyField('RegOpcUaServer', blank=True)
+    server = models.ManyToManyField('RegOpcUaServer', blank=True)
     # Name des Service
     serviceName = models.CharField(max_length=30, unique=True)
     # Beschreibung des Service
