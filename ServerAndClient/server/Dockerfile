@@ -13,6 +13,7 @@ ENV opcua_user=
 ENV opcua_pasword=
 ENV opcua_port 4840
 
+
 WORKDIR /app
 
 #EXPOSE ${db_port}

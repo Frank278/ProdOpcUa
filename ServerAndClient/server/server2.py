@@ -38,6 +38,9 @@ opcua_user = os.environ.get("opcua_user", "")  # unused
 opcua_pasword = os.environ.get("opcua_pasword", "")  # unused
 opcua_port = os.environ.get("opcua_port", "4840")
 server_name = os.environ.get('HOSTNAME')
+container_name = os.environ.get('CONTAINERNAME', 'hallo')
+
+
 
 name_is_hex = False
 try:
@@ -123,7 +126,7 @@ class Bearbeitungscenter(object):
         self.m_center = DBHandler_cls(
             #mkey=server_name, #"Bearbeitungscenter_%s" % server_name,
             dockerid=server_name,
-            servername="Hamster",
+            servername=str(container_name),
             pid=os.getpid(),
             ip="2016",
             port=999,

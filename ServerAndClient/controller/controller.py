@@ -84,6 +84,9 @@ class DockerHandler(object):
             ports_dic = {
                 '40840' : port
             }
+            env_dic = {
+                'CONTAINERNAME': name, #"%s:%s" %(name, port)
+            }
             result = client.containers.run(
                 'opcua_server',
                 name = name,
@@ -92,7 +95,8 @@ class DockerHandler(object):
                 links = links_dic,
                 volumes = volumes_dic,
                 ports = ports_dic,
-                network = 'productionopcua_default',
+                network = 'prodopcua_default',
+                environment = env_dic,
             )
             self.registry[name] = result
             print(result.status)
@@ -102,7 +106,7 @@ class DockerHandler(object):
             # check if the container is running
             if container.status !='running':
                 container.start()
-
+                print(name + "ist gestartet")
 
     def remove_server(self, name):
         """
@@ -112,6 +116,7 @@ class DockerHandler(object):
         self._refresh_registry()
         container = self.registry.get(name)
         if container:
+            print(name+"ist abgemeldet")
             # signal 15 informs the dbhandler within
             # the container to remove itself from
             # the database
