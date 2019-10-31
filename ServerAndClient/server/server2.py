@@ -186,13 +186,7 @@ class Bearbeitungscenter(object):
 
         self.m_center.status = Status
         self.m_center.temp = Temp
-        # print("received:", signalnumber)
-        # if self.m_center.pid:
-        #     self.m_center.pid = none
-        #     self.m_center.status = "idle"
-        # else:
-        #     self.m_center.pid = os.getpid()
-        #     self.m_center.status = "aktiv"
+
         self.session.commit()
         return
 class SubHandler(object):
@@ -316,7 +310,7 @@ if __name__ == "__main__":
     madtvar = machine.add_variable(idx, "MyDateTimeVar", datetime.utcnow())
     madtvar.set_writable()  # Set MyVariable to be writable by clients
     machinearrayvar = machine.add_variable(idx, "myarrayvar", [6.7, 7.9])
-    machinearrayvar = machine.add_variable(idx, "myStronglytTypedVariable", ua.Variant([], ua.VariantType.UInt32))
+    machinestrongarrayvar = machine.add_variable(idx, "myStronglytTypedVariable", ua.Variant([], ua.VariantType.UInt32))
     machineprop = machine.add_property(idx, "myproperty", "I am a property")
 
     # add Parameter to the Object
