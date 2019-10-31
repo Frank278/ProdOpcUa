@@ -89,16 +89,14 @@ class BearbeitungscenterDB(base):
     """
 
     __tablename__ = "opc_serverdata"
-    
-    #id = Column(Integer, TABLE_ID, primary_key=True, server_default=TABLE_ID.next_value())
-    #mkey = Column(Integer, TABLE_ID, primary_key=True, server_default=TABLE_ID.next_value())
+
     mkey = Column(String, default=str(time.time()), primary_key=True)
     servername = Column(String)
     ip = Column(String)
     dockerid = Column(String)
     port = Column(Integer)
     pid = Column(Integer)
-    status = Column(String)  # idle, gestarted, gestoppt, fehler
+    status = Column(String)
     temp = Column(Integer)
     press = Column(Integer)
     time = Column(DateTime, default=datetime.utcnow)
@@ -179,7 +177,7 @@ class Bearbeitungscenter(object):
         sys.exit()
 
     # Update des Datenbankeintages
-    def updateValueServer(self, Temp, Status, Time):
+    def updateValueServer(self, Temp, Pressure, Status, Time):
 
         """Melde der Server ab
 
@@ -190,6 +188,7 @@ class Bearbeitungscenter(object):
 
         self.m_center.status = Status
         self.m_center.temp = Temp
+        self.m_center.press = Pressure
         self.m_center.time = Time
 
         self.session.commit()
@@ -407,7 +406,7 @@ if __name__ == "__main__":
             Servername.set_value(servername)
             Portnummer.set_value(portnummer)
             # Hier werden die Variablen der Funtktion Update übergeben
-            center.updateValueServer(Temperature, Status, Time)
+            center.updateValueServer(Temperature, Pressure, status, TIME)
 
             time.sleep(5)
 

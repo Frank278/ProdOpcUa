@@ -48,7 +48,7 @@ urlpatterns = [
 
 
     # Produkte
-    path('Produkt', produkt_list, name='Produkt'),
+    path('produkte', produktList.as_view(), name='produkte'),
 
     # Von den Maschinen zur verfügung gestellte Dienstleistungen
     path('dienstleistungen', dienstleistungen_list, name='dienstleistungen'),
@@ -64,7 +64,7 @@ urlpatterns = [
 
     # ProduktionsaÜberwachung
     path('produktionsUeberwachung',produktionsUeberwachung_list, name='produktionsUeberwachung'),
-   # path('produktionsUeberwachung', prouktionsUeberwachung_list, name='produktionsUeberwachung'),
+    #path('produktionsUeberwachung', prouktionsUeberwachung_list, name='produktionsUeberwachung'),
 
     # Ressourcenplanung, verteilen der Poduktionsaufträge auf die Maschinen
     path('ressourcenplanung', ressourcenplanungList.as_view(), name='ressourcenplanung'),

@@ -113,7 +113,7 @@ class DockerHandler(object):
             # if not , then start container
             if container.status !='running':
                 container.start()
-                print(name + "ist gestartet")
+
 
     # Fährt die ausgewählten Server herunter
     def remove_server(self, name):

@@ -5,48 +5,59 @@
     <title>VirtuelleOpcUaServer</title>
 </head>
 <body>
-{% extends 'main/includes/header.html' %}
+{% extends 'main/includes/header2.html' %}
 
 {% block content %}
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Serverdaten</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">servername</th>
-      <th scope="col">ip</th>
-      <th scope="col">start</th>
-      <th scope="col">beendet</th>
-      <th scope="col">stoerung</th>
-      <th scope="col">Temperature</th>
-      <th scope="col">Pressure</th>
-        <th scope="col">TIME_Value</th>
 
-    </tr>
-  </thead>
-  <tbody>
-    {% for serverdata in object_list %}
-   <tr>
+              <thead>
+                <tr>
+                  <th scope="col">Mkey</th>
+                  <th scope="col">Servername</th>
+                  <th scope="col">IP</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Dockerid</th>
+                  <th scope="col">PID</th>
+                  <th scope="col">Temperature</th>
+                  <th scope="col">Pressure</th>
+                   <th scope="col">Zeitstempel</th>
 
-            <td>{{ serverdata.id}}</td>
-            <td>{{ serverdata.servername}}</td>
-            <td>{{ serverdata.ip}}</td>
-            <td>{{ serverdata.start}}</td>
-            <td>{{ serverdata.beendet}}</td>
-            <td>{{ serverdata.stoerung}}</td>
-            <td>{{ serverdata.Temperature}}</td>
-            <td>{{ serverdata.Pressure}}</td>
-            <td>{{ serverdata.TIME_Value}}</td>
-            <td>{{ serverdata.startZeit}}</td>
-            <td>{{ serverdata.aktuelleAuftraegsNr}}</td>
 
-    </tr>
+                </tr>
+              </thead>
+              <tbody>
+                {% for serverdata in object_list %}
+               <tr>
 
-    {% endfor %}
+                        <td>{{ serverdata.mkey}}</td>
+                        <td>{{ serverdata.servername}}</td>
+                        <td>{{ serverdata.ip}}</td>
+                        <td>{{ serverdata.status}}</td>
+                        <td>{{ serverdata.dockerid}}</td>
+                        <td>{{ serverdata.pid}}</td>
+                        <td>{{ serverdata.temp}}</td>
+                        <td>{{ serverdata.press}}</td>
+                        <td>{{ serverdata.time}}</td>
 
-  </tbody>
-</table>
+                </tr>
+
+                {% endfor %}
+
+              </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 </body>
