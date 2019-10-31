@@ -44,7 +44,7 @@ urlpatterns = [
     # Damit werden dann die Produkte erstellt und die Produktionsaufträge überwacht und optimiert
 
     # Produktionsaufträge
-    path('produktionsAuftrag', produktionsAuftrag_list, name='produktionsAuftrag'),
+    path('produktionsAuftrag', produktionsAuftragList.as_view(), name='produktionsAuftrag'),
 
 
     # Produkte
@@ -63,15 +63,19 @@ urlpatterns = [
     path('produktionsAuftragErstellen', produktionsAuftragErstellen, name='produktionsAuftragErstellen'),
 
     # ProduktionsaÜberwachung
-    path('produktionsUeberwachung', prouktionsUeberwachung_list, name='produktionsUeberwachung'),
+    path('produktionsUeberwachung',produktionsUeberwachung_list, name='produktionsUeberwachung'),
+   # path('produktionsUeberwachung', prouktionsUeberwachung_list, name='produktionsUeberwachung'),
 
     # Ressourcenplanung, verteilen der Poduktionsaufträge auf die Maschinen
-    path('ressourcenplanung', ressourcenplanung_list, name='ressourcenplanung'),
+    path('ressourcenplanung', ressourcenplanungList.as_view(), name='ressourcenplanung'),
 
     # Anzeige der Kundendaten
-    path('kunden', kunden_list, name='kunden'),
+    path('kunden', kundenList.as_view(), name='kunden'),
 
     # Die von den Serern eingehenden Daten
-    path('serverdata', serverdata_list, name='serverdata'),
+    path('serverdata',serverdataView.as_view(), name='serverdata'),
+
+
+
 
 ]

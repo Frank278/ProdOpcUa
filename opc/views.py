@@ -1,6 +1,9 @@
 from django.shortcuts import render
 
 # Create your views here.
+from random import randint
+from django.views.generic import TemplateView
+from chartjs.views.lines import BaseLineChartView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db import models
@@ -13,13 +16,19 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.views import generic
+from django.views import generic, View
 from .forms import NewUserForm
 from django.db.models import Count
 from tablib import Dataset
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from django.contrib import messages
 import json
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from rest_framework import viewsets
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from .serializers import *
 
 from .models import *
@@ -96,7 +105,6 @@ def maschinen(request):
 
 
 # Erstellen der Datenbankabfrage für die OpcUaServer
-
 @login_required
 def regOpcUaServer_list(request, template_name='main/opcregOpcUaServer.html'):
     regOpcUaServer = RegOpcUaServer.objects.all()
@@ -108,7 +116,6 @@ def regOpcUaServer_list(request, template_name='main/opcregOpcUaServer.html'):
 
 
 # Erstellen der Datenbankabfrage für Dienstleistungen
-
 @login_required
 def dienstleistungen_list(request, template_name='main/opcdienstleistungen.html'):
     dienstleistungen = Dienstleistungen.objects.all()
@@ -121,7 +128,6 @@ def dienstleistungen_list(request, template_name='main/opcdienstleistungen.html'
 
 
 # Erstellen der Datenbankabfrage für die Produkte
-
 @login_required
 def produkt_list(request, template_name='main/opcProdukt.html'):
     produkt = Produkt.objects.all()
@@ -133,48 +139,43 @@ def produkt_list(request, template_name='main/opcProdukt.html'):
 
 
 # Erstellen der Datenbankabfrage für die Kunden
+@method_decorator(login_required, name='dispatch')
+class kundenList(ListView):
+    template_name='main/opckunden.html'
+    Model = Kunden
+    def get_queryset(self):
+        return Kunden.objects.all()
 
-@login_required
-def kunden_list(request, template_name='main/opckunden.html'):
-    kunden = Kunden.objects.all()
-
-    data = {}
-    data['object_list'] = kunden
-
-    return render(request, template_name, data)
 
 
 # Erstellen der Datenbankabfrage für ProduktionsAuftrag
+@method_decorator(login_required, name='dispatch')
+class produktionsAuftragList(ListView):
+    template_name='main/opcproduktionsAuftrag.html'
+    Model = ProduktionsAuftrag
+    def get_queryset(self):
+        return ProduktionsAuftrag.objects.all()
 
-@login_required
-def produktionsAuftrag_list(request, template_name='main/opcproduktionsAuftrag.html'):
-    produktionsAuftrag = ProduktionsAuftrag.objects.all()
-
-    data = {}
-    data['object_list'] = produktionsAuftrag
-
-    return render(request, template_name, data)
 
 # Erstellen der Datenbankabfrage für die Ressourcenplannung
+@method_decorator(login_required, name='dispatch')
+class ressourcenplanungList(ListView):
+    template_name='main/opcressourcen.html'
+    def get_queryset(self):
+        return Ressourcenplanung.objects.all()
 
-@login_required
-def ressourcenplanung_list(request, template_name='main/opcressourcen.html'):
-    ressourcenplanung = Ressourcenplanung.objects.all()
 
-    data = {}
-    data['object_list'] = ressourcenplanung
 
-    return render(request, template_name, data)
+# Erstellen der Ansicht der serverdaten
+@method_decorator(login_required, name='dispatch')
+class serverdataView(ListView):
+    template_name='main/serverdata.html'
+    Model = Serverdata
 
-# Erstellen der Datenbankabfrage für die Serverdaten
-login_required
-def serverdata_list(request, template_name='main/serverdata.html'):
-    serverdata = Serverdata.objects.all()
+    def get_queryset(self):
+        return Serverdata.objects.all()
 
-    data = {}
-    data['object_list'] = serverdata
 
-    return render(request, template_name, data)
 
 
 
@@ -187,7 +188,7 @@ def produktionsAuftragErstellen(request):
 
 # Produktionsüberwachung
 @login_required
-def prouktionsUeberwachung_list(request, template_name='main/opcproduktionsUeberwachung.html'):
+def produktionsUeberwachung_list(request, template_name='main/opcproduktionsUeberwachung.html'):
     produktionsAuftrag = ProduktionsAuftrag.objects.all().order_by('auftragseingang', 'auftragsstatus',)
     anzahlauftraege = ProduktionsAuftrag.objects.count()
 
@@ -198,9 +199,14 @@ def prouktionsUeberwachung_list(request, template_name='main/opcproduktionsUeber
     anzahlserver = RegOpcUaServer.objects.count()
     anzahlprodukte = Produkt.objects.count()
 
+    produkt = [obj.produkt for obj in produktionsAuftrag]
+    auftragsmenge = [int(obj.auftragsmenge) for obj in produktionsAuftrag]
+
     maschinetime = anzahlserver * timedelta(days=1)
-    #data = {}
+
     context = {
+        'produkt': produkt,
+        'auftragsmenge': auftragsmenge,
         'produktionsAuftrag': produktionsAuftrag,
         'auftragszeiten': auftragszeiten,
         'anzahlauftraege': anzahlauftraege,
@@ -211,10 +217,7 @@ def prouktionsUeberwachung_list(request, template_name='main/opcproduktionsUeber
         'anzahlprodukte': anzahlprodukte,
         'list_produktionsAuftrag':produktionsAuftrag,
     }
-    #data['list_produktionsAuftrag'] = produktionsAuftrag
-    #anzahlserv = anzahlserver
-    #data['list_produktionsAuftrag'] = produktionsAuftrag
-    #data['list_anzahlserver'] = anzahlserver
+
 
     return render(request, template_name, context)
 
@@ -269,3 +272,22 @@ class RessourcenplanungViewSet(viewsets.ModelViewSet):
     queryset = Ressourcenplanung.objects.all()
     serializer_class = RessourcenplanungSerializer
 
+class LineChartJSONView(BaseLineChartView):
+    def get_labels(self):
+        """Return 7 labels for the x-axis."""
+        return ["January", "February", "March", "April", "May", "June", "July"]
+
+    def get_providers(self):
+        """Return names of datasets."""
+        return ["Central", "Eastside", "Westside"]
+
+    def get_data(self):
+        """Return 3 datasets to plot."""
+
+        return [[75, 44, 92, 11, 44, 95, 35],
+                [41, 92, 18, 3, 73, 87, 92],
+                [87, 21, 94, 3, 90, 13, 65]]
+
+
+line_chart = TemplateView.as_view(template_name='main/chart.html')
+line_chart_json = LineChartJSONView.as_view()
