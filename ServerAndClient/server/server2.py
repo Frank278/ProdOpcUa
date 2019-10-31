@@ -233,6 +233,7 @@ def start_demoprogramm(parent):
     status = " Demoprogramm beendet"
 
 
+
 class VarUpdater(Thread):
     def __init__(self, var):
         Thread.__init__(self)
