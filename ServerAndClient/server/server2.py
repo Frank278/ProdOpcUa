@@ -122,7 +122,7 @@ class Bearbeitungscenter(object):
 
         base.metadata.create_all(db)
 
-        # # Make ourselfs known to the outside world
+        # Make ourselfs known to the outside world
         self.m_center = DBHandler_cls(
             #mkey=server_name, #"Bearbeitungscenter_%s" % server_name,
             dockerid=server_name,
@@ -143,7 +143,7 @@ class Bearbeitungscenter(object):
             self.m_center.status="started"
             self.session.commit()
 
-    # handle termination signals cleanly
+    # Verabeitung des Signals
     def updateServer(self, signalNumber, frame):
         """Serverdateb updaten
 
@@ -162,7 +162,7 @@ class Bearbeitungscenter(object):
         self.session.commit()
         return
 
-    # handle termination signals cleanly
+    # Abmelden des Servers
     def unregisterServer(self, signalNumber, frame):
         """Melde den Server ab
 
@@ -178,7 +178,8 @@ class Bearbeitungscenter(object):
         self.session.commit()
         sys.exit()
 
-    def updateValueServer(self, Temp, Status):
+    # Update des Datenbankeintages
+    def updateValueServer(self, Temp, Status, Time):
 
         """Melde der Server ab
 
@@ -189,6 +190,7 @@ class Bearbeitungscenter(object):
 
         self.m_center.status = Status
         self.m_center.temp = Temp
+        self.m_center.time = Time
 
         self.session.commit()
         return
@@ -404,7 +406,8 @@ if __name__ == "__main__":
             Status.set_value(status)
             Servername.set_value(servername)
             Portnummer.set_value(portnummer)
-            center.updateValueServer(Temperature, status)
+            # Hier werden die Variablen der Funtktion Update übergeben
+            center.updateValueServer(Temperature, Status, Time)
 
             time.sleep(5)
 

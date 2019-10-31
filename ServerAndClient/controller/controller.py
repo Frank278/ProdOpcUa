@@ -5,6 +5,9 @@ import docker
 import os
 import time
 
+# Um mit dem Docker-Daemon zu kommunizieren, müssen Sie zuerst einen Client instanziieren.
+# Am einfachsten geht das, indem Sie die Funktion from_env () aufrufen.
+# Es kann auch manuell konfiguriert werden, indem eine DockerClient-Klasse instanziiert wird.
 client = docker.from_env()
 
 class DockerHandler(object):
@@ -16,11 +19,12 @@ class DockerHandler(object):
 
     registry = {}
     client = None
-    #Suche nach dem Verzeichnis Server
+    #Suche nach dem Verzeichnis Server und den benötigten Dateien
     home_dir = '%s/server' % os.path.split(os.path.abspath(os.path.dirname(__file__)))[0]
     home_dir = os.environ.get('BASE_PATH')
 
     def __init__(self):
+        # Ein weiterer Client auf dem Self Objekt
         self.client = docker.from_env()
         # check if home_dir is ok and look for server2.py
         server_py = '%s/ServerAndClient/server/server2.py' % self.home_dir
@@ -49,6 +53,7 @@ class DockerHandler(object):
                     'POSTGRES_PASSWORD' : 'frank',
                     'POSTGRES_DB' : 'postgres',
                 }
+                # Hier werden
                 dbserver = client.containers.run(
                     'postgres',
                     name = 'dbserver',
@@ -58,13 +63,14 @@ class DockerHandler(object):
                     environment = env_dic
                 )
                 self.registry['dbserver'] = dbserver
-                    
+
+    # Aktualisiert die Registry
     def _refresh_registry(self, all=False):
         self.registry = {}
         for container in self.client.containers.list(all=all):
             name = container.name
             self.registry[name] = container
-        
+    # Erstellung der ausgewählten Server
     def create_server(self, name, port):
         """
            docker run --name frank_server \
@@ -72,7 +78,7 @@ class DockerHandler(object):
         """
         self._refresh_registry(all=True)
         container = self.registry.get(name)
-
+        # Falls der Container noch nicht existiert, wird ein neuer erstellt
         if not container:
             links_dic = {
                 'productionopcua_dbserver_1' : 'dbserver'
@@ -85,7 +91,7 @@ class DockerHandler(object):
                 '40840' : port
             }
             env_dic = {
-                'CONTAINERNAME': name, #"%s:%s" %(name, port)
+                'CONTAINERNAME': name,
             }
             result = client.containers.run(
                 'opcua_server',
@@ -104,10 +110,12 @@ class DockerHandler(object):
             return result.short_id
         else:
             # check if the container is running
+            # if not , then start container
             if container.status !='running':
                 container.start()
                 print(name + "ist gestartet")
 
+    # Fährt die ausgewählten Server herunter
     def remove_server(self, name):
         """
         remove a server from the database
@@ -129,6 +137,7 @@ class DockerHandler(object):
             if self.registry.get(name):
                 raise ValueError('Hoppala, should not happen')
 
+    # sendet ein Signal an die Server
     def signal_server(self, name):
         """
         remove a server from the database
@@ -141,6 +150,7 @@ class DockerHandler(object):
             # the container to change its status
             container.kill(signal = 14)
 
+    # gibt eine Liste der erstellten Server aus
     def list_servers(self, filter=[]):
         """list existing containers
         
