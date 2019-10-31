@@ -32,37 +32,7 @@ class DockerHandler(object):
         #     raise ValueError('%s does not exists' % server_py)
         self._refresh_registry()
         print(self.registry)
-        return
-        # make sure the db container is up and running
-        # mit diesen Befehl könnte die Datenbank über das Termial erzeugt werden
-        # docker run -d -e POSTGRES_USER=frank -e POSTGRES_PASSWORD=frank -e POSTGRES_DB=postgres --name dbserver -p 55432:5432 postgres
-        if not self.registry.get('dbserver'):
-            # not running, check if it exists
-            dbserver = self.client.containers.list(all=True, filters={'name' : 'dbserver'})
-            if dbserver:
-                # Start des Servers falls gestoppt
-                # container is stopped
-                dbserver[0].restart()
-            else:
-                # Erzeugung des Postgres Servers
-                ports_dic = {
-                    '5432' : 55432
-                }
-                env_dic = {
-                    'POSTGRES_USER' : 'frank',
-                    'POSTGRES_PASSWORD' : 'frank',
-                    'POSTGRES_DB' : 'postgres',
-                }
-                # Hier werden
-                dbserver = client.containers.run(
-                    'postgres',
-                    name = 'dbserver',
-                    auto_remove = False,
-                    detach = True,
-                    ports = ports_dic,
-                    environment = env_dic
-                )
-                self.registry['dbserver'] = dbserver
+
 
     # Aktualisiert die Registry
     def _refresh_registry(self, all=False):
