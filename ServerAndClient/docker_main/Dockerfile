@@ -26,6 +26,8 @@ EXPOSE 8000
 # run entrypoint.sh
 #ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
 # ENTRYPOINT ["python", "manage.py", "runserver"]
+#COPY ./entrypoint.sh /usr/src/app/entrypoint.sh 
+#ENTRYPOINT ["/usr/src/app/entrypoint.sh", "postgres"]
 ENTRYPOINT sh -c "python manage.py makemigrations opc && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
 #ENTRYPOINT ["python", "doit.py"]
 

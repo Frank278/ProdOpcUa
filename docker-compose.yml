@@ -1,7 +1,10 @@
-version: '3.6'
+version: '2.1'
 services:
   web:
     build: ServerAndClient/docker_main
+    depends_on:
+      dbserver:
+        condition: service_healthy
     # command: 
     #   - sh -c "python manage.py makemigrations opc && python manage.py migrate && python manage.py runserver"
     ports:
@@ -11,8 +14,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:
       - ./.env
-    depends_on:
-      - dbserver
     environment:
       - BASE_PATH=$PWD
 
@@ -24,6 +25,11 @@ services:
       - POSTGRES_USER=frank 
       - POSTGRES_PASSWORD=frank 
       - POSTGRES_DB=opcuaDB
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U frank -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     # the mapping is not necessary 
     # ports:
     #   - 55432:5432
