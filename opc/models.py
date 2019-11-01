@@ -34,7 +34,7 @@ class RegOpcUaServer(models.Model):
     SERVERSTATUS = Choices('Gestartet', 'Gestoppt')
     serverstatus = models.CharField(choices=SERVERSTATUS, default=SERVERSTATUS.Gestoppt, max_length=20)
 
-    MASCHINENSTATUS = Choices('Bereit', 'Maschine belegt', 'Stöerung')
+    MASCHINENSTATUS = Choices('Bereit', 'Maschine belegt', 'Störung', 'Gestartet', 'Gestoppt', 'started', )
     maschinenstatus = models.CharField(choices=MASCHINENSTATUS, default=MASCHINENSTATUS.Bereit, max_length=20)
     # anzeige ob server aktiv
     aktiv = models.BooleanField(default=False)
@@ -228,7 +228,7 @@ class Serverdata(models.Model):
     # Schreibt den Status von Serverdata in RegOpcUaServer
     def check_status(self):
         if RegOpcUaServer.servername == self.servername:
-            RegOpcUaServer.objects.filter(servername=self.servername).update(serverstatus=self.status)
+            RegOpcUaServer.objects.filter(servername=self.servername).update(maschinenstatus=self.status)
 
     # setzt den Server auf Aktiv, wenn diese in den letzen 3 Minuten etwas in die Datenbank geschrieben hat
     # sonst auf Inaktiv

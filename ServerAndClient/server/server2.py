@@ -172,7 +172,7 @@ class Bearbeitungscenter(object):
         # print("Received:", signalNumber)
         # print("Wird heruntergefahren")
         # Delete
-        self.m_center.status = "gestoppt"
+        self.m_center.status = "Gestoppt"
         self.session.commit()
         sys.exit()
 
@@ -275,7 +275,7 @@ if __name__ == "__main__":
     # server.disable_clock()
     # server.set_endpoint("opc.tcp://localhost:4840/freeopcua/server/")
     server.set_endpoint("opc.tcp://0.0.0.0:4840/freeopcua/server/")
-    server.set_server_name("FreeOpcUa Example Server")
+    server.set_server_name("Fräsmaschine01 Server")
     # set all possible endpoint policies for clients to connect through
     server.set_security_policy(
         [
@@ -399,14 +399,16 @@ if __name__ == "__main__":
 
             servername = "Fräsmachine01"
             portnummer = "50840"
-
+            # Ausgeben der Werte
             print(Temperature, Pressure, TIME, status, servername, portnummer)
+            # Setzen der Werte in die UA Variablen
             Temp.set_value(Temperature)
             Press.set_value(Pressure)
             Time.set_value(TIME)
             Status.set_value(status)
             Servername.set_value(servername)
             Portnummer.set_value(portnummer)
+
             # Hier werden die Variablen der Funtktion Update übergeben
             center.updateValueServer(Temperature, Pressure, status, TIME)
 

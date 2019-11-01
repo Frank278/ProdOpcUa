@@ -15,3 +15,9 @@ python manage.py flush --no-input
 python manage.py migrate
 
 exec "$@"
+
+# Der ENTRYPOINT wird Verwendet um den Hauptbefehls für das Image festzulegen,
+# sodass das Image so nach diesen Befehl ausgeführt wird
+# Die ENTRYPOINT-Anweisung kann auch in Kombination mit einem Hilfsskript verwendet werden,
+# sodass sie auf ähnliche Weise wie der obige Befehl funktioniert,
+# auch wenn das Tool möglicherweise mehr als einen Schritt erfordert.

@@ -93,9 +93,7 @@ class DockerHandler(object):
 
     def create_client(self, name, port):
         """
-           docker run --name frank_server \
-            --link dbserver:dbserver -p 40840:40840 opcua_server wenn der Server nicht Virtuell ist,
-            wird ein Client im Docker erzeugt um Verbindung zum Server auzubauen.
+            wenn der Server nicht Virtuell ist, kann ein Client im Docker erzeugt um Verbindung zum Server auzubauen.
             Die Unterscheidung ob Virtuell oder Real wird im GUI abgefangen.
         """
         clientname = name+"client"
@@ -103,9 +101,6 @@ class DockerHandler(object):
         container = self.registry.get(clientname)
         # Falls der Container noch nicht existiert, wird ein neuer erstellt
         if not container:
-            links_dic = {
-                'productionopcua_dbserver_1': 'dbserver'
-            }
             volumes_dic = {
                 '%s/ServerAndClient/client' % self.home_dir:
                     {'bind': '/app', 'mode': 'ro'}
@@ -121,7 +116,6 @@ class DockerHandler(object):
                 name=clientname,
                 auto_remove=False,
                 detach=True,
-                links=links_dic,
                 volumes=volumes_dic,
                 ports=ports_dic,
                 network='prodopcua_default',
@@ -186,10 +180,10 @@ class DockerHandler(object):
 
 
     # sendet ein Signal an die Server
-    def start_demoprogramm(self, name, serverurl, port, uamethod= "start_demoprogramm"):
+    def start_uaprogramm(self, name, serverurl, port, uamethod= "start_demoprogramm"):
 
         """
-        ruft die UA Methode auf den im Docker erzeugten Server auf
+        ruft die UA Methode über den im Docker erzeugten Client auf
 
         """
 
@@ -199,8 +193,8 @@ class DockerHandler(object):
         container = self.registry.get(clientname)
         if container:
 
-            # connectstring = "opc.tcp://"+serverurl+":"+port+"/freeopcua/server/"
-            # client = Client(connectstring)
+            connectstring = "opc.tcp://"+serverurl+":"+port+"/freeopcua/server/"
+            client = Client(connectstring)
             # client = Client("opc.tcp://admin@localhost:4840/freeopcua/server/") #connect using a user
             try:
                 client.connect()

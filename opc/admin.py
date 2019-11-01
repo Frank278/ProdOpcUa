@@ -46,7 +46,7 @@ def virt_serv_start(modeladmin, request, queryset):
         s_id = handler.create_server(name, port)
         queryset.update(aktiv=True)
         queryset.update(serverstatus='Gestartet')
-
+        queryset.update(servertyp='Virtuell')
 virt_serv_start.short_description = "Virtuellen Server anmelden"
 
 # Funktion um Virtuelle Server abzumelden und herunter zu fahren
@@ -61,15 +61,31 @@ def virt_serv_stop(modeladmin, request, queryset):
 
 virt_serv_stop.short_description = "Virtuelle Server stoppen"
 
-# Demoprogramm auf Server laufen lassen
-def demo_prog_start(modeladmin, request, queryset):
-    for object in queryset:
-        port = queryset.portnummer
-        #ip = queryset.ip
-        # string = ip+port
-        #client = client(port)
-        # client.startprogramm
-demo_prog_start.short_description = "Demoprogramm laufen lassen"
+# erstellt einen Client Docker , wenn der Server nicht virtuell ist.
+# also ein Raspery oder eine reale Maschine
+def virt_client_create(modeladmin, request, queryset):
+    # for object in queryset:
+    #     if object.servertyp == 'Raspery':
+    #         name = object.servername
+    #         port = object.portnummer
+    #         handler = get_docker_handler()
+    #         s_id = handler.create_client(name, port)
+    pass # konnte nicht mehr getestet werden
+virt_client_create.short_description = "Client erstellen für Raspery"
+
+# Demoprogramm auf nicht vituellen Server laufen lassen
+def ua_prog_start(modeladmin, request, queryset):
+    # for object in queryset:
+    #     if object.servertyp == 'Raspery':
+    #         name = object.servername
+    #         port = queryset.uamethod
+    #         serverurl = object.ip
+    #         uamethod = object.uamethod
+    #         handler = get_docker_handler()
+    #         s_id = handler.create_client(name, serverurl, port, uamethod)
+    pass # konnte nicht mehr getestet werden
+
+ua_prog_start.short_description = "UA-Programm laufen lassen auf Raspery Server"
 
 # Demoprogramm auf Server laufen lassen
 def virt_serv_signal(modeladmin, request, queryset):
