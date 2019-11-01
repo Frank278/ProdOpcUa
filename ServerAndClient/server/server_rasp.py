@@ -259,18 +259,16 @@ if __name__ == "__main__":
     # Bearbeitungszentrum anlegen, mit BearbeitungscenterDB-Klasse als parameter
     center = Bearbeitungscenter(opcuaDB)
 
-
-
-
-    # register the signals to be caught
-    signal.signal(signal.SIGALRM, center.updateServer) # signal 14
-    signal.signal(signal.SIGTERM, center.unregisterServer) # signal 15
+    # Registrieren der zu erfassenden Signale
+    signal.signal(signal.SIGALRM, center.updateServer)  # signal 14
+    signal.signal(signal.SIGTERM, center.unregisterServer)  # signal 15
 
     # server.disable_clock()
     # server.set_endpoint("opc.tcp://localhost:4840/freeopcua/server/")
     server.set_endpoint("opc.tcp://0.0.0.0:4840/freeopcua/server/")
-    server.set_server_name("FreeOpcUa Example Server")
-    # set all possible endpoint policies for clients to connect through
+    server.set_server_name("Fräsmaschine01 Server")
+    # Anlegen der möglichen Endpunktrichtlinien für Clients fest,
+    # über die eine Verbindung hergestellt werden soll
     server.set_security_policy(
         [
             ua.SecurityPolicyType.NoSecurity,
@@ -279,11 +277,11 @@ if __name__ == "__main__":
         ]
     )
 
-    # setup our own namespace
-    uri = "http://examples.freeopcua.github.io"
+    # Adressraum festlegen
+    uri = "http://freeopcua.github.io"
     idx = server.register_namespace(uri)
 
-    # create a new node type we can instantiate in our address space
+    # Erstellen eines neuen Knotentyp, den wir in unserem Adressraum instanziieren können
     dev = server.nodes.base_object_type.add_object_type(idx, "MyDevice")
     dev.add_variable(idx, "sensor1", 1.0).set_modelling_rule(True)
     dev.add_property(idx, "device_id", "0340").set_modelling_rule(True)
@@ -291,18 +289,18 @@ if __name__ == "__main__":
     ctrl.set_modelling_rule(True)
     ctrl.add_property(idx, "state", "Idle").set_modelling_rule(True)
 
-    # populating our address space
-    # First a folder to organise our nodes
+    # unseren Adressraum einrichten
+    # Zuerst einen Ordner, um unsere Knoten zu organisieren
     machinefolder = server.nodes.objects.add_folder(idx, "myFolder")
-    # instanciate one instance of our device
+    # instanziieren einer Instanz unseres Geräts
     machinedevice = server.nodes.objects.add_object(idx, "Device0001", dev)
     machinedevice_var = machinedevice.get_child(
         ["{}:controller".format(idx), "{}:state".format(idx)])  # get proxy to our device state variable
-    # create directly some objects and variables
+    # Erstellen  einiger Objekte und Variablen
     machine = server.nodes.objects.add_object(idx, "MachineObject")
     machinevar = machine.add_variable(idx, "MachineVariable", 6.7)
 
-    # add Parameter to the Object
+    # Parameter zum Objekt hinzufügen
     machinesin = machine.add_variable(idx, "MachineSin", 0, ua.VariantType.Float)
     machinevar.set_writable()  # Set MyVariable to be writable by clients
     machinestringvar = machine.add_variable(idx, "MyStringVariable", "Really nice string")
@@ -310,29 +308,28 @@ if __name__ == "__main__":
     madtvar = machine.add_variable(idx, "MyDateTimeVar", datetime.utcnow())
     madtvar.set_writable()  # Set MyVariable to be writable by clients
     machinearrayvar = machine.add_variable(idx, "myarrayvar", [6.7, 7.9])
-    machinearrayvar = machine.add_variable(idx, "myStronglytTypedVariable", ua.Variant([], ua.VariantType.UInt32))
+    machinestrongarrayvar = machine.add_variable(idx, "myStronglytTypedVariable", ua.Variant([], ua.VariantType.UInt32))
     machineprop = machine.add_property(idx, "myproperty", "I am a property")
 
-    # add Parameter to the Object
+    # Parameter zum Objekt hinzufügen
     Temp = machine.add_variable(idx, "Temperature", 0)
-    Temp.set_writable()  # Set MyVariable to be writable by clients
+    Temp.set_writable()  # Stellt MyVariable so ein, dass es von Clients beschrieben werden kann
     Press = machine.add_variable(idx, "Pressure", 0)
-    Press.set_writable()  # Set MyVariable to be writable by clients
+    Press.set_writable()  # Stellt Press so ein, dass es von Clients beschrieben werden kann
     Time = machine.add_variable(idx, "Time", 0)
-    Time.set_writable()  # Set MyVariable to be writable by clients
+    Time.set_writable()  # Stellt Time so ein, dass es von Clients beschrieben werden kann
     Status = machine.add_variable(idx, "Status", 0)
-    Status.set_writable()  # Set MyVariable to be writable by clients
+    Status.set_writable()  # Stellt Staus so ein, dass es von Clients beschrieben werden kann
     Servername = machine.add_variable(idx, "Servername", 0)
-    Servername.set_writable()  # Set MyVariable to be writable by clients
+    Servername.set_writable()  # Stellt Servername so ein, dass es von Clients beschrieben werden kann
     Portnummer = machine.add_variable(idx, "Portnummer", 0)
-    Portnummer.set_writable()  # Set MyVariable to be writable by clients
+    Portnummer.set_writable()  # Stellt Portnummer so ein, dass es von Clients beschrieben werden kann
 
-    # add methode
+    # Parameter zum Objekt hinzufügen
     mymethod = machine.add_method(idx, "mymethod", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
     start_programm = machine.add_method(idx, "startprogramm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
     stop_programm = machine.add_method(idx, "stop_programm", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
     get_status = machine.add_method(idx, "get_status", func, [ua.VariantType.Int64], [ua.VariantType.Boolean])
-
 
     multiply_node = machine.add_method(
         idx,
@@ -342,12 +339,11 @@ if __name__ == "__main__":
         [ua.VariantType.Int64],
     )
 
-    # import some nodes from xml
+    # import der Kn oten aus dem xml
     server.import_xml("custom_nodes.xml")
 
-    # creating a default event object
-    # The event object automatically will have members for all events properties
-    # you probably want to create a custom event type, see other examples
+    # Erstellen eines Standardereignisobjekts
+    # Das Ereignisobjekt hat automatisch Mitglieder für alle Ereignisseigenschaften
     myevgen = server.get_event_generator()
     myevgen.event.Severity = 300
 
@@ -357,21 +353,17 @@ if __name__ == "__main__":
     vup = VarUpdater(machinesin)  # just  a stupide class update a variable
     vup.start()
     try:
-        # enable following if you want to subscribe to nodes on server side
-        # handler = SubHandler()
-        # sub = server.create_subscription(500, handler)
-        # handle = sub.subscribe_data_change(myvar)
-        # trigger event, all subscribed clients wil receive it
-        var = machinearrayvar.get_value()  # return a ref to value in db server side! not a copy!
+
+        var = machinearrayvar.get_value()  # # Rückgabe eines Verweises auf den Wert auf der DB-Serverseite! keine Kopie!
         var = copy.copy(
-            var)  # WARNING: we need to copy before writting again otherwise no data change event will be generated
+            var)  # WARNING: Wir müssen vor dem erneuten Schreiben kopieren, da sonst kein Datenänderungsereignis generiert wird
         var.append(9.3)
         machinearrayvar.set_value(var)
         machinedevice_var.set_value("Running")
         myevgen.trigger(message="This is BaseEvent")
         server.set_attribute_value(machinevar.nodeid, ua.DataValue(
-            9.9))  # Server side write method which is a but faster than using set_value
-        # tell us what PID we have
+            9.9))  # Serverseitige Schreibmethode, die jedoch schneller ist als die Verwendung von set_value
+        # gibt unsere PID aus
         print("My PID is:", os.getpid())
 
         # zum testen
@@ -392,21 +384,20 @@ if __name__ == "__main__":
             elif count == 3:
                 status = 'Störung'
 
-            servername = "Steinbeisser"
+            servername = "Fräsmachine01"
             portnummer = "50840"
-
+            # Ausgeben der Werte
             print(Temperature, Pressure, TIME, status, servername, portnummer)
+            # Setzen der Werte in die UA Variablen
             Temp.set_value(Temperature)
             Press.set_value(Pressure)
             Time.set_value(TIME)
             Status.set_value(status)
             Servername.set_value(servername)
             Portnummer.set_value(portnummer)
+
+            # Hier werden die Variablen der Funtktion Update übergeben
             center.updateValueServer(Temperature, status)
-
-
-
-
 
             time.sleep(5)
 

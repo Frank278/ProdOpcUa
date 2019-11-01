@@ -187,7 +187,7 @@ class DockerHandler(object):
 
         """
 
-
+        # Suche, ob der Container existiert
         clientname = name+"client"
         self._refresh_registry()
         container = self.registry.get(clientname)
@@ -195,31 +195,34 @@ class DockerHandler(object):
 
             connectstring = "opc.tcp://"+serverurl+":"+port+"/freeopcua/server/"
             client = Client(connectstring)
-            # client = Client("opc.tcp://admin@localhost:4840/freeopcua/server/") #connect using a user
+            # client = Client("opc.tcp://admin@localhost:4840/freeopcua/server/")
             try:
                 client.connect()
-                client.load_type_definitions()  # load definition of server specific structures/extension objects
+                client.load_type_definitions()
 
-                # Client has a few methods to get proxy to UA nodes that should always be in address space such as Root or Objects
+
+                # # Der Client verfügt über einige Methoden, um einen Proxy für UA-Knoten abzurufen,
+                # die sich immer im Adressraum befinden sollten, z. B. Root oder Objects
                 root = client.get_root_node()
                 print("Root node is: ", root)
                 objects = client.get_objects_node()
                 print("Objects node is: ", objects)
 
-                # Node objects have methods to read and write node attributes as well as browse or populate address space
+                # Knotenobjekte verfügen über Methoden zum Lesen und Schreiben von Knotenattributen sowie zum Duchsuchen
+                # des Adressraums
                 print("Children of root are: ", root.get_children())
 
-                # get a specific node knowing its node id
 
-                # gettting our namespace idx
-                uri = "http://examples.freeopcua.github.io"
+
+                # Der Adressraum  idx
+                uri = "http://freeopcua.github.io"
                 idx = client.get_namespace_index(uri)
 
-                # Now getting a variable node using its browse path
+                # Jetzt wird ein variabler Knoten über den Suchpfad abgerufen
                 myvar = root.get_child(["0:Objects", "{}:MyObject".format(idx), "{}:MyVariable".format(idx)])
 
                 obj = root.get_child(["0:Objects", "{}:MyObject".format(idx)])
-                # calling a method on server
+                # Aufrufen unserer übergebenen Methode
                 res = obj.call_method(uamethod.format(idx))
             finally:
                 client.disconnect()

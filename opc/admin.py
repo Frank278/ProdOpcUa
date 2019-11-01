@@ -85,7 +85,7 @@ def ua_prog_start(modeladmin, request, queryset):
     #         s_id = handler.create_client(name, serverurl, port, uamethod)
     pass # konnte nicht mehr getestet werden
 
-ua_prog_start.short_description = "UA-Programm laufen lassen auf Raspery Server"
+ua_prog_start.short_description = "UA-Mehtode aufrufen auf Raspery Server"
 
 # Demoprogramm auf Server laufen lassen
 def virt_serv_signal(modeladmin, request, queryset):
@@ -110,7 +110,7 @@ class RegOpcUaServerAdmin(ImportExportModelAdmin):
     list_display = ('regServerID', 'servername', 'portnummer', 'aktiv', 'serverstatus','maschinenstatus')
     list_filter = ('servername', 'portnummer')
     resource_class = RegOpcUaServerResource
-    actions = [virt_serv_start, virt_serv_stop, demo_prog_start, virt_serv_signal]
+    actions = [virt_serv_start, virt_serv_stop, virt_serv_signal, virt_client_create, ua_prog_start]
     list_per_page = 25
 # Register the admin class with the associated model
 admin.site.register(RegOpcUaServer, RegOpcUaServerAdmin)
