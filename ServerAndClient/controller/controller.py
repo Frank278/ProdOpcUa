@@ -192,13 +192,15 @@ class DockerHandler(object):
         ruft die UA Methode auf den im Docker erzeugten Server auf
 
         """
+
+
         clientname = name+"client"
         self._refresh_registry()
         container = self.registry.get(clientname)
         if container:
 
-            connectstring = "opc.tcp://"+serverurl+":"+port+"/freeopcua/server/"
-            client = Client(connectstring)
+            # connectstring = "opc.tcp://"+serverurl+":"+port+"/freeopcua/server/"
+            # client = Client(connectstring)
             # client = Client("opc.tcp://admin@localhost:4840/freeopcua/server/") #connect using a user
             try:
                 client.connect()
