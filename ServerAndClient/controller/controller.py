@@ -3,7 +3,12 @@
 
 import docker
 import os
+import sys
+sys.path.insert(0, "..")
+import logging
 import time
+from opcua import Client
+from opcua import ua
 
 # Um mit dem Docker-Daemon zu kommunizieren, müssen Sie zuerst einen Client instanziieren.
 # Am einfachsten geht das, indem Sie die Funktion from_env () aufrufen.
@@ -84,6 +89,53 @@ class DockerHandler(object):
             if container.status !='running':
                 container.start()
 
+        # Erstellung der ausgewählten Server
+
+    def create_client(self, name, port):
+        """
+           docker run --name frank_server \
+            --link dbserver:dbserver -p 40840:40840 opcua_server wenn der Server nicht Virtuell ist,
+            wird ein Client im Docker erzeugt um Verbindung zum Server auzubauen.
+            Die Unterscheidung ob Virtuell oder Real wird im GUI abgefangen.
+        """
+        clientname = name+"client"
+        self._refresh_registry(all=True)
+        container = self.registry.get(clientname)
+        # Falls der Container noch nicht existiert, wird ein neuer erstellt
+        if not container:
+            links_dic = {
+                'productionopcua_dbserver_1': 'dbserver'
+            }
+            volumes_dic = {
+                '%s/ServerAndClient/client' % self.home_dir:
+                    {'bind': '/app', 'mode': 'ro'}
+            }
+            ports_dic = {
+                '40840': port
+            }
+            env_dic = {
+                'CONTAINERNAME': clientname,
+            }
+            result = client.containers.run(
+                'opcua_client',
+                name=clientname,
+                auto_remove=False,
+                detach=True,
+                links=links_dic,
+                volumes=volumes_dic,
+                ports=ports_dic,
+                network='prodopcua_default',
+                environment=env_dic,
+            )
+            self.registry[name] = result
+            print(result.status)
+            print(self.registry)
+            return result.short_id
+        else:
+            # check if the container is running
+            # if not , then start container
+            if container.status != 'running':
+                container.start()
 
     # Fährt die ausgewählten Server herunter
     def remove_server(self, name):
@@ -120,6 +172,8 @@ class DockerHandler(object):
             # the container to change its status
             container.kill(signal = 14)
 
+
+
     # gibt eine Liste der erstellten Server aus
     def list_servers(self, filter=[]):
         """list existing containers
@@ -128,6 +182,52 @@ class DockerHandler(object):
             filter {list} -- list of filter arguments (default: {[]})
         """
         print(self.registry.keys())
+
+
+
+    # sendet ein Signal an die Server
+    def start_demoprogramm(self, name, serverurl, port, uamethod= "start_demoprogramm"):
+
+        """
+        ruft die UA Methode auf den im Docker erzeugten Server auf
+
+        """
+        clientname = name+"client"
+        self._refresh_registry()
+        container = self.registry.get(clientname)
+        if container:
+
+            connectstring = "opc.tcp://"+serverurl+":"+port+"/freeopcua/server/"
+            client = Client(connectstring)
+            # client = Client("opc.tcp://admin@localhost:4840/freeopcua/server/") #connect using a user
+            try:
+                client.connect()
+                client.load_type_definitions()  # load definition of server specific structures/extension objects
+
+                # Client has a few methods to get proxy to UA nodes that should always be in address space such as Root or Objects
+                root = client.get_root_node()
+                print("Root node is: ", root)
+                objects = client.get_objects_node()
+                print("Objects node is: ", objects)
+
+                # Node objects have methods to read and write node attributes as well as browse or populate address space
+                print("Children of root are: ", root.get_children())
+
+                # get a specific node knowing its node id
+
+                # gettting our namespace idx
+                uri = "http://examples.freeopcua.github.io"
+                idx = client.get_namespace_index(uri)
+
+                # Now getting a variable node using its browse path
+                myvar = root.get_child(["0:Objects", "{}:MyObject".format(idx), "{}:MyVariable".format(idx)])
+
+                obj = root.get_child(["0:Objects", "{}:MyObject".format(idx)])
+                # calling a method on server
+                res = obj.call_method(uamethod.format(idx))
+            finally:
+                client.disconnect()
+
 
 
 if __name__ == "__main__":

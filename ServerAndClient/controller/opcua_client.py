@@ -16,10 +16,8 @@ from opcua import ua
 #from ServerAndClient.client import client
 
 class OcpuaClient(threading.Thread):
-    """Neuen Client anlegen
+    """Neuen Client anlegen, ruft UA Methoden auf Server ausserhalb der Dockerumgebung an
     Eventuell braucht es Threading um mehrere Clients zu starten, zumindest wenn Sie auf den gleichen Port zugreifen
-    Arguments:
-
     """
 
     def __init__(self):
@@ -49,7 +47,7 @@ class OcpuaClient(threading.Thread):
 
 
     def start_demoprogramm(self, clientname):
-        #res = clientname.obj.start_demoprogramm()
+        res = clientname.obj.start_demoprogramm()
         pass
 
 

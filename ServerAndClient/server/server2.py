@@ -227,11 +227,12 @@ def multiply(parent, x, y):
 
 
 @uamethod
-def start_demoprogramm(parent):
+def start_demoprogramm(self, parent):
     status = " Demoprogramm gestartet"
+    self.m_center.status = status
     time.sleep(10)
     status = " Demoprogramm beendet"
-
+    self.m_center.status = status
 
 
 class VarUpdater(Thread):
