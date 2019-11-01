@@ -22,10 +22,8 @@ from opcua import ua
 class SubHandler(object):
 
     """
-    Subscription Handler. To receive events from server for a subscription
-    data_change and event methods are called directly from receiving thread.
-    Do not do expensive, slow or network operation there. Create another
-    thread if you need to do such a thing
+    Abonnement-Handler. Um Ereignisse vom Server für ein Abonnement zu erhalten
+    Die Methoden data_change und event werden direkt vom empfangenden Thread aufgerufen.
     """
 
     def datachange_notification(self, node, val, data):
@@ -44,41 +42,46 @@ if __name__ == "__main__":
     # client = Client("opc.tcp://admin@localhost:4840/freeopcua/server/") #connect using a user
     try:
         client.connect()
-        client.load_type_definitions()  # load definition of server specific structures/extension objects
+        client.load_type_definitions()  # Ladet Definition von serverspezifischen Strukturen / Erweiterungsobjekten
 
-        # Client has a few methods to get proxy to UA nodes that should always be in address space such as Root or Objects
+
+        # Der Client verfügt über einige Methoden, um einen Proxy für UA-Knoten abzurufen,
+        # die sich immer im Adressraum befinden sollten, z. B. Root oder Objects
+
         root = client.get_root_node()
         print("Root node is: ", root)
         objects = client.get_objects_node()
         print("Objects node is: ", objects)
 
-        # Node objects have methods to read and write node attributes as well as browse or populate address space
+
+        # Knotenobjekte verfügen über Methoden zum Lesen und Schreiben von Knotenattributen
+        # sowie zum Durchsuchen oder Auffüllen des Adressraums
         print("Children of root are: ", root.get_children())
 
-        # get a specific node knowing its node id
+        # Holen Sie sich Informationen eines Knoten mit Kenntnis seiner Knoten-ID
 
         # gettting our namespace idx
-        uri = "http://examples.freeopcua.github.io"
+        uri = "http://freeopcua.github.io"
         idx = client.get_namespace_index(uri)
 
-        # Now getting a variable node using its browse path
+        # Jetzt wird ein variabler Knoten über den Suchpfad abgerufen
         myvar = root.get_child(["0:Objects", "{}:MyObject".format(idx), "{}:MyVariable".format(idx)])
 
         obj = root.get_child(["0:Objects", "{}:MyObject".format(idx)])
         print("myvar is: ", myvar)
 
-        # subscribing to a variable node
+        # Abonnieren eines variablen Knotens
         handler = SubHandler()
         sub = client.create_subscription(500, handler)
         handle = sub.subscribe_data_change(myvar)
         time.sleep(0.1)
 
-        # we can also subscribe to events from server
+        # Wir können auch Ereignisse vom Server abonnieren
         sub.subscribe_events()
         # sub.unsubscribe(handle)
         # sub.delete()
 
-        # calling a method on server
+        # Aufrufen einer Methode auf dem Server
         res = obj.call_method("{}:multiply".format(idx), 5, "klk")
         print("method result is: ", res)
 

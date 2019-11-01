@@ -21,3 +21,4 @@ exec "$@"
 # Die ENTRYPOINT-Anweisung kann auch in Kombination mit einem Hilfsskript verwendet werden,
 # sodass sie auf ähnliche Weise wie der obige Befehl funktioniert,
 # auch wenn das Tool möglicherweise mehr als einen Schritt erfordert.
+# Wird benötigt, damit Dei Server beim start warten bis Peotgre gebildet wird.
