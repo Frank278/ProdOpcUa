@@ -1,19 +1,11 @@
-import os
-import sys
-
-from django.db import models
-
 # Create your models here.
-from django.db import models
-
-# Create your models here.
-from model_utils import Choices
-from datetime import datetime
-from django.utils import timezone
-from datetime import timedelta
-from django.db.models import Count
-import objects
 import time
+from datetime import timedelta
+
+from django.db import models
+from django.db.models import Count
+from django.utils import timezone
+from model_utils import Choices
 
 
 class RegOpcUaServer(models.Model):
@@ -206,7 +198,7 @@ class Ressourcenplanung(models.Model):
 class Serverdata(models.Model):
     # ID des Servereintages
     mkey = models.CharField(max_length=60, default=str(time.time()))
-    # Name des Kunden
+    # Name des Servers
     servername = models.CharField(max_length=60, null=True, blank=True)
     # IP Adresse
     ip = models.URLField(null=True)

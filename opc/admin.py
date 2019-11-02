@@ -168,8 +168,8 @@ admin.site.register(Ressourcenplanung, RessourcenplanungAdmin)
 
 # Register the Admin class for Serverdata
 class ServerdataAdmin(ImportExportModelAdmin):
-    #list_display = ('servername')
-    #list_filter = ('servername')
+    list_display = ('servername', 'status', 'temp', 'press', 'time')
+    list_filter = ('servername', 'status')
     list_per_page = 25
     resource_class = ServerdataResource
 # Register the admin class with the associated model

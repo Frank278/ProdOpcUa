@@ -105,6 +105,8 @@ WSGI_APPLICATION = 'ProdOpcUa.wsgi.application'
 
 
 # DATABASE_ROUTERS = ['dynamic_db_router.DynamicDbRouter']
+
+# Verbindet zu Postgres Datenbank, falls keine gefunden wird, wird eine SQLite Datenbank erzeugt
 DATABASES = {
     "default": {
         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
@@ -118,6 +120,8 @@ DATABASES = {
 print('*' * 80)
 print(DATABASES)
 print('*' * 80)
+
+# Zwei Datenbanken, nur nötig wenn Django nicht im Docker läuft
 # DATABASES = {
 #     # 'default': {
 #     #     # Postgres
