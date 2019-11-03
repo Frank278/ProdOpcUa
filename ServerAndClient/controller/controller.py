@@ -118,7 +118,7 @@ class DockerHandler(object):
                 detach=True,
                 volumes=volumes_dic,
                 ports=ports_dic,
-                network='productionopcua_default',
+                network='prodopcua_default',
                 environment=env_dic,
             )
             self.registry[name] = result
