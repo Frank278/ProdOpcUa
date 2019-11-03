@@ -1,5 +1,5 @@
 
-Starten der Demoumgebung:
+Starten der Demo:
 --------------------------------------------
 1. Terminal window öffnen
 2. virtuelle python umgebung starten:
