@@ -233,7 +233,6 @@ class DockerHandler(object):
                 client.disconnect()
 
 
-
 if __name__ == "__main__":
     handler = DockerHandler()
     s_id = handler.create_server('hugo', 40845)
