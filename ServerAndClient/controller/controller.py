@@ -76,7 +76,7 @@ class DockerHandler(object):
                 links = links_dic,
                 volumes = volumes_dic,
                 ports = ports_dic,
-                network = 'prodopcua_default',
+                network = 'productionopcua_default',
                 environment = env_dic,
             )
             self.registry[name] = result
@@ -118,7 +118,7 @@ class DockerHandler(object):
                 detach=True,
                 volumes=volumes_dic,
                 ports=ports_dic,
-                network='prodopcua_default',
+                network='productionopcua_default',
                 environment=env_dic,
             )
             self.registry[name] = result
@@ -132,7 +132,7 @@ class DockerHandler(object):
                 container.start()
 
     # Fährt die ausgewählten Server herunter
-    def remove_server(self, name):
+    def remove_server(self, name, counter=0):
         """
         remove a server from the database
         and delete the container
@@ -149,9 +149,14 @@ class DockerHandler(object):
             # now refresh the registry
             # name should not exist anymore
             time.sleep(1)
-            self._refresh_registry()
+            self._refresh_registry()            
             if self.registry.get(name):
-                raise ValueError('Hoppala, should not happen')
+                if counter < 4:
+                    time.sleep(1)
+                    counter += 1
+                    self.remove_server(name, counter)
+                else:
+                    raise ValueError('Hoppala, should not happen')
 
     # sendet ein Signal an die Server
     def signal_server(self, name):
