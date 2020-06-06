@@ -1,5 +1,5 @@
 opcua
-django==2.2.6
+django==2.2.13
 psycopg2-binary==2.8.3
 django-tools
 django-livesync
